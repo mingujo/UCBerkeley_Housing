@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @scheduler.name %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @scheduler.email %>
+</p>
+
+<p>
+  <strong>Login:</strong>
+  <%= @scheduler.login %>
+</p>
+
+<%= link_to 'Edit', edit_scheduler_path(@scheduler) %> |
+<%= link_to 'Back', schedulers_path %>
