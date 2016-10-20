@@ -15,13 +15,15 @@ RSpec.describe SchedulerMailer, type: :mailer do
             expect(@mail.from[0]).to eq("mingu08@berkeley.edu")
         end
         
-        it "sends to the given recipient" do
+        it "sends to the relevant recipient" do
             expect(@mail.to[0]).to eq(@temp_guy.email)
         end
 
-        # it "expects the number of mails sent to increment by 1" do
-        #     expect(SchedulerMailer.deliver_now).to change { ActionMailer::Base.deliveries.count }.by(1)
-        # end
+        it "should send an email" do
+            # expect(@mail.deliver_now).to change { ActionMailer::Base.deliveries.count }.by(1)
+            @mail.deliver_now
+            expect(ActionMailer::Base.deliveries.count).to eq(1)
+        end
     end
 end
 
