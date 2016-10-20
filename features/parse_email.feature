@@ -1,9 +1,8 @@
-Feature: Parse email from doc
+#Feature: Parse email from doc
   
-  Background: 
-    Given a page with e-mail address "absterr08@berkeley.edu"
+  #Background: 
+    #Given row "1" contains e-mail address "absterr08@berkeley.edu" and name "Abby"
     
 
-  Scenario: Parse the e-mail address
-    When the app looks for an e-mail address
-    Then it should find the e-mail address "absterr08@berkeley.edu"
+  #Scenario: Get e-mail address given a name
+    #Given the e-mail address of "Abby" should be "absterr08@berkeley.edu"
