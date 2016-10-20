@@ -12,8 +12,9 @@ RSpec.describe EmailGetter, :type => :helper do
         end
             
         it "gets email given name and hash" do  
-            email = EmailGetter.get_email(@emails, "a")
-            expect(email).to equal("a@a.com")
+            #email = EmailGetter.get_email(@emails, "a")
+            #expect(email).to equal("a@a.com")
+            expect(@emails["a"]).to eq("a@a.com")
         end
     end
 end
