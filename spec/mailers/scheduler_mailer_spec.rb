@@ -20,11 +20,9 @@ RSpec.describe SchedulerMailer, type: :mailer do
         end
 
         it "should send an email" do
-            # expect(@mail.deliver_now).to change { ActionMailer::Base.deliveries.count }.by(1)
             @mail.deliver_now
             expect(ActionMailer::Base.deliveries.count).to eq(1)
         end
     end
 end
 
-# expect {custom_mailer.deliver}.to change { ActionMailer::Base.deliveries.count }.by(1)
