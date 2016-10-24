@@ -15,4 +15,6 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore all the coverage results
 /coverage/*
