@@ -52,6 +52,7 @@ group :development do
   gem 'database_cleaner'
   gem 'autotest-rails'
   gem 'factory_girl_rails'
+  gem 'google-api-client'
   #gem 'metric-fu'
 end
 
