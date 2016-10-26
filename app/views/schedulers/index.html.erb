@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Schedulers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Login</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @schedulers.each do |scheduler| %>
+      <tr>
+        <td><%= scheduler.name %></td>
+        <td><%= scheduler.email %></td>
+        <td><%= scheduler.login %></td>
+        <td><%= link_to 'Show', scheduler %></td>
+        <td><%= link_to 'Edit', edit_scheduler_path(scheduler) %></td>
+        <td><%= link_to 'Destroy', scheduler, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Scheduler', new_scheduler_path %>
