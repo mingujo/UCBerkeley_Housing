@@ -1,4 +1,4 @@
-class CAsController < ApplicationController
+class CasController < ApplicationController
   before_action :set_ca, only: [:show, :edit, :update, :destroy]
 
   # GET /cas
@@ -69,6 +69,6 @@ class CAsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def ca_params
-      params.require(:ca).permit(:name, :email, :phone_number)
+      params.fetch(:ca, {})
     end
 end
