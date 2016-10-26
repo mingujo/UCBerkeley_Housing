@@ -18,3 +18,5 @@
 
 # Ignore all the coverage results
 /coverage/*
+
+.byebug_history

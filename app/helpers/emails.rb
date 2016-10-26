@@ -1,17 +1,15 @@
 require 'google/apis/sheets_v4'
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
-
 require 'fileutils'
 
-class Emails
-  OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
-  APPLICATION_NAME = 'Google Sheets API Ruby Quickstart'
-  CLIENT_SECRETS_PATH = 'client_secret.json'
-  CREDENTIALS_PATH = File.join(Dir.home, 
-                              '.credentials',
-                               "sheets.googleapis.com-ruby-quickstart.yaml")
-  SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS
+OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
+APPLICATION_NAME = 'Google Sheets API Ruby Quickstart'
+CLIENT_SECRETS_PATH = 'client_secret.json'
+CREDENTIALS_PATH = File.join(Dir.home, 
+                            '.credentials',
+                             "sheets.googleapis.com-ruby-quickstart.yaml")
+SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS
 
 ##
 # Ensure valid credentials, either by restoring from the saved credentials
@@ -19,87 +17,83 @@ class Emails
 # the user's default browser will be launched to approve the request.
 #
 # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
-  def authorize
-    FileUtils.mkdir_p(File.dirname(CREDENTIALS_PATH))
-  
-    client_id = Google::Auth::ClientId.from_file(CLIENT_SECRETS_PATH)
-    token_store = Google::Auth::Stores::FileTokenStore.new(file: CREDENTIALS_PATH)
-    authorizer = Google::Auth::UserAuthorizer.new(client_id, SCOPE, token_store)
-    user_id = 'default'
-    credentials = authorizer.get_credentials(user_id)
-    if credentials.nil?
-      url = authorizer.get_authorization_url(base_url: OOB_URI)
-      puts "Open the following URL in the browser and enter the " +
-           "resulting code after authorization"
-      puts url
-      code = gets
-      credentials = authorizer.get_and_store_credentials_from_code(
-        user_id: user_id, code: code, base_url: OOB_URI)
-    end
-    credentials
+def authorize
+  FileUtils.mkdir_p(File.dirname(CREDENTIALS_PATH))
+
+  client_id = Google::Auth::ClientId.from_file(CLIENT_SECRETS_PATH)
+  token_store = Google::Auth::Stores::FileTokenStore.new(file: CREDENTIALS_PATH)
+  authorizer = Google::Auth::UserAuthorizer.new(client_id, SCOPE, token_store)
+  user_id = 'default'
+  credentials = authorizer.get_credentials(user_id)
+  if credentials.nil?
+    url = authorizer.get_authorization_url(base_url: OOB_URI)
+    puts "Open the following URL in the browser and enter the " +
+         "resulting code after authorization"
+    puts url
+    code = gets
+    credentials = authorizer.get_and_store_credentials_from_code(
+      user_id: user_id, code: code, base_url: OOB_URI)
   end
-  
-  # Initialize the API
-  $service = Google::Apis::SheetsV4::SheetsService.new
-  $service.client_options.application_name = APPLICATION_NAME
-  $service.authorization = authorize
-  
-  # Prints the names and majors of students in a sample spreadsheet:
-  # https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-  $spreadsheet_id = '1uO5sg1kHQJ7rgDJSL1jXf1ww7rkEP0nRYBTQbjZwWCQ'
-  range = 'Sheet1!A2:C'
-  
-  
-  #Maps all the emails to names from the e-mail page
-  def get_email_mappings
-    range = 'emails!A2:C'
-    response = $service.get_spreadsheet_values($spreadsheet_id, range)
-    emails = {}
-    response.values.each do |row|
-      # Print columns A and E, which correspond to indices 0 and 4.
-      emails[row[0]] = row[2]
-    end
-    return emails
+  credentials
+end
+
+require 'byebug'
+#Maps all the emails to names from the e-mail page
+def get_response(spreadsheet_id, range)
+  $service.get_spreadsheet_values(spreadsheet_id, range).values
+end
+
+def build_dic_with_response(resp)
+  contents = {}
+  resp.each_with_index do |row, i|
+    contents[i] = row[2]
   end
-  
-  
-  def put_email(row, name, email)
-    requests = []
-    requests.push({
-      update_cells: {
-        start: {sheet_id: 0, row_index: row, column_index: 0},
-        rows: [
-          {
-            values: [
-              {
-                  user_entered_value: {string_value: name}
-              }
-            ]
-          }
-        ],
-        fields: 'userEnteredValue'
-     }
-    })
-    requests.push({
+end
+
+def put_email(row, name, email)
+  requests = []
+  requests.push({
     update_cells: {
-      start: {sheet_id: 0, row_index: row, column_index: 2},
+      start: {sheet_id: 0, row_index: row, column_index: 0},
       rows: [
         {
           values: [
             {
-              user_entered_value: {string_value: email}
+                user_entered_value: {string_value: name}
             }
           ]
         }
       ],
       fields: 'userEnteredValue'
-    }
-    })
-    batch_update_request = {requests: requests}
-    $service.batch_update_spreadsheet($spreadsheet_id, batch_update_request, {})
-  end
-
+   }
+  })
+  requests.push({
+  update_cells: {
+    start: {sheet_id: 0, row_index: row, column_index: 2},
+    rows: [
+      {
+        values: [
+          {
+            user_entered_value: {string_value: email}
+          }
+        ]
+      }
+    ],
+    fields: 'userEnteredValue'
+  }
+  })
+  batch_update_request = {requests: requests}
+  $service.batch_update_spreadsheet($spreadsheet_id, batch_update_request, {})
 end
 
 
-  
+
+# Initialize the API
+$service = Google::Apis::SheetsV4::SheetsService.new
+$service.client_options.application_name = APPLICATION_NAME
+$service.authorization = authorize
+
+$spreadsheet_id = '1uO5sg1kHQJ7rgDJSL1jXf1ww7rkEP0nRYBTQbjZwWCQ' # need to put at env var file, this changes over time. 
+range = '1!A5:F22' # need to put at env var file
+
+build_dic_with_response(get_response(spreadsheet_id, range))
