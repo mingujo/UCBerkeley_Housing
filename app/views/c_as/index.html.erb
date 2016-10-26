@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Cas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone number</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cas.each do |ca| %>
+      <tr>
+        <td><%= ca.name %></td>
+        <td><%= ca.email %></td>
+        <td><%= ca.phone_number %></td>
+        <td><%= link_to 'Show', ca %></td>
+        <td><%= link_to 'Edit', edit_ca_path(ca) %></td>
+        <td><%= link_to 'Destroy', ca, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ca', new_ca_path %>

@@ -1,0 +1,2 @@
+module CAsHelper
+end

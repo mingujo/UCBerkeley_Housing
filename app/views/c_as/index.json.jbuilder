@@ -1,0 +1,1 @@
+json.array! @cas, partial: 'cas/ca', as: :ca

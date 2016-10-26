@@ -1,0 +1,1 @@
+json.partial! "cas/ca", ca: @ca
