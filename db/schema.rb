@@ -11,6 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 <<<<<<< 51744cb7798017e2b914c2bb5623e23f12fc8445
 ActiveRecord::Schema.define(version: 20161019224817) do
 
@@ -21,6 +22,8 @@ ActiveRecord::Schema.define(version: 20161019224817) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
 =======
+=======
+>>>>>>> 37df446a459fa187e2567495f7e0e7594bfb3609
 ActiveRecord::Schema.define(version: 20161026031149) do
 
   create_table "timeslot10s", force: :cascade do |t|
@@ -362,7 +365,10 @@ ActiveRecord::Schema.define(version: 20161026031149) do
     t.string   "current_tenant"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+<<<<<<< HEAD
 >>>>>>> create 31 timeslot models and populate them with times
+=======
+>>>>>>> 37df446a459fa187e2567495f7e0e7594bfb3609
   end
 
 end
