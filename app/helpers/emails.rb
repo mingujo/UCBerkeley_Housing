@@ -1,7 +1,6 @@
 require 'google/apis/sheets_v4'
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
-
 require 'fileutils'
 
 OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
@@ -38,18 +37,18 @@ def authorize
   credentials
 end
 
-
+require 'byebug'
 #Maps all the emails to names from the e-mail page
-def get_email_mappings(spreadsheet_id, range)
-  response = $service.get_spreadsheet_values(spreadsheet_id, range)
-  emails = {}
-  response.values.each do |row|
-    # Print columns A and E, which correspond to indices 0 and 4.
-    emails[row[0]] = row[2]
-  end
-  return emails
+def get_response(spreadsheet_id, range)
+  $service.get_spreadsheet_values(spreadsheet_id, range).values
 end
 
+def build_dic_with_response(resp)
+  contents = {}
+  resp.each_with_index do |row, i|
+    contents[i] = row[2]
+  end
+end
 
 def put_email(row, name, email)
   requests = []
@@ -94,9 +93,7 @@ $service = Google::Apis::SheetsV4::SheetsService.new
 $service.client_options.application_name = APPLICATION_NAME
 $service.authorization = authorize
 
-# https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-$spreadsheet_id = '1uO5sg1kHQJ7rgDJSL1jXf1ww7rkEP0nRYBTQbjZwWCQ' # need to put at env var file
-range = 'emails!A2:C'
+$spreadsheet_id = '1uO5sg1kHQJ7rgDJSL1jXf1ww7rkEP0nRYBTQbjZwWCQ' # need to put at env var file, this changes over time. 
+range = '1!A5:F22' # need to put at env var file
 
-get_email_mappings()
-
+build_dic_with_response(get_response(spreadsheet_id, range))
