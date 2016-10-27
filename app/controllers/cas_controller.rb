@@ -26,15 +26,13 @@ class CasController < ApplicationController
   def create
     @ca = Ca.new(ca_params)
 
-    respond_to do |format|
-      if @ca.save
-        format.html { redirect_to @ca, notice: 'Ca was successfully created.' }
-        format.json { render :show, status: :created, location: @ca }
-      else
-        format.html { render :new }
-        format.json { render json: @ca.errors, status: :unprocessable_entity }
-      end
+    if @ca.save
+      redirect_to action: 'index'
+    else
+      format.html { render :new }
+      format.json { render json: @ca.errors, status: :unprocessable_entity }
     end
+    
   end
 
   # PATCH/PUT /cas/1

@@ -9,19 +9,17 @@
     %button.buttons.button2{:type => "button"} CA INFO
     %button.buttons.button3{:type => "button"} ADD CA
     %main
-      %form
-        %p{:style => "text-align: center; font-size: 20px"} CA INFO
-        %label NAME:
-        %br/
-        %input{:name => "fullname", :type => "text"}/
-        %br/
-        %label EMAIL:
-        %br/
-        %input{:name => "email", :type => "text"}/
-        %br/
-        %label PHONE:
-        %br/
-        %input{:name => "phone", :type => "text"}/
-        .center_buttons
-          %button.buttons{:type => "button"} ADD
-          %button.buttons{:type => "button"} CANCEL
+      %p{:style => "text-align: center; font-size: 20px"} CA INFO
+      %label NAME:
+      %br/
+      %input{:name => "fullname", :type => "text"}/
+      %br/
+      %label EMAIL:
+      %br/
+      %input{:name => "email", :type => "text"}/
+      %br/
+      %label PHONE:
+      %br/
+      %input{:name => "phone", :type => "text"}/
+      = button_to 'ADD', cas_url, :method => :post, :class => 'center_buttons'
+      %button.buttons{:type => "button", :class => 'center_buttons'} CANCEL
