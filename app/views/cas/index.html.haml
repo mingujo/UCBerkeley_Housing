@@ -1,0 +1,22 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title CA contacts
+    %link{:charset => "utf-8", :href => "default.scss", :media => "screen", :rel => "stylesheet"}/
+  %body
+    %button.buttons.button1{:type => "button"} CALENDAR
+    %button.buttons.button2{:type => "button"} CA INFO
+    // %button.buttons.button3{:type => "button"} ADD CA
+    = button_to 'ADD CA', new_ca_path, :method => :get, :class => 'buttons button3'
+    %main
+      /
+        <p1>NAME</p1>
+        <p1>EMAIL</p1>
+        <p1>PHONE</p1>
+      %table
+        %tr
+          %th NAME
+          %th EMAIL
+          %th PHONE
+          %th

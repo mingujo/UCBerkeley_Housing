@@ -1,0 +1,27 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title add CA
+    %link{:charset => "utf-8", :href => "default.scss", :media => "screen", :rel => "stylesheet"}/
+  %body
+    %button.buttons.button1{:type => "button"} CALENDAR
+    %button.buttons.button2{:type => "button"} CA INFO
+    %button.buttons.button3{:type => "button"} ADD CA
+    %main
+      %form
+        %p{:style => "text-align: center; font-size: 20px"} CA INFO
+        %label NAME:
+        %br/
+        %input{:name => "fullname", :type => "text"}/
+        %br/
+        %label EMAIL:
+        %br/
+        %input{:name => "email", :type => "text"}/
+        %br/
+        %label PHONE:
+        %br/
+        %input{:name => "phone", :type => "text"}/
+        .center_buttons
+          %button.buttons{:type => "button"} ADD
+          %button.buttons{:type => "button"} CANCEL
