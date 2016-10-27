@@ -30,10 +30,10 @@ Feature: Edit CA info
 	Scenario: Edit a CA
 		#should have editable text boxes already filled with current info
 		Given I am on the "edit page" for "A"
-		And I fill in "name" with "AA"
+		And I fill in "name" with "C"
 		And I press "save"
 		Then I should be on the "CA page"
-		And I should see "AA"
+		And I should see "C"
 		And I should not see "A"
 		
 	Scenario: Delete a CA
