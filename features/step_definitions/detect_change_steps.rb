@@ -5,7 +5,7 @@ Given /^the following is fetched from a spreadsheet of one day:$/ do |timeslot_t
 	timeslot_table.hashes.each_with_index do |ts, i|
 		$mock_timeslots[i] = ts[:client]
 	end
-	expect(4).to eq $mock_timeslots.length
+	expect(timeslot_table.hashes.size).to eq $mock_timeslots.length
 end
 
 Given /^the following timeslots of that day exists:$/ do |timeslot_table|
@@ -22,10 +22,12 @@ Given /^the following timeslots of that day exists:$/ do |timeslot_table|
 end
 
 
-Given /^the e-mail address of "([^"]*)" be "([^"]*)":$/ do |name, email|
-	pending
+Given /^the e-mail address of "([^"]*)" be "([^"]*)"$/ do |name, email|
+	Ca.create!({:name => name, :email => email})
+	expect(Ca.find_by_name(name)[:name]).to eq name
+	expect(Ca.find_by_email(email)[:email]).to eq email
 end
 
 Then /^"([^"]*)" gets a "([^"]*)" email:$/ do |name, kind|
-	pending
+	
 end

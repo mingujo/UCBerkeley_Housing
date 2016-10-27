@@ -87,7 +87,6 @@ def put_email(row, name, email)
 end
 
 
-
 # Initialize the API
 $service = Google::Apis::SheetsV4::SheetsService.new
 $service.client_options.application_name = APPLICATION_NAME

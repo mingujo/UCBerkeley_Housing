@@ -19,18 +19,16 @@ Feature: detect a change and send an email
   	  | 09:00 | ELISSA | Jackson    | 510-123-1234 | 101 | Enrique        |
   	  | 09:30 |        |			      |       	     |     |         	      |
 
-
-
   Scenario: Henri gets the email
-    Given the e-mail address of "Henri" be "mingu08@berkeley.edu"
+    Given the e-mail address of "Henri" be "henri@berkeley.edu"
     And "Henri" gets a "notification" email
     
   Scenario: Elissa gets the email
-    Given the e-mail address of "Jane" be "absterr08@berkeley.edu"
+    Given the e-mail address of "Jane" be "jane@berkeley.edu"
     And "Jane" gets a "cancellation" email
     
   Scenario: Jane does not get any email
-    Given the e-mail address of "Jane" be "absterr08@berkeley.edu"
+    Given the e-mail address of "Jane" be "jane@berkeley.edu"
     And "Jane" does not get any email
     
     
