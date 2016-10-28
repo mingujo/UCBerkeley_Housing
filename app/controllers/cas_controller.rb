@@ -1,10 +1,14 @@
 class CasController < ApplicationController
   before_action :set_ca, only: [:show, :edit, :update, :destroy]
+  
+  def ca_params
+    params.require(:ca).permit(:name, :email, :phone)
+  end
 
   # GET /cas
   # GET /cas.json
   def index
-    @cas = Ca.all
+    @ca = Ca.all
   end
 
   # GET /cas/1
@@ -14,7 +18,7 @@ class CasController < ApplicationController
 
   # GET /cas/new
   def new
-    @ca = Ca.new
+    # @ca = Ca.new
   end
 
   # GET /cas/1/edit
@@ -25,14 +29,16 @@ class CasController < ApplicationController
   # POST /cas.json
   def create
     @ca = Ca.new(ca_params)
-
+    
     if @ca.save
-      redirect_to action: 'index'
+      redirect_to cas_path
     else
-      format.html { render :new }
-      format.json { render json: @ca.errors, status: :unprocessable_entity }
+      redirect_to action: 'error'
     end
     
+  end
+  
+  def error
   end
 
   # PATCH/PUT /cas/1

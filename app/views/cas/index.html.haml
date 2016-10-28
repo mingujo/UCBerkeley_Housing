@@ -1,22 +1,23 @@
-!!!
-%html
-  %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title CA contacts
-    %link{:charset => "utf-8", :href => "default.scss", :media => "screen", :rel => "stylesheet"}/
-  %body
-    %button.buttons.button1{:type => "button"} CALENDAR
-    %button.buttons.button2{:type => "button"} CA INFO
-    // %button.buttons.button3{:type => "button"} ADD CA
-    = button_to 'ADD CA', new_ca_path, :method => :get, :class => 'buttons button3'
-    %main
-      /
-        <p1>NAME</p1>
-        <p1>EMAIL</p1>
-        <p1>PHONE</p1>
-      %table
-        %tr
-          %th NAME
-          %th EMAIL
-          %th PHONE
-          %th
+%head
+  = link_to 'CALENDAR', cas_path, :class => 'buttons'
+  = link_to 'CA INFO', cas_path, :class => 'buttons'
+  = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
+%table    
+  %thead
+    %tr
+      %th{:style => "padding:40px 300px 0px 15px;"} NAME
+      %th{:style => "padding:40px 400px 0px 15px;"} EMAIL
+      %th{:style => "padding:40px 200px 0px 15px;"} PHONE
+      %th{:style => "padding:40px 50px 0px 15px"}
+  %tbody
+    - @ca.each do |item|
+      %tr
+        %td= item.name
+        %td= item.email_address
+        %td= item.phone_number
+  
+          
+
+
+
+          
