@@ -6,13 +6,20 @@ Feature: detect a change and send an email
 	and the link to spreadsheet
   
   Background: Existing spreadsheet and table
-    Given the following is fetched from a spreadsheet of one day:
+    Given the e-mail address of "Henri" be "henri@berkeley.edu"
+    And the e-mail address of "Jane" be "jane@berkeley.edu"
+    And the e-mail address of "Elissa" be "elissa@berkeley.edu"
+    And the following is fetched from a spreadsheet of one day:
+      | 9/12/2016 Monday||||||
+      | ALL APPOINTMENTS MUST BE SCHEDULED AT LEAST 2 DAYS IN ADVANCE||||||
   	  | time  | ca	   | client     | phone 	     | APT | current tenant |
   	  | 08:00 | HENRI  | Jackson    | 510-123-1234 | 101 | Enrique		  |
   	  | 08:30 |        | Jackson    | 510-123-1234 | 101 | Enrique		  |
   	  | 09:00 | ELISSA |    		    |              |     |      		    |
   	  | 11:31 | JANE   |			      |			         |     |      		    |
   	And the following timeslots of that day exists:
+      | 9/12/2016 Monday||||||
+      | ALL APPOINTMENTS MUST BE SCHEDULED AT LEAST 2 DAYS IN ADVANCE||||||
   	  | time  | ca	   | client     | phone 	     | APT | current tenant |
   	  | 08:00 | HENRI  |		        |	    	       |     |     		        |
   	  | 08:30 |        |		        |	    	       |     |			          |
@@ -20,16 +27,16 @@ Feature: detect a change and send an email
   	  | 09:30 |        |			      |       	     |     |         	      |
 
   Scenario: Henri gets the email
-    Given the e-mail address of "Henri" be "henri@berkeley.edu"
-    And "Henri" gets a "notification" email
+    Given after 5 minutes
+    Then "Henri" gets a "notification" email
     
   Scenario: Elissa gets the email
-    Given the e-mail address of "Jane" be "jane@berkeley.edu"
-    And "Jane" gets a "cancellation" email
+    Given after 5 minutes
+    Then "Jane" gets a "cancellation" email
     
   Scenario: Jane does not get any email
-    Given the e-mail address of "Jane" be "jane@berkeley.edu"
-    And "Jane" does not get any email
+    Given after 5 minutes
+    Then "Jane" does not get any email
     
     
     # test the email contents in mailer rspec !!!!!!!!!!!!!!!!!!!

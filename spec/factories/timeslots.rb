@@ -1,7 +1,8 @@
 FactoryGirl.define do
-  factory :timeslot22 do
+  factory :timeslot do
+    date "2016-10-28"
     time "MyString"
-    CA_id 1
+    ca_id 1
     client_name "MyString"
     phone_number "MyString"
     apt_number "MyString"
