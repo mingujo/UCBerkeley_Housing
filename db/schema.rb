@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161028024042) do
+ActiveRecord::Schema.define(version: 20161031013803) do
 
   create_table "cas", force: :cascade do |t|
     t.string   "name"
@@ -29,8 +29,10 @@ ActiveRecord::Schema.define(version: 20161028024042) do
     t.string   "phone_number"
     t.string   "apt_number"
     t.string   "current_tenant"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.boolean  "new_schedule_email_sent", default: false
+    t.boolean  "cancellation_sent",       default: false
   end
 
 end
