@@ -5,7 +5,7 @@
     </head>
     
     <body>
-        <h1>Hey <%= @guy_CA.name %></h1>
+        <h3>Hey <%= @guy_CA.name %>,</h3>
         <p>
             Your open house schedule is at <%= @timeslot.time %> on <%= @timeslot.date %> is now CANCELLED.
             The visitor's name was:  <%= @timeslot.client_name %><br>
@@ -14,6 +14,6 @@
         <p>
             To check out the schedule in calendar view, just follow this link: <%= @url %>
         </p>
-        <p> Thanks for this and have a great day son!</p>
+        <p> Thanks for this and have a great day!</p>
     </body>
 </html>

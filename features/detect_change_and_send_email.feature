@@ -6,9 +6,9 @@ Feature: detect a change and send an email
 	and the link to spreadsheet
   
   Background: Existing spreadsheet and table
-    Given the e-mail address of "Henri" be "mingu08@berkeley.edu"
-    And the e-mail address of "Jane" be "mingu08@berkeley.edu"
-    And the e-mail address of "Elissa" be "mingu08@berkeley.edu"
+    Given the e-mail address of "Henri" be "TEST_GUY_EMAIL_ADDR"
+    And the e-mail address of "Jane" be "TEST_GUY_EMAIL_ADDR"
+    And the e-mail address of "Elissa" be "TEST_GUY_EMAIL_ADDR"
     And the following is fetched from a spreadsheet of one day:
       | 9/12/2016 Monday||||||
       | ALL APPOINTMENTS MUST BE SCHEDULED AT LEAST 2 DAYS IN ADVANCE||||||

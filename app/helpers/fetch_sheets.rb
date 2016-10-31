@@ -8,21 +8,17 @@ require_relative '../mailers/scheduler_mailer'
 # $service.client_options.application_name = APPLICATION_NAME
 # $service.authorization = authorize
 
-SPREADSHEET_ID = '1uO5sg1kHQJ7rgDJSL1jXf1ww7rkEP0nRYBTQbjZwWCQ' # need to put at env var file, this changes over time. 
-CELL_RANGE = 'A2:F' # need to put at env var file
-
-# Google::Apis::ClientError
     
 def fetch_month_sheets()
     for day in ('1'..'31').to_a
-        range = day + "!" + CELL_RANGE
+        range = day + "!" + ENV["CELL_RANGE"]
         info_list = get_sheet_response(range)
         detect_change_send_email(info_list)
     end 
 end
 
 def get_sheet_response(range)
-    $service.get_spreadsheet_values(SPREADSHEET_ID, range).values # mock this
+    $service.get_spreadsheet_values(ENV["SPREADSHEET_ID"], range).values # mock this
 end
 
 def detect_change_send_email(info_list)
@@ -94,7 +90,3 @@ def write_to_spreadsheet(row, name, email)
     batch_update_request = {requests: requests}
     $service.batch_update_spreadsheet($spreadsheet_id, batch_update_request, {})
 end
-
-        
-    
-        

@@ -39,6 +39,9 @@ end
 
 
 Given /^the e-mail address of "([^"]*)" be "([^"]*)"$/ do |name, email|
+	if email == "TEST_GUY_EMAIL_ADDR"
+		email = ENV["TEST_GUY_EMAIL_ADDR"]
+	end
 	Ca.create!({:name => name.downcase, :email => email})
 	expect(Ca.find_by_name(name.downcase)[:name]).to eq name.downcase
 	expect(Ca.find_by_email(email)[:email]).to eq email
