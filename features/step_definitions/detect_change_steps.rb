@@ -8,7 +8,6 @@ Given /^the following is fetched from a spreadsheet of one day:$/ do |timeslot_t
 	for idx in (0...$info_list.length).to_a
 		$info_list[idx] -= [""]
 	end
-	# expect(timeslot_table.hashes.size).to eq $mock_timeslots.length
 end
 
 Given /^the following timeslots of that day exists:$/ do |timeslot_table|

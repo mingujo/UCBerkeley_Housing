@@ -60,7 +60,7 @@ RSpec.describe SchedulerMailer, type: :mailer do
         end
 
         it "expects email subject" do
-            expect(@mail.subject).to eq("Someone just cancelled open house schedule!")
+            expect(@mail.subject).to eq(ENV["CANCELLATION_SUBJECT"])
         end
         
         it "sends from the default email" do

@@ -4,10 +4,11 @@ require_relative 'google_api_authorization'
 require_relative '../mailers/scheduler_mailer'
 
 
-# $service = Google::Apis::SheetsV4::SheetsService.new
-# $service.client_options.application_name = APPLICATION_NAME
-# $service.authorization = authorize
-
+if not ENV['TESTING_ENV']
+  $service = Google::Apis::SheetsV4::SheetsService.new
+  $service.client_options.application_name = APPLICATION_NAME
+  $service.authorization = authorize
+end
     
 def fetch_month_sheets()
     for day in ('1'..'31').to_a
