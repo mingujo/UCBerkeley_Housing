@@ -4,11 +4,9 @@ require 'googleauth/stores/file_token_store'
 require 'fileutils'
 
 OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
-APPLICATION_NAME = 'Google Sheets API Ruby Quickstart'
-CLIENT_SECRETS_PATH = 'client_secret.json'
-CREDENTIALS_PATH = File.join(Dir.home, 
-                            '.credentials',
-                             "sheets.googleapis.com-ruby-quickstart.yaml")
+APPLICATION_NAME = ENV["APP_NAME"]
+CLIENT_SECRETS_PATH = ENV["CLIENT_SECRETS"]
+CREDENTIALS_PATH = ENV["CREDENTIALS_PATH"]
 SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS
 
 ##

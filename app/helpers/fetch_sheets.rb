@@ -10,7 +10,7 @@ if not ENV['TESTING_ENV']
   $service.client_options.application_name = APPLICATION_NAME
   $service.authorization = authorize
 end
-    
+
 def fetch_month_sheets()
     for day in ('1'..'31').to_a
         range = day + "!" + ENV["CELL_RANGE"]
