@@ -1,15 +1,30 @@
 language: ruby
+sudo: false
 rvm:
  - 2.2.2
 # - jruby
 # - rbx-2
-# uncomment and edit the following line if your project needs to run something other than `rake`:
+
+cache: bundler
+
 script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
-  - bundle exec rspec
   - bundle exec cucumber
+  - bundle exec rspec
+
+# env:
+#   - GMAIL_DOMAIN=gmail.com 
+#   - GMAIL_USERNAME=housingnotificationsystem@gmail.com 
+#   - GMAIL_PORT=587
+#   - SPREADSHEET_ID=1uO5sg1kHQJ7rgDJSL1jXf1ww7rkEP0nRYBTQbjZwWCQ
+#   - CELL_RANGE=A2:F
+#   - APP_URL=http://ucb-housing.herokuapp.com/spreadsheet
+#   - CANCELLATION_SUBJECT=Someone just cancelled open house schedule!
+#   - NEW_SCHEDULE_SUBJECT=Your new open house schedule!
+#   - TEST_GUY_EMAIL_ADDR=mingu08@berkeley.edu
+#   - TEST_GUY_NAME=min
+#   - TESTING_ENV=True
+
 after_script:
   - bundle exec rake send_to_codeclimate 
-#service:
-#- mysql

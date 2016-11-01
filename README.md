@@ -20,10 +20,10 @@ UC Berkeley Family Housing Scheduler &amp; Automatic Notification Web App
  - Automated email notification of additions/changes to apartment showings to relevant still will remove human error from the communication process.
 
 
-[![Code Climate](https://codeclimate.com/github/rails/rails/badges/gpa.svg)](https://codeclimate.com/github/rails/rails)
+[![Code Climate](https://codeclimate.com/github/mingujo/UCBerkeley_Housing/badges/gpa.svg)](https://codeclimate.com/github/mingujo/UCBerkeley_Housing)
 
-[![Test Coverage](https://codeclimate.com/github/rails/rails/badges/coverage.svg)](https://codeclimate.com/github/rails/rails/coverage)
+[![Test Coverage](https://codeclimate.com/github/mingujo/UCBerkeley_Housing/badges/coverage.svg)](https://codeclimate.com/github/mingujo/UCBerkeley_Housing/coverage)
 
-[![Issue Count](https://codeclimate.com/github/rails/rails/badges/issue_count.svg)](https://codeclimate.com/github/rails/rails)
+[![Issue Count](https://codeclimate.com/github/mingujo/UCBerkeley_Housing/badges/issue_count.svg)](https://codeclimate.com/github/mingujo/UCBerkeley_Housing)
 
 [![Build Status](https://travis-ci.org/mingujo/UCBerkeley_Housing.svg?branch=master)](https://travis-ci.org/mingujo/UCBerkeley_Housing)

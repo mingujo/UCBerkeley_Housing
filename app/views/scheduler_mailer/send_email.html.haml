@@ -1,0 +1,34 @@
+
+%head
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+
+
+%body
+    %h3 Hey <%= @guy_CA.name %>,
+    
+    - if @type == "new_schedule"
+        %p
+            Your open house schedule is at <%= @timeslot.time %> on <%= @timeslot.date %>.
+            
+            The visitor's name is:  <%= @timeslot.client_name %>.
+            And His phone number is: <%= @timeslot.phone_number %>.
+            
+            He's visiting the APT: <%= @timeslot.apt_number %>.
+            The current tenant is: <%= @timeslot.current_tenant %>.
+    
+        %p
+            To check out the schedule in calendar view, just follow this link: <%= @url %>
+        %p
+            Thanks for this and have a great day son!
+            
+    - elsif @type == "cancellation"
+        %p
+            Your open house schedule is at <%= @timeslot.time %> on <%= @timeslot.date %> is now CANCELLED.
+            
+            The visitor's name was:  <%= @timeslot.client_name %>
+            And His phone number was: <%= @timeslot.phone_number %>
+        %p
+            To check out the schedule in calendar view, just follow this link: <%= @url %>
+        
+        %p
+            Thanks for this and have a great day!

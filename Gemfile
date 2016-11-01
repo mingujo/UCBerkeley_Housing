@@ -29,15 +29,15 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 
-# ADDING HAML
+# ADDING OUR GEMS HERE
 gem 'haml'
+gem 'figaro'
+gem 'google-api-client'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'sqlite3'
-  #gem 'debugger'
-  
+
 end
 
 group :development do
@@ -51,7 +51,6 @@ group :development do
   gem 'database_cleaner'
   gem 'autotest-rails'
   gem 'factory_girl_rails'
-  gem 'google-api-client'
   #gem 'metric-fu'
 end
 
@@ -61,5 +60,6 @@ group :test do
 end
 
 group :production do
-#  gem 'pg'
+  gem 'pg'
+  # gem 'sqlite3'
 end
