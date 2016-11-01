@@ -2,6 +2,8 @@ require 'date'
 require_relative 'google_api_authorization'
 require_relative '../mailers/scheduler_mailer'
 
+NEW_SCHEDULE = "new_schedule"
+CANCELLATION = "cancellation"
 
 if not ENV['TESTING_ENV']
   $service = Google::Apis::SheetsV4::SheetsService.new
@@ -31,7 +33,7 @@ def detect_change_send_email(info_list)
             
             ca_id = Ca.find_by_name(row[1].downcase)[:id]
             # send cancellation email
-            SchedulerMailer.cancellation_email(ca_id).deliver_now
+            SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
         elsif not Timeslot.find_by_date_and_time(date,row[0]).nil? and \
             Timeslot.find_by_date_and_time(date,row[0])[:client_name].nil? and \
             row.length == 6
@@ -47,7 +49,7 @@ def detect_change_send_email(info_list)
                     	:current_tenant => row[5]
             })
             # send new schedule notification email
-            SchedulerMailer.new_schedule_notification_email(ca_id).deliver_now
+            SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
         end
     end
     return false

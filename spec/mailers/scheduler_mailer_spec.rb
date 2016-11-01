@@ -15,7 +15,7 @@ RSpec.describe SchedulerMailer, type: :mailer do
                                         :apt_number => '123',
                                         :current_tenant => 'Rafael'
 	        })
-            @mail = SchedulerMailer.new_schedule_notification_email(@temp_guy.id)
+            @mail = SchedulerMailer.send_email(@temp_guy.id, "new_schedule")
         end
 
         it "expects email subject" do
@@ -56,7 +56,7 @@ RSpec.describe SchedulerMailer, type: :mailer do
                                         :apt_number => '123',
                                         :current_tenant => 'Rafael'
 	        })
-            @mail = SchedulerMailer.cancellation_email(@temp_guy.id)
+            @mail = SchedulerMailer.send_email(@temp_guy.id, "cancellation")
         end
 
         it "expects email subject" do
