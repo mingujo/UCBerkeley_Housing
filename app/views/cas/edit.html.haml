@@ -1,0 +1,7 @@
+%h1 Editing Ca
+
+= render 'form' 
+
+= link_to 'Show', @ca
+= link_to 'Back', cas_path 
+= button_to 'Delete', ca_path(@ca), :method => :delete, :confirm => 'Are you sure?'
