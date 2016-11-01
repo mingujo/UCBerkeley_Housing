@@ -2,7 +2,7 @@ class CasController < ApplicationController
   before_action :set_ca, only: [:show, :edit, :update, :destroy]
   
   def ca_params
-    params.require(:ca).permit(:name, :email, :phone)
+    params.require(:ca).permit(:name, :email, :phone_number)
   end
 
   # GET /cas
@@ -28,7 +28,8 @@ class CasController < ApplicationController
   # POST /cas
   # POST /cas.json
   def create
-    @ca = Ca.new(ca_params)
+    params.permit!
+    @ca = Ca.create(ca_params)
     
     if @ca.save
       redirect_to cas_path
