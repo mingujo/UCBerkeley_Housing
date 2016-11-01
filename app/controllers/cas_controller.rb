@@ -45,6 +45,7 @@ class CasController < ApplicationController
   # PATCH/PUT /cas/1
   # PATCH/PUT /cas/1.json
   def update
+    params.permit!
     respond_to do |format|
       if @ca.update(ca_params)
         format.html { redirect_to @ca, notice: 'Ca was successfully updated.' }
