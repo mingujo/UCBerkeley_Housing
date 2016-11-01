@@ -1,4 +1,3 @@
-require 'byebug'
 
 class SchedulerMailer < ApplicationMailer
     default from: ENV["GMAIL_USERNAME"]

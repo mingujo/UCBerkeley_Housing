@@ -1,4 +1,3 @@
-require 'byebug'
 require 'date'
 require_relative 'google_api_authorization'
 require_relative '../mailers/scheduler_mailer'

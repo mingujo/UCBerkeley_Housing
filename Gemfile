@@ -32,6 +32,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # ADDING OUR GEMS HERE
 gem 'haml'
 gem 'figaro'
+gem 'google-api-client'
 
 group :development, :test do
   gem 'byebug'
@@ -50,7 +51,6 @@ group :development do
   gem 'database_cleaner'
   gem 'autotest-rails'
   gem 'factory_girl_rails'
-  gem 'google-api-client'
   #gem 'metric-fu'
 end
 

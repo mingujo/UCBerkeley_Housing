@@ -1,4 +1,3 @@
-require 'byebug'
 require 'date'
 require_relative '../../app/helpers/fetch_sheets'
 
