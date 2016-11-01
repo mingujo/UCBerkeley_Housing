@@ -1,8 +1,9 @@
-class CreateTimeslot7s < ActiveRecord::Migration
+class CreateTimeslots < ActiveRecord::Migration
   def change
-    create_table :timeslot7s do |t|
+    create_table :timeslots do |t|
+      t.date :date
       t.string :time
-      t.integer :CA_id
+      t.integer :ca_id
       t.string :client_name
       t.string :phone_number
       t.string :apt_number

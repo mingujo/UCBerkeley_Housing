@@ -29,15 +29,14 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 
-# ADDING HAML
+# ADDING OUR GEMS HERE
 gem 'haml'
+gem 'figaro'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'sqlite3'
-  #gem 'debugger'
-  
+
 end
 
 group :development do
@@ -61,5 +60,6 @@ group :test do
 end
 
 group :production do
-#  gem 'pg'
+  gem 'pg'
+  # gem 'sqlite3'
 end
