@@ -19,6 +19,12 @@ UC Berkeley Family Housing Scheduler &amp; Automatic Notification Web App
 ### Requested Feature
  - Automated email notification of additions/changes to apartment showings to relevant still will remove human error from the communication process.
 
+### Sample Automated Notification Email View
+#### New Schedule
+![Alt text](/sample_email_view_1.jpg?raw=true "New Schedule")
+
+#### Schedule Cancellation
+![Alt text](/sample_email_view_2.jpg?raw=true "Schedule Cancellation")
 
 [![Code Climate](https://codeclimate.com/github/mingujo/UCBerkeley_Housing/badges/gpa.svg)](https://codeclimate.com/github/mingujo/UCBerkeley_Housing)
 

@@ -4,31 +4,31 @@
 
 
 %body
-    %h3 Hey <%= @guy_CA.name %>,
+    %h3 Hey <em><b>#{@guy_CA.name}</b></em>,
     
     - if @type == "new_schedule"
         %p
-            Your open house schedule is at <%= @timeslot.time %> on <%= @timeslot.date %>.
+            Your open house schedule is at <em><b>#{@timeslot.time}</b></em> on <em>#{@timeslot.date}</em>. <br><br>
             
-            The visitor's name is:  <%= @timeslot.client_name %>.
-            And His phone number is: <%= @timeslot.phone_number %>.
+            The visitor's name is:  <em><b>#{@timeslot.client_name}</b></em>. <br>
+            And His phone number is:  <em><b>#{@timeslot.phone_number}</b></em>. <br>
             
-            He's visiting the APT: <%= @timeslot.apt_number %>.
-            The current tenant is: <%= @timeslot.current_tenant %>.
+            He's visiting the APT:  <em><b>#{@timeslot.apt_number}</b></em>. <br>
+            The current tenant is:  <em><b>#{@timeslot.current_tenant}</b></em>.<br>
     
         %p
-            To check out the schedule in calendar view, just follow this link: <%= @url %>
+            To check out the schedule in calendar view, just follow this link:  <em><b>#{@url}</b></em><br><br>
         %p
-            Thanks for this and have a great day son!
+            Thanks for this and have a great day son! <br>
             
     - elsif @type == "cancellation"
         %p
-            Your open house schedule is at <%= @timeslot.time %> on <%= @timeslot.date %> is now CANCELLED.
+            Your open house schedule is at <em><b>#{@timeslot.time}</b></em> on <em><b>#{@timeslot.date}</b></em> is now CANCELLED. <br> <br>
             
-            The visitor's name was:  <%= @timeslot.client_name %>
-            And His phone number was: <%= @timeslot.phone_number %>
+            The visitor's name was:  <em><b>#{@timeslot.client_name}</b></em>. <br>
+            And His phone number was:  <em><b>#{@timeslot.phone_number}</b></em>. <br>
         %p
-            To check out the schedule in calendar view, just follow this link: <%= @url %>
+            To check out the schedule in calendar view, just follow this link:  <em><b>#{@url}</b></em> <br> <br>
         
         %p
-            Thanks for this and have a great day!
+            Thanks for this and have a great day! <br>
