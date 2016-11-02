@@ -1,11 +1,10 @@
-# Feature: Edit CA info
+Feature: Edit CA info
   
-# 	Background: there is a CA
-# 		Given I am a CA
-# 		And the following CAs exist:
-# 		| name                   | email             | phone number |
-# 		| Someone                | someone@test.com  | 111          |
-# 		| Sometwo                | sometwo@test.com  | 222          |
+	Background: there is a CA
+		Given the following CAs exist:
+		| name                   | email             | phone number |
+		| Someone                | someone@test.com  | 111          |
+		| Sometwo                | sometwo@test.com  | 222          |
   
 # 	Scenario: Get to Add CA page
 # 		Given I am on the "CA page"
@@ -36,10 +35,9 @@
 # 		And I should see "Noone"
 # 		And I should not see "Someone"
 		
-# 	Scenario: Delete a CA
-# 		Given I am on the "edit page" for "Someone"
-# 		And I press "delete CA"
-# 		#And a pop up appears asking if i am sure
-# 		#And I press "yes"
-# 		Then I should be on the "CA page"
-# 		And I should not see "Someone"
+	Scenario: Delete CA
+	  Given I am on the "edit" page for "Someone"
+	  And I press "Delete"
+	  Then I should be on the "CA page"
+	  And I should not see "Someone"
+	  But I should see "Sometwo"
