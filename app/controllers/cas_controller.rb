@@ -18,7 +18,8 @@ class CasController < ApplicationController
 
   # GET /cas/new
   def new
-    # @ca = Ca.new
+    print "In new method"
+    @ca = Ca.new
   end
 
   # GET /cas/1/edit
@@ -28,10 +29,12 @@ class CasController < ApplicationController
   # POST /cas
   # POST /cas.json
   def create
+    print "In create method"
     params.permit!
     @ca = Ca.create(ca_params)
     
     if @ca.save
+      puts "In create now saving and redirecting to"
       redirect_to cas_path
     else
       redirect_to action: 'error'
