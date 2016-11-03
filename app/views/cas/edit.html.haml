@@ -1,0 +1,19 @@
+%h1 Editing CA
+
+= form_tag ca_path(@ca), :method => :put do
+
+
+  = label :ca, :name, 'Name'
+  = text_field :ca, 'name'
+
+  = label :ca, :email, 'Email'
+  = text_field :ca, 'email'
+  
+  = label :ca, :phone_number, 'Phone Number'
+  = text_field :ca, 'phone_number'
+  
+  =submit_tag 'Save'
+        
+= link_to 'Show', @ca
+= link_to 'Back', cas_path 
+= button_to 'Delete', ca_path(@ca), :method => :delete, :confirm => 'Are you sure?'

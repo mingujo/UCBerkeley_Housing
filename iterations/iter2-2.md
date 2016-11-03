@@ -17,6 +17,7 @@
 
 ### Routes Available Now
 * Heroku URL: https://ucberkeley-housing.herokuapp.com/
+- /
 - /cas
 - /cas/new
 - ...

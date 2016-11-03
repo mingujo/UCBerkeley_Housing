@@ -1,0 +1,20 @@
+%body
+    = link_to 'CALENDAR', cas_path, :class => 'buttons'
+    = link_to 'CA INFO', cas_path, :class => 'buttons'
+    = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
+    %main
+    = form_tag cas_path do
+    
+        = label :ca, :name, 'Name'
+        = text_field :ca, 'name'
+
+        = label :ca, :email, 'Email'
+        = text_field :ca, 'email'
+  
+        = label :ca, :phone_number, 'Phone Number'
+        = text_field :ca, 'phone_number'
+  
+        = submit_tag 'Add'
+    =button_to 'CANCEL', cas_path, :method => :get
+
+

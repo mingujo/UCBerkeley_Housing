@@ -1,10 +1,14 @@
 class CasController < ApplicationController
   before_action :set_ca, only: [:show, :edit, :update, :destroy]
+  
+  def ca_params
+    params.require(:ca).permit(:name, :email, :phone_number)
+  end
 
   # GET /cas
   # GET /cas.json
   def index
-    @cas = Ca.all
+    @ca = Ca.all
   end
 
   # GET /cas/1
@@ -14,6 +18,7 @@ class CasController < ApplicationController
 
   # GET /cas/new
   def new
+    print "In new method"
     @ca = Ca.new
   end
 
@@ -24,22 +29,26 @@ class CasController < ApplicationController
   # POST /cas
   # POST /cas.json
   def create
-    @ca = Ca.new(ca_params)
-
-    respond_to do |format|
-      if @ca.save
-        format.html { redirect_to @ca, notice: 'Ca was successfully created.' }
-        format.json { render :show, status: :created, location: @ca }
-      else
-        format.html { render :new }
-        format.json { render json: @ca.errors, status: :unprocessable_entity }
-      end
+    print "In create method"
+    params.permit!
+    @ca = Ca.create(ca_params)
+    
+    if @ca.save
+      puts "In create now saving and redirecting to"
+      redirect_to cas_path
+    else
+      redirect_to action: 'error'
     end
+    
+  end
+  
+  def error
   end
 
   # PATCH/PUT /cas/1
   # PATCH/PUT /cas/1.json
   def update
+    params.permit!
     respond_to do |format|
       if @ca.update(ca_params)
         format.html { redirect_to @ca, notice: 'Ca was successfully updated.' }

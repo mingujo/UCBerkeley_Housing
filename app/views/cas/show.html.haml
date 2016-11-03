@@ -1,0 +1,14 @@
+// <p id="notice"><%= notice %></p>
+
+CA PAGE
+%h1 #{@ca.name}
+
+%h1
+%h3 #{@ca.email} 
+%h3 #{@ca.phone_number}
+%h3
+%h3 List Showings and Availability Here
+
+= link_to 'Edit CA Info', edit_ca_path(@ca) 
+= link_to 'Edit Availability', edit_ca_path(@ca) 
+= link_to 'Back', cas_path 

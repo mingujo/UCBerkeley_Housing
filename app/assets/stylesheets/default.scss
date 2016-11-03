@@ -3,23 +3,23 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .buttons {
-  margin-left: 5%;
-  font-size: 20;
-
+    margin-left: 3%;
+    font-size: 40px;
 }
 .button3 {
+    margin-right: 5%;
 	float: right;
-	margin-right: 5%;
 }
 .center_buttons {
     text-align: center;
+    display: block;
 }
 
 main {
-	margin-top: 100;
+	margin-top: 60px;
 	border-radius: 5px;
     background-color: #f2f2f2;
-    padding: 20px;
+    // padding: 20px;
 }
 
 input[type=text], select {
@@ -30,4 +30,9 @@ input[type=text], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+table {
+	border-collapse: separate;
+	border-spacing: 250px 50;
 }
