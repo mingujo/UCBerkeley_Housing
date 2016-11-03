@@ -16,9 +16,10 @@ end
 #When /^(?:|I )follow "([^"]*)"$/
 
 Given(/^I click "([^"]*)"$/) do |link|
-  click_link(link)
+  #click_link(link) was this before
+  click_link(link, :match => :first)
 end
 
-Given(/^I click "([^"]*)" for the CA "([^"]*)"$/) do |arg1, arg2|
+#Given(/^I click "([^"]*)" for the CA "([^"]*)"$/) do |arg1, arg2|
    # Write code here that turns the phrase above into concrete actions
-end
+#end

@@ -16,20 +16,17 @@ module NavigationHelpers
     when /^the home\s?page$/
       '/'
     when /^the "edit" page for "(.*)"$/ 
-    edit_ca_path(Ca.find_by name: $1)
-    #when /^the "Add CA page"$/
-    
+      edit_ca_path(Ca.find_by name: $1)
     when /^the "CA page"$/ 
-    cas_path
-    #cas_path(Ca.find_by name: $1)
-    #puts cas_path
-    #when /^the "Add CA page"$/
-    #new_ca_path(Ca.find_by name: $1) 
-    #new_ca_path
-    #visit("/cas/1")
+      cas_path
+    when /^the CA page for "(.*)"$/
+      ca_path(Ca.find_by name: $1)
     when /^the "Add CA page"$/
-    #visit("/cas/new")
-    new_ca_path
+      new_ca_path
+    when /^"Details" for the CA "(.*)"$/
+      ca_path(Ca.find_by name: $1)
+    when /^the "Details" page for the CA "(.*)"$/
+      ca_path(Ca.find_by name: $1)
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
