@@ -12,7 +12,7 @@ if not ENV['TESTING_ENV']
 end
 
 def fetch_month_sheets()
-    for day in ('1'..'31').to_a
+    for day in ('1'..'2').to_a
         range = day + "!" + ENV["CELL_RANGE"]
         info_list = get_sheet_response(range)
         detect_change_send_email(info_list)

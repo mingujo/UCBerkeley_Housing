@@ -1,7 +1,6 @@
-
-class SchedulerMailer < ApplicationMailer
+class SchedulerMailer < ActionMailer::Base
     default from: ENV["GMAIL_USERNAME"]
-
+    layout 'mailer'
     def send_email(ca_id, subject)
         @type = subject
         @timeslot = Timeslot.find_by_ca_id(ca_id)
