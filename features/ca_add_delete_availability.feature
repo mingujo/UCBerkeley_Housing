@@ -12,7 +12,7 @@ Feature: Add and Delete CA Availability
 		| Wednesday              | 11/16             | 1:00pm - 2:00pm          |
 		| Wednesday              | 11/23             | 1:00pm - 2:00pm          |		
 
-		And the current month is November 2016
+		And the current month is "November 2016"
 
 
     Scenario: Get to Add Availibility page for CA
@@ -31,11 +31,11 @@ Feature: Add and Delete CA Availability
     	And I select "1:00pm" from "To"
     	And I press "Save"
     	Then I should be on the "Details" page for "Someone"
-    	And I should see availibility for Tuesday 11/1 12:00pm - 1:00pm
-    	And I should see availibility for Tuesday 11/8 12:00pm - 1:00pm
-    	And I should see availibility for Tuesday 11/15 12:00pm - 1:00pm
-    	And I should see availibility for Tuesday 11/22 12:00pm - 1:00pm
-    	And I should see availibility for Tuesday 11/29 12:00pm - 1:00pm
+    	And I should see availability for "Tuesday 11/1 12:00pm - 1:00pm"
+    	And I should see availability for "Tuesday 11/8 12:00pm - 1:00pm"
+    	And I should see availability for "Tuesday 11/15 12:00pm - 1:00pm"
+    	And I should see availability for "Tuesday 11/22 12:00pm - 1:00pm"
+    	And I should see availability for "Tuesday 11/29 12:00pm - 1:00pm"
 
 
 
@@ -49,21 +49,21 @@ Feature: Add and Delete CA Availability
     	And I fill in "Date" with "1"
     	And I press "Save"
     	Then I should be on the "Details" page for "Someone"
-    	And I should see availibility for Tuesday 11/1 12:00pm - 1:00pm
-    	And I should not see availibility for Tuesday 11/8 12:00pm - 1:00pm
-    	And I should not see availibility for Tuesday 11/15 12:00pm - 1:00pm
-    	And I should not see availibility for Tuesday 11/22 12:00pm - 1:00pm
-    	And I should not see availibility for Tuesday 11/29 12:00pm - 1:00pm   
+    	And I should see availability for "Tuesday 11/1 12:00pm - 1:00pm"
+    	And I should not see availability for "Tuesday 11/8 12:00pm - 1:00pm"
+    	And I should not see availability for "Tuesday 11/15 12:00pm - 1:00pm"
+    	And I should not see availability for "Tuesday 11/22 12:00pm - 1:00pm"
+    	And I should not see availability for "Tuesday 11/29 12:00pm - 1:00pm"  
 
 
 
     Scenario: Delete CA Availability
         Given I am on the "Add Availability" page for the CA "Someone"
         And I press "Delete" for the Availibility Slot "Wednesday 11/2 1:00pm - 2:00pm"
-        Then I should not see availibility for Wednesday 11/2 1:00pm - 2:00pm
-    	And I should see availibility for Wednesday 11/9 1:00pm - 2:00pm
-    	And I should see availibility for Wednesday 11/16 1:00pm - 2:00pm
-    	And I should see availibility for Wednesday 11/23 1:00pm - 2:00pm
+        Then I should not see availability for "Wednesday 11/2 1:00pm - 2:00pm"
+    	And I should see availability for "Wednesday 11/9 1:00pm - 2:00pm"
+    	And I should see availability for "Wednesday 11/16 1:00pm - 2:00pm"
+    	And I should see availability for "Wednesday 11/23 1:00pm - 2:00pm"
 
 
 
