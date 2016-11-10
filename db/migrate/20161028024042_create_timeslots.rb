@@ -3,7 +3,7 @@ class CreateTimeslots < ActiveRecord::Migration
     create_table :timeslots do |t|
       t.date :date
       t.string :time
-      t.integer :ca_id
+      t.references :ca
       t.string :client_name
       t.string :phone_number
       t.string :apt_number

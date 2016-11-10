@@ -15,7 +15,7 @@ Given /^I am on the "([^"]*)" page for the CA "([^"]*)"$/ do |page_name, person|
     pending
 end
 
-And I click /^"([^"]*)"$/ do |button|
+And /^I click "([^"]*)"$/ do |button|
     pending
 end
 
