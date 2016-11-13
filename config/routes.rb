@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'calendar/' => 'calendar#index'
+
+  
   resources :cas
   
   # The priority is based upon order of creation: first created -> highest priority.
