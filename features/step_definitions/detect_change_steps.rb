@@ -15,11 +15,11 @@ Given /^the following timeslots of that day exists:$/ do |timeslot_table|
     timeslot_table.raw.each_with_index do |ts, idx|
 		if ts[1].downcase == "henri"
 			Timeslot.create!({:date => date, 
-							 :time => ts[0], 
+							 :starttime => ts[0], 
 							 :ca_id => Ca.find_by_name(ts[1].downcase)[:id]})
 		elsif ts[1].downcase == "elissa"
 		    Timeslot.create!({:date => date,
-		    				   :time => ts[0], 
+		    				   :starttime => ts[0], 
 		                       :ca_id => Ca.find_by_name(ts[1].downcase)[:id], 
 		                       :client_name => ts[2].downcase,
 		                       :phone_number => ts[3],
@@ -28,7 +28,7 @@ Given /^the following timeslots of that day exists:$/ do |timeslot_table|
 			})
 		elsif ts[1].downcase == "jane"
     		Timeslot.create!({:date => date, 
-    						 :time => ts[0], 
+    						 :starttime => ts[0], 
     						 :ca_id => Ca.find_by_name(ts[1].downcase)[:id]})
 		end
     end
@@ -54,14 +54,14 @@ Then /^"([^"]*)" gets a "([^"]*)" email for date: "([^"]*)", time: "([^"]*)"$/ d
 	date = Date.new(str_date[2].to_i, str_date[0].to_i, str_date[1].to_i)
 	name = name.downcase
 	if kind == "cancellation"
-		expect(Timeslot.find_by_date_and_time_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
+		expect(Timeslot.find_by_date_and_starttime_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
 						[:new_schedule_email_sent]).to eq false
-		expect(Timeslot.find_by_date_and_time_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
+		expect(Timeslot.find_by_date_and_starttime_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
 						[:cancellation_sent]).to eq true
 	elsif kind == "new_schedule_notification"
-		expect(Timeslot.find_by_date_and_time_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
+		expect(Timeslot.find_by_date_and_starttime_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
 						[:new_schedule_email_sent]).to eq true
-		expect(Timeslot.find_by_date_and_time_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
+		expect(Timeslot.find_by_date_and_starttime_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
 						[:cancellation_sent]).to eq false	
 	end
 end
@@ -75,8 +75,8 @@ Then /^"([^"]*)" does not get any email for date: "([^"]*)", time: "([^"]*)"$/ d
 	date = Date.new(str_date[2].to_i, str_date[0].to_i, str_date[1].to_i)
 	name = name.downcase
 
-	expect(Timeslot.find_by_date_and_time_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
+	expect(Timeslot.find_by_date_and_starttime_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
 					[:new_schedule_email_sent]).to eq false
-	expect(Timeslot.find_by_date_and_time_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
+	expect(Timeslot.find_by_date_and_starttime_and_ca_id(date,time,Ca.find_by_name(name)[:id]) \
 					[:cancellation_sent]).to eq false
 end

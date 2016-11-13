@@ -8,7 +8,7 @@ RSpec.describe SchedulerMailer, type: :mailer do
                                    :email=> ENV["TEST_GUY_EMAIL_ADDR"]})
             @temp_ts = Timeslot.create({:id => 123,
                                         :date => Date.parse('2020-09-01'),
-                                        :time => '09:00', 
+                                        :starttime => '09:00', 
                                         :ca_id => @temp_guy.id, 
                                         :client_name => 'John',
                                         :phone_number => '510-123-1234',
@@ -49,7 +49,7 @@ RSpec.describe SchedulerMailer, type: :mailer do
                                    :email=>ENV["TEST_GUY_EMAIL_ADDR"]})
             @temp_ts = Timeslot.create({:id => 123,
                                         :date => Date.parse('2020-09-01'),
-                                        :time => '09:00', 
+                                        :starttime => '09:00', 
                                         :ca_id => @temp_guy.id, 
                                         :client_name => 'John',
                                         :phone_number => '510-123-1234',

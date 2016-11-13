@@ -8,7 +8,7 @@
     
     - if @type == "new_schedule"
         %p
-            Your open house schedule is at <em><b>#{@timeslot.time}</b></em> on <em>#{@timeslot.date}</em>. <br><br>
+            Your open house schedule is at <em><b>#{@timeslot.starttime}</b></em> on <em>#{@timeslot.date}</em>. <br><br>
             
             The visitor's name is:  <em><b>#{@timeslot.client_name}</b></em>. <br>
             And His phone number is:  <em><b>#{@timeslot.phone_number}</b></em>. <br>
@@ -23,7 +23,7 @@
             
     - elsif @type == "cancellation"
         %p
-            Your open house schedule is at <em><b>#{@timeslot.time}</b></em> on <em><b>#{@timeslot.date}</b></em> is now CANCELLED. <br> <br>
+            Your open house schedule is at <em><b>#{@timeslot.starttime}</b></em> on <em><b>#{@timeslot.date}</b></em> is now CANCELLED. <br> <br>
             
             The visitor's name was:  <em><b>#{@timeslot.client_name}</b></em>. <br>
             And His phone number was:  <em><b>#{@timeslot.phone_number}</b></em>. <br>
