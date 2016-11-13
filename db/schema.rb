@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161112020412) do
+ActiveRecord::Schema.define(version: 20161113084725) do
 
   create_table "cas", force: :cascade do |t|
     t.string   "name"
@@ -22,8 +22,7 @@ ActiveRecord::Schema.define(version: 20161112020412) do
   end
 
   create_table "timeslots", force: :cascade do |t|
-    t.date     "date"
-    t.string   "starttime"
+    t.datetime "starttime"
     t.integer  "ca_id"
     t.string   "client_name"
     t.string   "phone_number"
@@ -33,7 +32,7 @@ ActiveRecord::Schema.define(version: 20161112020412) do
     t.datetime "updated_at",                              null: false
     t.boolean  "new_schedule_email_sent", default: false
     t.boolean  "cancellation_sent",       default: false
-    t.string   "endtime"
+    t.datetime "endtime"
   end
 
 end

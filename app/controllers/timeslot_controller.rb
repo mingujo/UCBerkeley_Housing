@@ -1,10 +1,22 @@
+include TimeslotHelper
+
 class TimeslotController < ApplicationController
-	# before_action :set_ca, only: [:show, :edit, :update, :destroy]
-	
+	# before_action :set_timeslot, only: [:show, :edit, :update, :destroy]
+
+	# def timeslot_params
+	# 	params.require(:timeslot).permit(:starttime,
+	# 									 :ca_id)
+	# end
+  
 	def index
 		# params.require(:ca).permit(:name, :email, :phone_number)
 	end
 	
+	# def create
+	# 	params.permit!
+	# 	@timeslot = Timeslot.create(timeslot_params, :endtime => add_30min(params[:starttime]))
+	# 	#if @timeslot.save
+	# end
 	# def create
 	# 	print "In create method"
 	# 	params.permit!

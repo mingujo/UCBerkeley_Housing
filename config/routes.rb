@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   get 'timeslot/' => 'timeslot#index'
 
-  
   resources :cas
   
   # The priority is based upon order of creation: first created -> highest priority.
