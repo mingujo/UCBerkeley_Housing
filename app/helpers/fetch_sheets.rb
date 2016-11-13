@@ -27,33 +27,45 @@ def detect_change_send_email(info_list)
     str_date = info_list[0][0].split(" ")[0].split("/")
     date = Date.new(str_date[2].to_i,str_date[0].to_i,str_date[1].to_i)
     for row in info_list[3..-1]
-        if not Timeslot.find_by_date_and_time(date,row[0]).nil? and \
-            not Timeslot.find_by_date_and_time(date,row[0])[:client_name].nil? and \
+        if not Timeslot.find_by_date_and_starttime(date,row[0]).nil? and \
+            not Timeslot.find_by_date_and_starttime(date,row[0])[:client_name].nil? and \
             row.length == 2
             
             ca_id = Ca.find_by_name(row[1].downcase)[:id]
+            
+            # find timeslot
+            ts = Timeslot.find_by_date_and_starttime_and_ca_id(date, row[0], ca_id)
+            # update timeslot
+            update_ts(ts, nil, nil, nil, nil)
+            
             # send cancellation email
             SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
-        elsif not Timeslot.find_by_date_and_time(date,row[0]).nil? and \
-            Timeslot.find_by_date_and_time(date,row[0])[:client_name].nil? and \
+        elsif not Timeslot.find_by_date_and_starttime(date,row[0]).nil? and \
+            Timeslot.find_by_date_and_starttime(date,row[0])[:client_name].nil? and \
             row.length == 6
             
             # this will error out if ca name is not right
             ca_id = Ca.find_by_name(row[1].downcase)[:id]
+            
             # find timeslot
-            ts = Timeslot.find_by_date_and_time_and_ca_id(date, row[0], ca_id)
-            ts.update({
-                    	:client_name => row[2].downcase,
-                    	:phone_number => row[3],
-                    	:apt_number => row[4],
-                    	:current_tenant => row[5]
-            })
+            ts = Timeslot.find_by_date_and_starttime_and_ca_id(date, row[0], ca_id)
+            # update timeslot
+            update_ts(ts, row[2].downcase, row[3], row[4], row[5])
+
             # send new schedule notification email
             SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
         end
     end
     return false
-    
+end
+
+def update_ts(ts, client_name, phone_number, apt_number, current_tenant)
+  ts.update({
+          	:client_name => client_name,
+          	:phone_number => phone_number,
+          	:apt_number => apt_number,
+          	:current_tenant => current_tenant
+  })
 end
 
 # for CA putting their availability
