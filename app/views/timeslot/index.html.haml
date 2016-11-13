@@ -1,16 +1,16 @@
 %head
-  = link_to 'CALENDAR', calendar_path, :class => 'buttons'
+  = link_to 'CALENDAR', timeslot_path, :class => 'buttons'
   = link_to 'CA INFO', cas_path, :class => 'buttons'
   = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
 
 %body
   %p
     %div
-      #calendar
+      #timeslot
     
 :javascript
     $(document).ready(function() {
-      $("#calendar").fullCalendar({
+      $("#timeslot").fullCalendar({
         header: {
           left: "prev,next today",
           center: "title",

@@ -17,4 +17,4 @@
 //= require moment 
 //= require fullcalendar
 
-$('#calendar').fullCalendar({});
+$('#timeslot').fullCalendar({});

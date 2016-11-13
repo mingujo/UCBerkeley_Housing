@@ -14,7 +14,7 @@
  *= require_self
  *= require fullcalendar
  */
- #calendar{
+ #timeslot{
  	width: 1200px;
  	margin: 0 auto;
  }
