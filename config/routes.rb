@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+  
+  resources :events do 
+    collection do 
+      get :get_events
+      post :move
+      post :resize
+    end
+  end
+
+
+  
   get 'timeslot/' => 'timeslot#index'
 
   resources :cas
