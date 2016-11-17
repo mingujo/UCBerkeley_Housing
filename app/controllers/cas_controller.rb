@@ -1,6 +1,7 @@
 class CasController < ApplicationController
   before_action :set_ca, only: [:show, :edit, :update, :destroy]
   before_action :require_login
+  before_action :require_ca_login, only: [:show, :edit, :update] 
   
   def ca_params
     params.require(:ca).permit(:name, :email, :phone_number)
@@ -94,6 +95,16 @@ class CasController < ApplicationController
           flash[:notice] = "This email is not authorized"
           session[:user_id] = nil
           redirect_to '/auth/login'
+        end
+      end
+    end
+    
+    def require_ca_login
+      user = Ca.get_by_user_id(session[:user_id])
+      unless user.nil?
+        if @ca.id != user.id
+          flash[:notice] = "You cannot access this user's info"
+          redirect_to ca_path(user.id)
         end
       end
     end

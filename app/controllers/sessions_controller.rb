@@ -3,14 +3,20 @@ class SessionsController < ApplicationController
         auth_hash = request.env['omniauth.auth']
         email = auth_hash[:info][:email]
         user = Ca.find_by_email(email)
+        is_ca = true
         if user.nil?
+            is_ca = false
             user = Admin.find_by_email(email)
         end
         if user
             user.user_id = auth_hash[:uid]
             session[:user_id] = auth_hash[:uid]
             user.save
-            redirect_to '/'
+            if is_ca
+                redirect_to ca_path(user.id)
+            else
+                redirect_to '/'
+            end
         else
             flash[:notice] = "This email is not authorized"
             redirect_to '/auth/login'
