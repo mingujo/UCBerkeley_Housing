@@ -1,0 +1,6 @@
+= form_tag :action=> "login" do
+  = label :user, :email, "Email"
+  = text_field :user, :email
+  = label :user, :password
+  = password_field :user, :password
+  = submit_tag 'Login'
