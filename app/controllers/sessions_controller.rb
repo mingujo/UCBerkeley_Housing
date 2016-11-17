@@ -2,11 +2,11 @@ class SessionsController < ApplicationController
     def create
         auth_hash = request.env['omniauth.auth']
         email = auth_hash[:info][:email]
-        user = Ca.find_by_email(email)
+        user = Ca.get_by_email(email)
         is_ca = true
         if user.nil?
             is_ca = false
-            user = Admin.find_by_email(email)
+            user = Admin.get_by_email(email)
         end
         if user
             user.user_id = auth_hash[:uid]
