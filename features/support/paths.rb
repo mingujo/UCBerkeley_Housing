@@ -19,9 +19,15 @@ module NavigationHelpers
       edit_ca_path(Ca.find_by name: $1)
     when /^the "CA page"$/ 
       cas_path
+    when /^the CA page$/
+      cas_path
     when /^the CA page for "(.*)"$/
       ca_path(Ca.find_by name: $1)
+    when /^the CA page for email "(.*)"$/
+      ca_path(Ca.find_by email: $1)
     when /^the "Add CA page"$/
+      new_ca_path
+    when /^the add CA page$/
       new_ca_path
     when /^"Details" for the CA "(.*)"$/
       ca_path(Ca.find_by name: $1)

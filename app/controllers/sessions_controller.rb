@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
             if is_ca
                 redirect_to ca_path(user.id)
             else
-                redirect_to '/'
+                redirect_to cas_path
             end
         else
             flash[:notice] = "This email is not authorized"
