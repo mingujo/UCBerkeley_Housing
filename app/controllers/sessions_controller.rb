@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
             redirect_to '/'
         else
             flash[:notice] = "This email is not authorized"
-            redirect_to '/'
+            redirect_to '/auth/login'
         end
     end
     
