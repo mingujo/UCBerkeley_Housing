@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :events do 
     collection do 
       get :get_events
+      get :get_ca_events
       post :move
       post :resize
     end

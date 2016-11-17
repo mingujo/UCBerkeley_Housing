@@ -2764,8 +2764,8 @@ setDefaults({
 	dragOpacity: {
 		agenda: .5
 	},
-	minTime: 0,
-	maxTime: 24,
+	minTime: 8,
+	maxTime: 17.5,
 	slotEventOverlap: true
 });
 
