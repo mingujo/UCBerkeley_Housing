@@ -86,10 +86,6 @@ function showPeriodAndFrequency(value){
             $('#period').html('month');
             $('#frequency').show();
             break;
-        case 'Yearly':
-            $('#period').html('year');
-            $('#frequency').show();
-            break;
             
         default:
             $('#frequency').hide();

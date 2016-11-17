@@ -10,7 +10,6 @@ class EventsController < ApplicationController
     if params[:event][:period] == "Does not repeat"
       event = Event.new(event_params)
     else
-      #      @event_series = EventSeries.new(:frequency => params[:event][:frequency], :period => params[:event][:repeats], :start_time => params[:event][:start_time], :end_time => params[:event][:end_time], :all_day => params[:event][:all_day])
       event = EventSeries.new(event_params)
     end
     if event.save

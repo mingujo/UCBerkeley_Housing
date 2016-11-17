@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116102056) do
+ActiveRecord::Schema.define(version: 20161117051517) do
 
   create_table "cas", force: :cascade do |t|
     t.string   "name"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20161116102056) do
     t.text     "description"
     t.integer  "event_series_id"
     t.boolean  "all_day",         default: false
+    t.integer  "ca_id"
   end
 
   add_index "events", ["all_day"], name: "index_events_on_all_day"
