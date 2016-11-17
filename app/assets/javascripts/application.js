@@ -1,6 +1,6 @@
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
-//= require turbolinks
 //= require_tree .
 
 function moveEvent(event, dayDelta, minuteDelta, allDay){
@@ -99,6 +99,7 @@ function showPeriodAndFrequency(value){
     
     
 }
+
 $(document).ready(function(){
   $('#create_event_dialog, #desc_dialog').on('submit', "#event_form", function(event) {
     var $spinner = $('.spinner');
