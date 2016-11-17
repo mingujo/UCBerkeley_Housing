@@ -1,7 +1,8 @@
 class CasController < ApplicationController
   before_action :set_ca, only: [:show, :edit, :update, :destroy]
   before_action :require_login
-  before_action :require_ca_login, only: [:show, :edit, :update] 
+  before_action :require_ca_login, only: [:show, :edit, :update]
+  before_action :require_admin_login, only: [:index, :new, :create, :update, :destroy]
   
   def ca_params
     params.require(:ca).permit(:name, :email, :phone_number)
@@ -103,9 +104,18 @@ class CasController < ApplicationController
       user = Ca.get_by_user_id(session[:user_id])
       unless user.nil?
         if @ca.id != user.id
-          flash[:notice] = "You cannot access this user's info"
+          flash[:notice] = "You cannot access that user's info"
           redirect_to ca_path(user.id)
         end
+      end
+    end
+    
+    def require_admin_login
+      user = Admin.get_by_user_id(session[:user_id])
+      if user.nil?
+        flash[:notice] = "You must be admin to access that page"
+        user = Ca.get_by_user_id(session[:user_id])
+        redirect_to ca_path(user.id)
       end
     end
 end
