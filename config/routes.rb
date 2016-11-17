@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :cas
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/logout', to: 'sessions#destroy'
+  get '/auth/login', to: 'sessions#login'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
