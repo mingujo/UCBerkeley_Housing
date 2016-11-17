@@ -20,7 +20,7 @@ Feature: Login
   
   Scenario: Signing out
     Given I am signed in with "ca@berkeley.edu"
-    When I click on sign out
+    When I follow "Sign out"
     Then I should be on the login page
   
   Scenario: Admin
