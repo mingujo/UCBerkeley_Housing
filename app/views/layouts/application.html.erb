@@ -1,10 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
-    <title>jQuery full calendar with RubyOnRails | VinSol</title>
-    <meta name="description" content="Integration of jQuery full calendar plugin with rubyonrails backend by Akhil Bansal at VinSol" />
-    <meta name="keywords" content="jQuery, calendar, rubyonrails, vinsol, full calendar plugin" />
-    <meta name="author" content="Akhil Bansal" />
+    <title>UC Berkeley Housing</title>
     <%= javascript_include_tag 'application', "data-turbolinks-track" => true %>
     <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
   </head>
@@ -21,11 +18,6 @@
           <%= flash[:error] %>
         </div>
         <%end -%>
-        <span>
-          <div id = 'loading'>
-            Loading...
-          </div>
-        </span>
         <div class="aplicationContent">
           <div class="appRightContent">
             <%= yield %>
