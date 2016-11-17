@@ -4,9 +4,9 @@ Feature: Login
   
   Scenario: Redirect to login if not signed in
     When I am on the home page
-    Then I should be in the login page
-    When I am on the ca page
-    Then I should be in the login page
+    Then I should be on the login page
+    When I go to the cas page
+    Then I should be on the login page
     
   Scenario: Signing in
     When I am on the login page
@@ -48,6 +48,6 @@ Feature: Login
   
   Scenario: Not authorized
     Given I am signed in with "not@berkeley.edu"
-    Then I should be on the not authorized page
+    Then I should be in the not authorized page
     When I click sign out
     Then I should be on the login page
