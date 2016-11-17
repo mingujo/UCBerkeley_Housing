@@ -2,6 +2,7 @@ class EventsController < ApplicationController
   
   def new
     @event = Event.new(:end_time => 1.hour.from_now, :period => "Does not repeat")
+    @ca = Ca.find(params[:ca_id])
     render :json => {:form => render_to_string(:partial => 'form')}
   end
   
@@ -91,7 +92,7 @@ class EventsController < ApplicationController
 
   private
     def event_params
-      params.require(:event).permit('title', 'description', 'start_time(1i)', 'start_time(2i)', 'start_time(3i)', 'start_time(4i)', 'start_time(5i)', 'end_time(1i)', 'end_time(2i)', 'end_time(3i)', 'end_time(4i)', 'end_time(5i)', 'all_day', 'period', 'frequency', 'commit_button')
+      params.require(:event).permit('title', 'description', 'start_time(1i)', 'start_time(2i)', 'start_time(3i)', 'start_time(4i)', 'start_time(5i)', 'end_time(1i)', 'end_time(2i)', 'end_time(3i)', 'end_time(4i)', 'end_time(5i)', 'all_day', 'period', 'frequency', 'commit_button', 'ca_id')
     end
   
 end

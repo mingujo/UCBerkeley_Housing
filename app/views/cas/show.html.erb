@@ -14,7 +14,7 @@
 </center>
 <br>
 <p>
-  <%=link_to 'Add Availability', new_event_url, :id => 'new_event' %>
+  <%= link_to 'Add Availability', new_ca_event_path(@ca), :id => 'new_event' %>
   <%= link_to 'Edit CA Info', edit_ca_path(@ca)  %>
   <%= link_to 'Back', cas_path %>
 </p>
@@ -63,7 +63,7 @@
               else 
                   $('#loading').hide();
           },
-          events: "/events/get_events",
+          events: "/events/get_ca_events",
           timeFormat: 'h:mm t{ - h:mm t} ',
           dragOpacity: "0.5",
           eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){

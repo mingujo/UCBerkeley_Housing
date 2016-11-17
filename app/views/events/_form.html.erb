@@ -1,4 +1,4 @@
-<%#remote_form_for @event, :url => {:action => :create}, :before => "$('#creating_events').show();", :complete => "$('#creating_events').hide();" do |f| %>
+<%#remote_form_for ([@ca, @event]), :url => {:action => :create}, :before => "$('#creating_events').show();", :complete => "$('#creating_events').hide();" do |f| %>
 <%= form_for @event, :html => { :id => 'event_form' } do |f| %>
 <p>
   <%=f.label :title %>
@@ -34,6 +34,10 @@
 </p>
 <%=f.hidden_field :id, :value => @event.id %>
 <p>
+<%= f.hidden_field :ca_id, :value => @ca.id %>
   <%=f.submit 'Create' %> <span id = "creating_events" class="spinner" style = "display:none;">Creating, Please wait...</span>
 </p>
+
+
+<p>
 <%end %>
