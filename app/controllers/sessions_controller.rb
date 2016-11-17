@@ -2,23 +2,19 @@ class SessionsController < ApplicationController
     def create
         auth_hash = request.env['omniauth.auth']
         email = auth_hash[:info][:email]
-        ca = Ca.find_by(email: email)
-        if ca
-            ca.user_id = auth_hash[:uid]
+        user = Ca.find_by_email(email)
+        if user.nil?
+            user = Admin.find_by_email(email)
+        end
+        if user
+            user.user_id = auth_hash[:uid]
             session[:user_id] = auth_hash[:uid]
-            ca.save
-            redirect_to '/'
-        elsif is_admin(email)
-            session[:user_id] = auth_hash[:uid]
+            user.save
             redirect_to '/'
         else
             flash[:notice] = "This email is not authorized"
             redirect_to '/'
         end
-    end
-    
-    def is_admin(email)
-        return false
     end
     
     def destroy
