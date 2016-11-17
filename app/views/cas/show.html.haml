@@ -1,27 +1,41 @@
-<h1>
-  <%= @ca.name.inspect %>
-</h1>
-<h3> <%= @ca.email.inspect %> </h3>
-<h3> <%= @ca.phone_number.inspect %> </h3>
-
-
-
-
-
-<center>
-<h1>Schedule</h1>
-
-</center>
-<br>
-<p>
-  <%= link_to 'Add Availability', new_ca_event_path(@ca), :id => 'new_event' %>
-  <%= link_to 'Edit CA Info', edit_ca_path(@ca)  %>
-  <%= link_to 'Back', cas_path %>
-</p>
-
-<script>
+%head
+  = link_to 'CALENDAR', events_path, :class => 'buttons'
+  = link_to 'CA INFO', cas_path, :class => 'buttons'
+  = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
   
-  
+%center
+  %h1 
+    %big Schedule for <em><b>#{@ca.name}</b></em>
+
+%h3
+  = @ca.email 
+  %br/
+  = @ca.phone_number
+
+%body
+  %p
+    = link_to 'Add Availability', new_ca_event_path(@ca), :id => 'new_event'
+    %br/
+    = link_to 'Edit CA Info', edit_ca_path(@ca)
+    %br/
+    = link_to 'Back', cas_path
+  %p
+    %div
+      #calendar
+    #desc_dialog.dialog{:style => "display:none;"}
+      #event_desc
+      %br/
+      %br/
+      #event_actions
+        %span#edit_event
+        %span#delete_event
+    #create_event_dialog.dialog{:style => "display:none;"}
+      #create_event
+
+
+
+
+:javascript  
   $(document).ready(function(){
       // page is now ready, initialize the calendar...
       $('#new_event').click(function(event) {
@@ -55,33 +69,24 @@
               right: 'month,agendaWeek,agendaDay'
           },
           defaultView: 'agendaWeek',
-          height: 500,
           slotMinutes: 15,
+          aspectRatio: 1.5,
           loading: function(bool){
               if (bool) 
                   $('#loading').show();
               else 
                   $('#loading').hide();
           },
-          events: "/events/get_ca_events",
+          events: "/events/get_events",
           timeFormat: 'h:mm t{ - h:mm t} ',
           dragOpacity: "0.5",
           eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
-//              if (confirm("Are you sure about this change?")) {
                   moveEvent(event, dayDelta, minuteDelta, allDay);
-//              }
-//              else {
-//                  revertFunc();
-//              }
+
           },
           
           eventResize: function(event, dayDelta, minuteDelta, revertFunc){
-//              if (confirm("Are you sure about this change?")) {
                   resizeEvent(event, dayDelta, minuteDelta);
-//              }
-//              else {
-//                  revertFunc();
-//              }
           },
           
           eventClick: function(event, jsEvent, view){
@@ -93,22 +98,3 @@
       
       });
   });
-</script>
-<div>
-  <div id='calendar'>
-  </div>
-</div>
-<div id = "desc_dialog" class="dialog" style ="display:none;">
-  <div id = "event_desc">
-  </div>
-  <br/>
-  <br/>
-  <div id = "event_actions">
-    <span id = "edit_event"></span>
-    <span id = "delete_event"></span>
-  </div>
-</div>
-<div id = "create_event_dialog" class="dialog" style ="display:none;">
-  <div id = "create_event">
-  </div>
-</div>
