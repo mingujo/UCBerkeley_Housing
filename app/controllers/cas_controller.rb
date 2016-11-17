@@ -1,5 +1,6 @@
 class CasController < ApplicationController
   before_action :set_ca, only: [:show, :edit, :update, :destroy]
+  before_action :require_login
   
   def ca_params
     params.require(:ca).permit(:name, :email, :phone_number)
@@ -79,5 +80,21 @@ class CasController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def ca_params
       params.fetch(:ca, {})
+    end
+    
+    def require_login
+      if session[:user_id].nil?
+        redirect_to '/auth/login'
+      else
+        user = Ca.get_by_user_id(session[:user_id])
+        if user.nil?
+          user = Admin.get_by_user_id(session[:user_id])
+        end
+        if user.nil?
+          flash[:notice] = "This email is not authorized"
+          session[:user_id] = nil
+          redirect_to '/auth/login'
+        end
+      end
     end
 end
