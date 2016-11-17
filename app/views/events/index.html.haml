@@ -4,9 +4,8 @@
   = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
 
 %body
-  %p
-    = link_to 'Create Event', new_event_url, :id => 'new_event'
-
+  // %p
+  //   = link_to 'Create Event', new_event_url, :id => 'new_event'
   %p
     %div
       #calendar
@@ -26,58 +25,58 @@
   $(document).ready(function(){
       // page is now ready, initialize the calendar...
     $('#new_event').click(function(event) {
-      event.preventDefault();
-      var url = $(this).attr('href');
-      $.ajax({
-        url: url,
-        beforeSend: function() {
-          $('#loading').show();
-        },
-        complete: function() {
-          $('#loading').hide();
-        },
-        success: function(data) {
-          $('#create_event').replaceWith(data['form']);
-          $('#create_event_dialog').dialog({
-            title: 'New Event',
-            modal: true,
-            width: 500,
-            close: function(event, ui) { $('#create_event_dialog').dialog('destroy') }
-          });
-        }
+        event.preventDefault();
+        var url = $(this).attr('href');
+        $.ajax({
+          url: url,
+          beforeSend: function() {
+            $('#loading').show();
+          },
+          complete: function() {
+            $('#loading').hide();
+          },
+          success: function(data) {
+            $('#create_event').replaceWith(data['form']);
+            $('#create_event_dialog').dialog({
+              title: 'New Event',
+              modal: true,
+              width: 500,
+              close: function(event, ui) { $('#create_event_dialog').dialog('destroy') }
+            });
+          }
+        });
       });
+  
+    $('#calendar').fullCalendar({
+      editable: true,
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: "month,agendaWeek,agendaDay,listDay"
+      },
+      slotMinutes: 15,
+      aspectRatio: 1.5,
+      listDayFormat: true,
+      loading: function(bool){
+        if (bool) 
+          $('#loading').show();
+        else 
+          $('#loading').hide();
+      },
+      events: "/events/get_events",
+      timeFormat: 'h:mm t{ - h:mm t} ',
+      dragOpacity: "0.5",
+      eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
+        moveEvent(event, dayDelta, minuteDelta, allDay);
+      },
+      eventResize: function(event, dayDelta, minuteDelta, revertFunc){
+        resizeEvent(event, dayDelta, minuteDelta);
+      },
+      
+      eventClick: function(event, jsEvent, view){
+        showEventDetails(event);
+      }
     });
-
-  $('#calendar').fullCalendar({
-    editable: true,
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: "month,agendaWeek,agendaDay,listDay"
-    },
-    slotMinutes: 15,
-    aspectRatio: 1.5,
-    listDayFormat: true,
-    loading: function(bool){
-      if (bool) 
-        $('#loading').show();
-      else 
-        $('#loading').hide();
-    },
-    events: "/events/get_events",
-    timeFormat: 'h:mm t{ - h:mm t} ',
-    dragOpacity: "0.5",
-    eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
-      moveEvent(event, dayDelta, minuteDelta, allDay);
-    },
-    eventResize: function(event, dayDelta, minuteDelta, revertFunc){
-      resizeEvent(event, dayDelta, minuteDelta);
-    },
-    
-    eventClick: function(event, jsEvent, view){
-      showEventDetails(event);
-    }
-  });
   });
 
 

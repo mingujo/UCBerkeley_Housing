@@ -1,16 +1,6 @@
 <%#remote_form_for ([@ca, @event]), :url => {:action => :create}, :before => "$('#creating_events').show();", :complete => "$('#creating_events').hide();" do |f| %>
 <%= form_for @event, :html => { :id => 'event_form' } do |f| %>
 <p>
-  <%=f.label :title %>
-  <br/>
-  <%=f.text_field :title %>
-</p>
-<p>
-  <%=f.label :description %>
-  <br/>
-  <%=f.text_area :description, :rows => 4, :cols => 30 %>
-</p>
-<p>
   <%=f.label :start_time, 'Start Time' %>
   <br/>
   <%=f.datetime_select :start_time, ampm: true, minute_step: 30, start_hour: 8, end_hour: 17%>

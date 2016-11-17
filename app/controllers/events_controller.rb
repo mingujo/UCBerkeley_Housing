@@ -1,5 +1,6 @@
+require 'byebug'
 class EventsController < ApplicationController
-  
+    
   def new
     @event = Event.new(:end_time => 1.hour.from_now, :period => "Does not repeat")
     @ca = Ca.find(params[:ca_id])
@@ -13,14 +14,20 @@ class EventsController < ApplicationController
       event = EventSeries.new(event_params)
     end
     if event.save
+      byebug
+      if event.class.name == 'Event'
+        Timeslot.create!(:starttime => event[:start_time],
+                 :endtime => event[:end_time],
+                 :ca_id => event[:ca_id])
+      end
       render :nothing => true
     else
       render :text => event.errors.full_messages.to_sentence, :status => 422
     end
+    
   end
   
   def index
-    
   end
   
   
@@ -44,7 +51,7 @@ class EventsController < ApplicationController
   end
   
   def move
-    @event = Event.find_by_id params[:id]
+    @event = Event.find_by_id(params[:id])
     if @event
       @event.start_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.start_time))
       @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
@@ -56,7 +63,7 @@ class EventsController < ApplicationController
   
   
   def resize
-    @event = Event.find_by_id params[:id]
+    @event = Event.find_by_id(params[:id])
     if @event
       @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
       @event.save
@@ -88,11 +95,16 @@ class EventsController < ApplicationController
     @event = Event.find_by_id(params[:id])
     if params[:delete_all] == 'true'
       @event.event_series.destroy
+      # not implemented yet
     elsif params[:delete_all] == 'future'
       @events = @event.event_series.events.find(:all, :conditions => ["start_time > '#{@event.start_time.to_formatted_s(:db)}' "])
       @event.event_series.events.delete(@events)
     else
       @event.destroy
+      if Timeslot.find_by_starttime_and_ca_id(@event.start_time, @event.ca_id)
+        ts_id = Timeslot.find_by_starttime_and_ca_id(@event.start_time, @event.ca_id)[:id]
+        Timeslot.destroy(ts_id)
+      end
     end
     render :nothing => true   
   end

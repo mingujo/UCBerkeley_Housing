@@ -17,24 +17,14 @@
 class Event < ActiveRecord::Base
   attr_accessor :period, :frequency, :commit_button
   
-  validates_presence_of :title, :description
-  validate :validate_timings
-  
   belongs_to :event_series
   
   REPEATS = [
               "Does not repeat",
               "Daily"          ,
               "Weekly"         ,
-              "Monthly"        ,
-              "Yearly"         
+              "Monthly"           
   ]
-  
-  def validate_timings
-    if (start_time >= end_time) and !all_day
-      errors[:base] << "Start Time must be less than End Time"
-    end
-  end
   
   def update_events(events, event)
     events.each do |e|

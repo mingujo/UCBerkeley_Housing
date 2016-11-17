@@ -24,11 +24,12 @@ ActiveRecord::Schema.define(version: 20161117051517) do
   create_table "event_series", force: :cascade do |t|
     t.integer  "frequency",  default: 1
     t.string   "period",     default: "monthly"
-    t.datetime "starttime"
-    t.datetime "endtime"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.boolean  "all_day",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "ca_id"
   end
 
   create_table "events", force: :cascade do |t|
