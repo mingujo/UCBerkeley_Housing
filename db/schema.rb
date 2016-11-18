@@ -11,16 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20161117051517) do
-=======
-ActiveRecord::Schema.define(version: 20161117040015) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email"
     t.string "user_id"
   end
->>>>>>> master
 
   create_table "cas", force: :cascade do |t|
     t.string   "name"
@@ -36,7 +32,6 @@ ActiveRecord::Schema.define(version: 20161117040015) do
     t.string   "period",     default: "monthly"
     t.datetime "start_time"
     t.datetime "end_time"
-    t.boolean  "all_day",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "ca_id"
@@ -48,11 +43,9 @@ ActiveRecord::Schema.define(version: 20161117040015) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "event_series_id"
-    t.boolean  "all_day",         default: false
     t.integer  "ca_id"
   end
 
-  add_index "events", ["all_day"], name: "index_events_on_all_day"
   add_index "events", ["event_series_id"], name: "index_events_on_event_series_id"
 
   create_table "timeslots", force: :cascade do |t|

@@ -298,9 +298,9 @@ DEPENDENCIES
   haml
   jbuilder (~> 2.0)
   jquery-rails
-  omniauth-google-oauth2
   jquery-turbolinks
   momentjs-rails
+  omniauth-google-oauth2
   pg
   rails
   rspec-rails

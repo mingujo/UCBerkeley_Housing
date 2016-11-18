@@ -35,7 +35,6 @@ var defaults = {
 	//disableDragging: false,
 	//disableResizing: false,
 	
-	allDayDefault: true,
 	ignoreTimezone: true,
 	
 	// event ajax
@@ -564,8 +563,8 @@ function Calendar(element, options, eventSources) {
 	-----------------------------------------------------------------------------*/
 	
 
-	function select(start, end, allDay) {
-		currentView.select(start, end, allDay===undefined ? true : allDay);
+	function select(start, end) {
+		currentView.select(start, end);
 	}
 	
 
@@ -1139,7 +1138,6 @@ function EventManager(options, _sources) {
 				}
 				e.title = event.title;
 				e.url = event.url;
-				e.allDay = event.allDay;
 				e.className = event.className;
 				e.editable = event.editable;
 				e.color = event.color;
@@ -1249,9 +1247,6 @@ function EventManager(options, _sources) {
 			event.end = null;
 		}
 		event._end = event.end ? cloneDate(event.end) : null;
-		if (event.allDay === undefined) {
-			event.allDay = firstDefined(source.allDayDefault, options.allDayDefault);
-		}
 		if (event.className) {
 			if (typeof event.className == 'string') {
 				event.className = event.className.split(/\s+/);
@@ -1685,16 +1680,16 @@ fc.applyAll = applyAll;
 
 function exclEndDay(event) {
 	if (event.end) {
-		return _exclEndDay(event.end, event.allDay);
+		return _exclEndDay(event.end);
 	}else{
 		return addDays(cloneDate(event.start), 1);
 	}
 }
 
 
-function _exclEndDay(end, allDay) {
+function _exclEndDay(end) {
 	end = cloneDate(end);
-	return allDay || end.getHours() || end.getMinutes() ? addDays(end, 1) : clearTime(end);
+	return end.getHours() || end.getMinutes() ? addDays(end, 1) : clearTime(end);
 	// why don't we check for seconds/ms too?
 }
 
@@ -2130,8 +2125,6 @@ function BasicView(element, calendar, viewName) {
 	t.colRight = colRight;
 	t.colContentLeft = colContentLeft;
 	t.colContentRight = colContentRight;
-	t.getIsCellAllDay = function() { return true };
-	t.allDayRow = allDayRow;
 	t.getRowCnt = function() { return rowCnt };
 	t.getColCnt = function() { return colCnt };
 	t.getColWidth = function() { return colWidth };
@@ -2503,12 +2496,12 @@ function BasicView(element, calendar, viewName) {
 	-----------------------------------------------------------------------*/
 	
 	
-	function defaultSelectionEnd(startDate, allDay) {
+	function defaultSelectionEnd(startDate) {
 		return cloneDate(startDate);
 	}
 	
 	
-	function renderSelection(startDate, endDate, allDay) {
+	function renderSelection(startDate, endDate) {
 		renderDayOverlay(startDate, addDays(cloneDate(endDate), 1), true); // rebuild every time???
 	}
 	
@@ -2518,10 +2511,10 @@ function BasicView(element, calendar, viewName) {
 	}
 	
 	
-	function reportDayClick(date, allDay, ev) {
+	function reportDayClick(date, ev) {
 		var cell = dateToCell(date);
 		var _element = bodyCells[cell.row*colCnt + cell.col];
-		trigger('dayClick', _element, date, allDay, ev);
+		trigger('dayClick', _element, date, ev);
 	}
 	
 	
@@ -2617,10 +2610,6 @@ function BasicView(element, calendar, viewName) {
 		return colContentPositions.right(col);
 	}
 	
-	
-	function allDayRow(i) {
-		return bodyRows.eq(i);
-	}
 	
 }
 
@@ -2752,8 +2741,6 @@ function AgendaDayView(element, calendar) {
 ;;
 
 setDefaults({
-	allDaySlot: true,
-	allDayText: 'all-day',
 	firstHour: 6,
 	slotMinutes: 30,
 	defaultEventMinutes: 120,
@@ -2785,8 +2772,6 @@ function AgendaView(element, calendar, viewName) {
 	t.afterRender = afterRender;
 	t.defaultEventEnd = defaultEventEnd;
 	t.timePosition = timePosition;
-	t.getIsCellAllDay = getIsCellAllDay;
-	t.allDayRow = getAllDayRow;
 	t.getCoordinateGrid = function() { return coordinateGrid }; // specifically for AgendaEventRenderer
 	t.getHoverListener = function() { return hoverListener };
 	t.colLeft = colLeft;

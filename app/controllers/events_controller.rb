@@ -1,3 +1,4 @@
+require 'byebug'
 class EventsController < ApplicationController
     
   def new
@@ -12,6 +13,7 @@ class EventsController < ApplicationController
     else
       event = EventSeries.new(event_params)
     end
+    byebug
     if event.save
       if event.class.name == 'Event'
         Timeslot.create!(:starttime => event[:start_time],

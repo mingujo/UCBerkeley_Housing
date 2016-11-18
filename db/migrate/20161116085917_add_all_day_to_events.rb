@@ -1,7 +1,7 @@
 class AddAllDayToEvents < ActiveRecord::Migration
   def self.up
     add_column :events, :all_day, :boolean, :default => false
-    add_index :events, :all_day
+    # add_index :events, :all_day
   end
   
   def self.down
