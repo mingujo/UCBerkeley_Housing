@@ -1,3 +1,4 @@
+require 'byebug'
 class EventsController < ApplicationController
     
   def new
