@@ -17,6 +17,7 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+require 'factory_girl_rails'
 # coverage
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start

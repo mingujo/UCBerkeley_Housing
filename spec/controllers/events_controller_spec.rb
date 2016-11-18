@@ -24,115 +24,162 @@ RSpec.describe EventsController, type: :controller do
   # Event. As you add validations to Event, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {:ca_id => "1", :start_time => Time.now, :end_time => Time.now+1.hour}
   }
 
   let(:invalid_attributes) {
     skip("Add a hash of attributes invalid for your model")
   }
+  
+  let(:valid_session) { {} }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # EventsController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+
 
   describe "GET #index" do
-    it "assigns all events as @events" do
-      event = Event.create! valid_attributes
-      get :index, params: {}, session: valid_session
-      expect(assigns(:events)).to eq([event])
+    "index method doesnt do anything"
+  end
+  
+  
+  describe "GET #get_events" do
+    it "gets all events" do
+      event1 = FactoryGirl.create(:event, :ca_id => 1)
+      event2 = FactoryGirl.create(:event, :ca_id => 2)
+      get :get_events, start: "1477810800", end: "1481443200"
+      expect(assigns(:events)).to include(event1)
+      expect(assigns(:events)).to include(event2)
+    end
+  end
+  
+  
+    
+  describe "GET #get_ca_events" do
+    it "gets all events belonging to a particular CA" do
+      event1 = FactoryGirl.create(:event, :ca_id => 1)
+      event2 = FactoryGirl.create(:event, :ca_id => 2)
+      event3 = FactoryGirl.create(:event, :ca_id => 2)
+      get :get_ca_events, :ca_id => 2, start: "1477810800", end: "1481443200"
+      expect(assigns(:events)).to include(event2)
+      expect(assigns(:events)).to include(event3)
+      expect(assigns(:events)).not_to include(event1)
     end
   end
 
-  describe "GET #show" do
-    it "assigns the requested event as @event" do
-      event = Event.create! valid_attributes
-      get :show, params: {id: event.to_param}, session: valid_session
-      expect(assigns(:event)).to eq(event)
-    end
-  end
 
   describe "GET #new" do
-    it "assigns a new event as @event" do
-      get :new, params: {}, session: valid_session
-      expect(assigns(:event)).to be_a_new(Event)
-    end
+    before :each do
+    @temp_event = double("Event",            
+        'start_time(1i)' => 2016, 
+        'start_time(2i)' => 11,
+        'start_time(3i)' => 11, 
+        'start_time(4i)' => 8, 
+        'start_time(5i)' => 0,
+        'end_time(1i)' =>2016, 
+        'end_time(2i)' =>12, 
+        'end_time(3i)' =>1, 
+        'end_time(4i)' =>8, 
+        'end_time(5i)' =>30,
+        :id => 2,
+        :ca_id => "3",
+        :period => "Does not repeat"
+      )
+
+      @temp_ca = double("Ca", :user_id => "3")  
+      expect(Ca).to receive(:find).with("3").and_return(@temp_ca)
+    end 
+    
+    it "renders new template" do
+        get :new, {:ca_id => '3'}
+        expect(response).to render_template("events/_form")
+    end   
   end
 
-  describe "GET #edit" do
-    it "assigns the requested event as @event" do
-      event = Event.create! valid_attributes
-      get :edit, params: {id: event.to_param}, session: valid_session
-      expect(assigns(:event)).to eq(event)
+
+describe "GET #edit" do
+   before :each do
+       @temp_event = double("Event",            
+           'start_time(1i)' => 2016, 
+           'start_time(2i)' => 11,
+           'start_time(3i)' => 11, 
+           'start_time(4i)' => 8, 
+           'start_time(5i)' => 0,
+           'end_time(1i)' =>2016, 
+           'end_time(2i)' =>12, 
+           'end_time(3i)' =>1, 
+           'end_time(4i)' =>8, 
+           'end_time(5i)' =>30,
+           :id => 2,
+           :ca_id => 3,
+           :period => "Does not repeat"
+       )
+       expect(Event).to receive(:find_by_id).with("2").and_return(@temp_event)
+   end
+   it "renders edit template" do
+       get :edit, {:id => '2'}
+       expect(response).to render_template("events/_edit_form")
+   end    
+ end
+
+ describe "POST #create" do
+   context "with valid params" do
+    it "creates a new Event" do
+      # @temp_event = double("Event", :id=>"1", :starttime => Time.now, :endtime => Time.now+1.hours, :period => "Does not repeat")
+      expect {
+        post :create, {:event => {
+          'start_time(1i)' => 2016, 
+          'start_time(2i)' => 11,
+          'start_time(3i)' => 11, 
+          'start_time(4i)' => 8, 
+          'start_time(5i)' => 0,
+          'end_time(1i)' =>2016, 
+          'end_time(2i)' =>12, 
+          'end_time(3i)' =>1, 
+          'end_time(4i)' =>8, 
+          'end_time(5i)' =>30,
+          :id => 2,
+          :ca_id => 3,
+          :period => "Does not repeat"}}
+        }.to change(Event, :count).by(1)
+        expect(Timeslot.count).to be(1)
     end
-  end
-
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Event" do
-        # @temp_event = double("Event", :id=>"1", :starttime => Time.now, :endtime => Time.now+1.hours, :period => "Does not repeat")
-        expect {
-          post :create, {:event => {
-            'start_time(1i)' => 2016, 
-            'start_time(2i)' => 11,
-            'start_time(3i)' => 11, 
-            'start_time(4i)' => 8, 
-            'start_time(5i)' => 0,
-            'end_time(1i)' =>2016, 
-            'end_time(2i)' =>12, 
-            'end_time(3i)' =>1, 
-            'end_time(4i)' =>8, 
-            'end_time(5i)' =>30,
-            :id => 2,
-            :ca_id => 3,
-            :period => "Does not repeat"}}
-          }.to change(Event, :count).by(1)
-          expect(Timeslot.count).to be(1)
-      end
-
-      it "creates a new event series" do
-        expect {
-          post :create, {:event => {
-            'start_time(1i)' => 2016, 
-            'start_time(2i)' => 11,
-            'start_time(3i)' => 11, 
-            'start_time(4i)' => 8, 
-            'start_time(5i)' => 0,
-            'end_time(1i)' =>2016, 
-            'end_time(2i)' =>12, 
-            'end_time(3i)' =>1, 
-            'end_time(4i)' =>8, 
-            'end_time(5i)' =>30,
-            :id => 2,
-            :period => 'Weekly'
-          }}
-          }.to change(EventSeries, :count).by(1)
-      end
-      
-      it "assigns a newly created event as @event" do
-        @temp_event = double("Event", :id=>"1", :starttime => Time.now, :endtime => Time.now+1.hours, :period => "Does not repeat")
-        post :create, {:event => {:id => "2", :start_time => Time.now+1.hours, :end_time => Time.now+2.hours,}}
-        expect(assigns(:event)).to be_a(Event)
-      end
-
-      it "redirects to the created event" do
-        post :create, params: {event: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Event.last)
-      end
+     
+    it "creates a new event series" do
+      expect {
+        post :create, {:event => {
+          'start_time(1i)' => 2016, 
+          'start_time(2i)' => 11,
+          'start_time(3i)' => 11, 
+          'start_time(4i)' => 8, 
+          'start_time(5i)' => 0,
+          'end_time(1i)' =>2016, 
+          'end_time(2i)' =>12, 
+          'end_time(3i)' =>1, 
+          'end_time(4i)' =>8, 
+          'end_time(5i)' =>30,
+          :id => 2,
+          :period => 'Weekly'
+        }}
+        }.to change(EventSeries, :count).by(1)
     end
+   end
+ end
+     
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved event as @event" do
-        post :create, params: {event: invalid_attributes}, session: valid_session
-        expect(assigns(:event)).to be_a_new(Event)
-      end
 
-      it "re-renders the 'new' template" do
-        post :create, params: {event: invalid_attributes}, session: valid_session
-        expect(response).to render_template("new")
-      end
-    end
-  end
+  #   context "with invalid params" do
+  #     it "assigns a newly created but unsaved event as @event" do
+  #       post :create, params: {event: invalid_attributes}, session: valid_session
+  #       expect(assigns(:event)).to be_a_new(Event)
+  #     end
+
+  #     it "re-renders the 'new' template" do
+  #       post :create, params: {event: invalid_attributes}, session: valid_session
+  #       expect(response).to render_template("new")
+  #     end
+  #   end
+  # end
 
   describe "PUT #update" do
     context "with valid params" do
@@ -141,53 +188,55 @@ RSpec.describe EventsController, type: :controller do
       }
 
       it "updates the requested event" do
-        event = Event.create! valid_attributes
-        put :update, params: {id: event.to_param, event: new_attributes}, session: valid_session
+        event = FactoryGirl.create(:event)
+        new_event = FactoryGirl.create(:event, :start_time => "2016-11-16 00:00:00", :end_time => "2016-11-16 00:00:01")
+        put :update, id: event.to_param, event: new_event.attributes
         event.reload
-        skip("Add assertions for updated state")
+        expect(assigns(:event).start_time).to eq("2016-11-16 00:00:00")
       end
 
-      it "assigns the requested event as @event" do
-        event = Event.create! valid_attributes
-        put :update, params: {id: event.to_param, event: valid_attributes}, session: valid_session
-        expect(assigns(:event)).to eq(event)
-      end
+      # it "assigns the requested event as @event" do
+      #   event = Event.create! valid_attributes
+      #   put :update, params: {id: event.to_param, event: valid_attributes}, session: valid_session
+      #   expect(assigns(:event)).to eq(event)
+      # end
 
-      it "redirects to the event" do
-        event = Event.create! valid_attributes
-        put :update, params: {id: event.to_param, event: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(event)
-      end
-    end
+    #   it "redirects to the event" do
+    #     event = Event.create! valid_attributes
+    #     put :update, params: {id: event.to_param, event: valid_attributes}, session: valid_session
+    #     expect(response).to redirect_to(event)
+    #   end
+    # end
 
-    context "with invalid params" do
-      it "assigns the event as @event" do
-        event = Event.create! valid_attributes
-        put :update, params: {id: event.to_param, event: invalid_attributes}, session: valid_session
-        expect(assigns(:event)).to eq(event)
-      end
+    # context "with invalid params" do
+    #   it "assigns the event as @event" do
+    #     event = Event.create! valid_attributes
+    #     put :update, params: {id: event.to_param, event: invalid_attributes}, session: valid_session
+    #     expect(assigns(:event)).to eq(event)
+    #   end
 
-      it "re-renders the 'edit' template" do
-        event = Event.create! valid_attributes
-        put :update, params: {id: event.to_param, event: invalid_attributes}, session: valid_session
-        expect(response).to render_template("edit")
-      end
+      # it "re-renders the 'edit' template" do
+      #   event = Event.create! valid_attributes
+      #   put :update, params: {id: event.to_param, event: invalid_attributes}, session: valid_session
+      #   expect(response).to render_template("edit")
+      # end
     end
   end
 
   describe "DELETE #destroy" do
     it "destroys the requested event" do
-      event = Event.create! valid_attributes
+      event = FactoryGirl.create(:event)
       expect {
-        delete :destroy, params: {id: event.to_param}, session: valid_session
-      }.to change(Event, :count).by(-1)
-    end
-
-    it "redirects to the events list" do
-      event = Event.create! valid_attributes
-      delete :destroy, params: {id: event.to_param}, session: valid_session
-      expect(response).to redirect_to(events_url)
+        delete :destroy, id: event.to_param
+      }.to change(Event.all, :count).by(-1)
     end
   end
+
+#     it "redirects to the events list" do
+#       event = Event.create! valid_attributes
+#       delete :destroy, params: {id: event.to_param}, session: valid_session
+#       expect(response).to redirect_to(events_url)
+#     end
+#   end
 
 end
