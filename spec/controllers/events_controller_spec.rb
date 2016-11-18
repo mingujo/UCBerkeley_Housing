@@ -55,7 +55,6 @@ RSpec.describe EventsController, type: :controller do
   describe "GET #new" do
     it "assigns a new event as @event" do
       get :new, params: {}, session: valid_session
-      ### MOCK CA_ID HERE !!!!!!!!!!!!!!!
       expect(assigns(:event)).to be_a_new(Event)
     end
   end
@@ -71,15 +70,49 @@ RSpec.describe EventsController, type: :controller do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new Event" do
+        # @temp_event = double("Event", :id=>"1", :starttime => Time.now, :endtime => Time.now+1.hours, :period => "Does not repeat")
         expect {
-          post :create, params: {event: valid_attributes}, session: valid_session
-        }.to change(Event, :count).by(1)
+          post :create, {:event => {
+            'start_time(1i)' => 2016, 
+            'start_time(2i)' => 11,
+            'start_time(3i)' => 11, 
+            'start_time(4i)' => 8, 
+            'start_time(5i)' => 0,
+            'end_time(1i)' =>2016, 
+            'end_time(2i)' =>12, 
+            'end_time(3i)' =>1, 
+            'end_time(4i)' =>8, 
+            'end_time(5i)' =>30,
+            :id => 2,
+            :ca_id => 3,
+            :period => "Does not repeat"}}
+          }.to change(Event, :count).by(1)
+          expect(Timeslot.count).to be(1)
       end
 
+      it "creates a new event series" do
+        expect {
+          post :create, {:event => {
+            'start_time(1i)' => 2016, 
+            'start_time(2i)' => 11,
+            'start_time(3i)' => 11, 
+            'start_time(4i)' => 8, 
+            'start_time(5i)' => 0,
+            'end_time(1i)' =>2016, 
+            'end_time(2i)' =>12, 
+            'end_time(3i)' =>1, 
+            'end_time(4i)' =>8, 
+            'end_time(5i)' =>30,
+            :id => 2,
+            :period => 'Weekly'
+          }}
+          }.to change(EventSeries, :count).by(1)
+      end
+      
       it "assigns a newly created event as @event" do
-        post :create, params: {event: valid_attributes}, session: valid_session
+        @temp_event = double("Event", :id=>"1", :starttime => Time.now, :endtime => Time.now+1.hours, :period => "Does not repeat")
+        post :create, {:event => {:id => "2", :start_time => Time.now+1.hours, :end_time => Time.now+2.hours,}}
         expect(assigns(:event)).to be_a(Event)
-        expect(assigns(:event)).to be_persisted
       end
 
       it "redirects to the created event" do
