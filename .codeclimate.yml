@@ -1,0 +1,4 @@
+## other configuration excluded from example...
+exclude_paths:
+- "app/assets/javascripts/fullcalendar.js"
+- "app/assets/javascripts/application.js"
