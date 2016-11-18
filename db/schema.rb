@@ -33,12 +33,10 @@ ActiveRecord::Schema.define(version: 20161117051517) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "title"
     t.datetime "start_time"
     t.datetime "end_time"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "description"
     t.integer  "event_series_id"
     t.boolean  "all_day",         default: false
     t.integer  "ca_id"

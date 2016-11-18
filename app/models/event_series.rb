@@ -1,6 +1,3 @@
-# == Schema Information
-# Schema version: 20100330111833
-#
 # Table name: event_series
 #
 #  id         :integer(4)      not null, primary key
@@ -16,7 +13,7 @@ require 'date'
 RECURRING_EVENTS_UPTO = (Date.today.beginning_of_year + 1.years).to_time
 
 class EventSeries < ActiveRecord::Base
-  attr_accessor :title, :description, :commit_button
+  attr_accessor :commit_button
   
   validates_presence_of :frequency, :period, :start_time, :end_time
   
@@ -56,8 +53,6 @@ class EventSeries < ActiveRecord::Base
   #     p = 'weeks'
   #     when "Monthly"
   #     p = 'months'
-  #     when "Yearly"
-  #     p = 'years'
   #   end
   #   return p
   # end

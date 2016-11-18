@@ -1,15 +1,5 @@
 <%= form_for @event, :html => { :id => 'event_form' } do |f| %>
 <p>
-  <%=f.label :title %>
-  <br/>
-  <%=f.text_field :title %>
-</p>
-<p>
-  <%=f.label :description %>
-  <br/>
-  <%=f.text_area :description, :rows => 4, :cols => 30 %>
-</p>
-<p>
   <%=f.label :start_time, 'Start Time' %>
   <br/>
   <%=f.datetime_select :start_time %>
@@ -18,10 +8,6 @@
   <%=f.label :end_time, 'End Time' %>
   <br/>
   <%=f.datetime_select :end_time %>
-</p>
-<p>
-  <%=f.label :all_day %>
-  <%=f.check_box :all_day %>
 </p>
 <%if false%>
 <%period = (@event.event_series)? @event.event_series.period : nil -%>

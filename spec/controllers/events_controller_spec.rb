@@ -55,6 +55,7 @@ RSpec.describe EventsController, type: :controller do
   describe "GET #new" do
     it "assigns a new event as @event" do
       get :new, params: {}, session: valid_session
+      ### MOCK CA_ID HERE !!!!!!!!!!!!!!!
       expect(assigns(:event)).to be_a_new(Event)
     end
   end

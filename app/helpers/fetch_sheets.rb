@@ -28,6 +28,7 @@ def detect_change_send_email(info_list)
     str_date = info_list[0][0].split(" ")[0]
     
     # ONE SAD PATH: if there is no ca and scheduler puts the client name, it will error out
+    # ONE SAD PATH: check if client is being replaced
     
     for row in info_list[3..-1]
         starttime = Time.parse(str_date + " " + row[0])

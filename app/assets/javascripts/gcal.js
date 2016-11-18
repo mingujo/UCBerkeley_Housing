@@ -76,13 +76,9 @@ function transformOptions(sourceOptions, start, end) {
 					}
 					events.push({
 						id: entry['gCal$uid']['value'],
-						title: entry['title']['$t'],
 						url: url,
 						start: start,
-						end: end,
-						allDay: allDay,
-						location: entry['gd$where'][0]['valueString'],
-						description: entry['content']['$t']
+						end: end
 					});
 				});
 			}

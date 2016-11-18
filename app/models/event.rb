@@ -1,24 +1,16 @@
-# == Schema Information
-# Schema version: 20100330111833
-#
 # Table name: events
 #
 #  id              :integer(4)      not null, primary key
-#  title           :string(255)
 #  start_time       :datetime
 #  end_time         :datetime
-#  all_day         :boolean(1)
 #  created_at      :datetime
 #  updated_at      :datetime
-#  description     :text
 #  event_series_id :integer(4)
 #
 
 class Event < ActiveRecord::Base
   attr_accessor :period, :frequency, :commit_button
-  
   belongs_to :event_series
-  
   REPEATS = [
               "Does not repeat",
               "Daily"          ,
@@ -38,12 +30,10 @@ class Event < ActiveRecord::Base
           nst = DateTime.parse("#{e.start_time.hour}:#{e.start_time.min}:#{e.start_time.sec}, #{st.day}-#{st.month}-#{st.year}")  
           net = DateTime.parse("#{e.end_time.hour}:#{e.end_time.min}:#{e.end_time.sec}, #{et.day}-#{et.month}-#{et.year}")
         end
-        #puts "#{nst}           :::::::::          #{net}"
       rescue
         nst = net = nil
       end
       if nst and net
-        #          e.attributes = event
         e.start_time, e.end_time = nst, net
         e.save
       end

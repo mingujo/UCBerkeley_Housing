@@ -11,10 +11,6 @@
   <%=f.datetime_select :end_time, ampm: true, minute_step: 30, start_hour: 8, end_hour: 17 %>
 </p>
 <p>
-  <%=f.label :all_day %>
-  <%=f.check_box :all_day %>
-</p>
-<p>
   <%=f.label :period, "Repeats" %>
   <%=f.select :period, Event::REPEATS,{}, :onchange => "showPeriodAndFrequency(this.value);" %>
 </p>

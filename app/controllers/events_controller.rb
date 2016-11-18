@@ -1,4 +1,3 @@
-require 'byebug'
 class EventsController < ApplicationController
     
   def new
@@ -14,11 +13,10 @@ class EventsController < ApplicationController
       event = EventSeries.new(event_params)
     end
     if event.save
-      byebug
       if event.class.name == 'Event'
         Timeslot.create!(:starttime => event[:start_time],
-                 :endtime => event[:end_time],
-                 :ca_id => event[:ca_id])
+                         :endtime => event[:end_time],
+                         :ca_id => event[:ca_id])
       end
       render :nothing => true
     else
@@ -35,7 +33,7 @@ class EventsController < ApplicationController
     @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] )
     events = [] 
     @events.each do |event|
-      events << {:id => event.id, :title => event.title, :description => event.description || "Some cool description here...", :start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :allDay => event.all_day, :recurring => (event.event_series_id)? true: false}
+      events << {:id => event.id, :start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :recurring => (event.event_series_id)? true: false}
     end
     render :text => events.to_json
   end
@@ -45,7 +43,7 @@ class EventsController < ApplicationController
     @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] ) #.where...
     events = [] 
     @events.each do |event|
-      events << {:id => event.id, :title => event.title, :description => event.description, :start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :allDay => event.all_day, :recurring => (event.event_series_id)? true: false}
+      events << {:id => event.id, :start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :recurring => (event.event_series_id)? true: false}
     end
     render :text => events.to_json
   end
@@ -55,7 +53,6 @@ class EventsController < ApplicationController
     if @event
       @event.start_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.start_time))
       @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
-      @event.all_day = params[:all_day]
       @event.save
     end
     render :nothing => true
@@ -111,7 +108,7 @@ class EventsController < ApplicationController
 
   private
     def event_params
-      params.require(:event).permit('title', 'description', 'start_time(1i)', 'start_time(2i)', 'start_time(3i)', 'start_time(4i)', 'start_time(5i)', 'end_time(1i)', 'end_time(2i)', 'end_time(3i)', 'end_time(4i)', 'end_time(5i)', 'all_day', 'period', 'frequency', 'commit_button', 'ca_id')
+      params.require(:event).permit('start_time(1i)', 'start_time(2i)', 'start_time(3i)', 'start_time(4i)', 'start_time(5i)', 'end_time(1i)', 'end_time(2i)', 'end_time(3i)', 'end_time(4i)', 'end_time(5i)', 'period', 'frequency', 'commit_button', 'ca_id')
     end
   
 end
