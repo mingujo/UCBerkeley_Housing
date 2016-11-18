@@ -1,6 +1,5 @@
 require 'time'
 include TimeslotHelper
-require 'byebug'
 require_relative '../../app/helpers/fetch_sheets'
 
 # can we mock list not hash
