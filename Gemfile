@@ -33,6 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'haml'
 gem 'figaro'
 gem 'google-api-client'
+gem "omniauth-google-oauth2"
 gem 'fullcalendar-rails'
 gem 'momentjs-rails'
 gem 'jquery-turbolinks'
