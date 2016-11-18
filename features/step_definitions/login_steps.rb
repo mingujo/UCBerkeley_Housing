@@ -25,7 +25,9 @@ end
 
 Then(/^I should be in my CA page$/) do
   current_path = URI.parse(current_url).path
-  current_path.should == ca_path(101) || current_path.should == ca_path(1)
+  if !current_path.should == ca_path(1)
+    current_path.should == ca_path(101)
+  end
 end
 
 When(/^I click on sign out$/) do
