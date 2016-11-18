@@ -34,6 +34,9 @@ gem 'haml'
 gem 'figaro'
 gem 'google-api-client'
 gem "omniauth-google-oauth2"
+gem 'fullcalendar-rails'
+gem 'momentjs-rails'
+gem 'jquery-turbolinks'
 
 group :development, :test do
   gem 'byebug'

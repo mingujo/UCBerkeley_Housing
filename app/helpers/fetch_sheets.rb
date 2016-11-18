@@ -1,14 +1,15 @@
-require 'date'
+require 'time'
 require_relative 'google_api_authorization'
 require_relative '../mailers/scheduler_mailer'
+require 'byebug'
 
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
 
 if not ENV['TESTING_ENV']
-  $service = Google::Apis::SheetsV4::SheetsService.new
-  $service.client_options.application_name = APPLICATION_NAME
-  $service.authorization = authorize
+    $service = Google::Apis::SheetsV4::SheetsService.new
+    $service.client_options.application_name = APPLICATION_NAME
+    $service.authorization = authorize
 end
 
 def fetch_month_sheets()
@@ -24,48 +25,47 @@ def get_sheet_response(range)
 end
 
 def detect_change_send_email(info_list)
-    str_date = info_list[0][0].split(" ")[0].split("/")
-    date = Date.new(str_date[2].to_i,str_date[0].to_i,str_date[1].to_i)
+    str_date = info_list[0][0].split(" ")[0]
+    
+    # ONE SAD PATH: if there is no ca and scheduler puts the client name, it will error out
+    # ONE SAD PATH: check if client is being replaced
+    
     for row in info_list[3..-1]
-        if not Timeslot.find_by_date_and_starttime(date,row[0]).nil? and \
-            not Timeslot.find_by_date_and_starttime(date,row[0])[:client_name].nil? and \
-            row.length == 2
-            
-            ca_id = Ca.find_by_name(row[1].downcase)[:id]
-            
-            # find timeslot
-            ts = Timeslot.find_by_date_and_starttime_and_ca_id(date, row[0], ca_id)
-            # update timeslot
-            update_ts(ts, nil, nil, nil, nil)
-            
-            # send cancellation email
-            SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
-        elsif not Timeslot.find_by_date_and_starttime(date,row[0]).nil? and \
-            Timeslot.find_by_date_and_starttime(date,row[0])[:client_name].nil? and \
-            row.length == 6
-            
-            # this will error out if ca name is not right
-            ca_id = Ca.find_by_name(row[1].downcase)[:id]
-            
-            # find timeslot
-            ts = Timeslot.find_by_date_and_starttime_and_ca_id(date, row[0], ca_id)
-            # update timeslot
-            update_ts(ts, row[2].downcase, row[3], row[4], row[5])
-
-            # send new schedule notification email
-            SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
+        starttime = Time.parse(str_date + " " + row[0])
+        # find ts
+        ts = Timeslot.find_by_starttime(starttime)
+        # find ca
+        ca = Ca.find_by_name(row[1].downcase)
+        if not ts.nil? and not ca.nil?
+            # find ca_id
+            ca_id = ca[:id]
+            if row.length == 6 and ts[:client_name].nil?
+                # update timeslot
+                update_ts(ts, row[2].downcase, row[3], row[4], row[5])
+    
+                # send new schedule notification email
+                SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
+                
+            elsif row.length == 2 and not ts[:client_name].nil?
+                # update timeslot
+                update_ts(ts, nil, nil, nil, nil)
+                
+                # send cancellation email
+                SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
+            end
         end
     end
+    
     return false
 end
 
 def update_ts(ts, client_name, phone_number, apt_number, current_tenant)
-  ts.update({
-          	:client_name => client_name,
-          	:phone_number => phone_number,
-          	:apt_number => apt_number,
-          	:current_tenant => current_tenant
-  })
+    ts.update({
+            	:client_name => client_name,
+            	:phone_number => phone_number,
+            	:apt_number => apt_number,
+            	:current_tenant => current_tenant
+    })
 end
 
 # for CA putting their availability

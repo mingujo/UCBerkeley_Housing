@@ -1,8 +1,22 @@
 Rails.application.routes.draw do
+  
+  resources :events do 
+    collection do 
+      get :get_events
+      get :get_ca_events
+      post :move
+      post :resize
+    end
+  end
+
   resources :cas
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/auth/logout', to: 'sessions#destroy'
   get '/auth/login', to: 'sessions#login'
+  
+  resources :cas do
+    resources :events, only: [:new]
+  end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

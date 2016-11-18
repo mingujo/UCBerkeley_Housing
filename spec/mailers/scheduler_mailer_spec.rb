@@ -1,14 +1,16 @@
 require "rails_helper"
-require "date"
+require "time"
+include TimeslotHelper
 
 RSpec.describe SchedulerMailer, type: :mailer do
     describe "new_schedule_notification_email(guy_CA)" do
         before :all do
             @temp_guy = Ca.create({:id=> 100, :name=> ENV["TEST_GUY_NAME"], 
                                    :email=> ENV["TEST_GUY_EMAIL_ADDR"]})
+            starttime = Time.parse('2020-09-01 09:00')
             @temp_ts = Timeslot.create({:id => 123,
-                                        :date => Date.parse('2020-09-01'),
-                                        :starttime => '09:00', 
+                                        :starttime => starttime, 
+                                        :endtime => add_30min(starttime),
                                         :ca_id => @temp_guy.id, 
                                         :client_name => 'John',
                                         :phone_number => '510-123-1234',
@@ -47,9 +49,10 @@ RSpec.describe SchedulerMailer, type: :mailer do
             @temp_guy = Ca.create({:id=> 100, 
                                    :name=> ENV["TEST_GUY_NAME"], 
                                    :email=>ENV["TEST_GUY_EMAIL_ADDR"]})
+            starttime = Time.parse('2020-09-01 09:00')
             @temp_ts = Timeslot.create({:id => 123,
-                                        :date => Date.parse('2020-09-01'),
-                                        :starttime => '09:00', 
+                                        :starttime => starttime, 
+                                        :endtime => add_30min(starttime),
                                         :ca_id => @temp_guy.id, 
                                         :client_name => 'John',
                                         :phone_number => '510-123-1234',

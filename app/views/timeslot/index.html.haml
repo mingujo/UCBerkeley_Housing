@@ -1,0 +1,24 @@
+%head
+  = link_to 'CALENDAR', events_path, :class => 'buttons'
+  = link_to 'CA INFO', cas_path, :class => 'buttons'
+  = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
+
+%body
+  %p
+    %div
+      #timeslot
+    
+:javascript
+    $(document).ready(function() {
+      $("#timeslot").fullCalendar({
+        header: {
+          left: "prev,next today",
+          center: "title",
+          right: "month,agendaWeek,agendaDay,listDay"
+        },
+        theme: false,
+        slotMinutes: 15,
+        aspectRatio: 1.5,
+        listDayFormat: true,
+      })
+    });

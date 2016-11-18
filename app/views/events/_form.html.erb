@@ -1,0 +1,29 @@
+<%#remote_form_for ([@ca, @event]), :url => {:action => :create}, :before => "$('#creating_events').show();", :complete => "$('#creating_events').hide();" do |f| %>
+<%= form_for @event, :html => { :id => 'event_form' } do |f| %>
+<p>
+  <%=f.label :start_time, 'Start Time' %>
+  <br/>
+  <%=f.datetime_select :start_time, ampm: true, minute_step: 30, start_hour: 8, end_hour: 17%>
+</p>
+<p>
+  <%=f.label :end_time, 'End Time' %>
+  <br/>
+  <%=f.datetime_select :end_time, ampm: true, minute_step: 30, start_hour: 8, end_hour: 17 %>
+</p>
+<p>
+  <%=f.label :period, "Repeats" %>
+  <%=f.select :period, Event::REPEATS,{}, :onchange => "showPeriodAndFrequency(this.value);" %>
+</p>
+<p id = "frequency" style = "display:none;">
+  <%=f.label :frequency, "Repeat every" %>
+  <%=f.select :frequency, (1..30).to_a %> <span id = "period"></span>
+</p>
+<%=f.hidden_field :id, :value => @event.id %>
+<p>
+<%= f.hidden_field :ca_id, :value => @ca.id %>
+  <%=f.submit 'Create' %> <span id = "creating_events" class="spinner" style = "display:none;">Creating, Please wait...</span>
+</p>
+
+
+<p>
+<%end %>

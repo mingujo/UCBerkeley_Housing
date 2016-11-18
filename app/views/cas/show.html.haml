@@ -1,15 +1,101 @@
-// <p id="notice"><%= notice %></p>
-= link_to 'Sign out', '/auth/logout'
-%br
-CA PAGE
-%h1 #{@ca.name}
+%head
+  = link_to 'CALENDAR', events_path, :class => 'buttons'
+  = link_to 'CA INFO', cas_path, :class => 'buttons'
+  = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
+  = link_to 'Sign out', '/auth/logout'
 
-%h1
-%h3 #{@ca.email} 
-%h3 #{@ca.phone_number}
+%center
+  %h1 
+    %big Schedule for <em><b>#{@ca.name}</b></em>
+
 %h3
-%h3 List Showings and Availability Here
+  = @ca.email 
+  %br/
+  = @ca.phone_number
 
-= link_to 'Edit CA Info', edit_ca_path(@ca) 
-= link_to 'Edit Availability', edit_ca_path(@ca) 
-= link_to 'Back', cas_path 
+%body
+  %p
+    = link_to 'Add Availability', new_ca_event_path(@ca), :id => 'new_event'
+    %br/
+    = link_to 'Edit CA Info', edit_ca_path(@ca)
+    %br/
+    = link_to 'Back', cas_path
+  %p
+    %div
+      #calendar
+    #desc_dialog.dialog{:style => "display:none;"}
+      #event_desc
+      %br/
+      %br/
+      #event_actions
+        %span#edit_event
+        %span#delete_event
+    #create_event_dialog.dialog{:style => "display:none;"}
+      #create_event
+
+
+
+
+:javascript  
+  $(document).ready(function(){
+      // page is now ready, initialize the calendar...
+      $('#new_event').click(function(event) {
+        event.preventDefault();
+        var url = $(this).attr('href');
+        $.ajax({
+          url: url,
+          beforeSend: function() {
+            $('#loading').show();
+          },
+          complete: function() {
+            $('#loading').hide();
+          },
+          success: function(data) {
+            $('#create_event').replaceWith(data['form']);
+            $('#create_event_dialog').dialog({
+              title: 'New Event',
+              modal: true,
+              width: 500,
+              close: function(event, ui) { $('#create_event_dialog').dialog('destroy') }
+            });
+          }
+        });
+      });
+
+      $('#calendar').fullCalendar({
+          editable: true,
+          header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'month,agendaWeek,agendaDay'
+          },
+          defaultView: 'agendaWeek',
+          slotMinutes: 15,
+          aspectRatio: 1.5,
+          loading: function(bool){
+              if (bool) 
+                  $('#loading').show();
+              else 
+                  $('#loading').hide();
+          },
+          events: "/events/get_events",
+          timeFormat: 'h:mm t{ - h:mm t} ',
+          dragOpacity: "0.5",
+          eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
+                  moveEvent(event, dayDelta, minuteDelta, allDay);
+
+          },
+          
+          eventResize: function(event, dayDelta, minuteDelta, revertFunc){
+                  resizeEvent(event, dayDelta, minuteDelta);
+          },
+          
+          eventClick: function(event, jsEvent, view){
+              showEventDetails(event);
+          },
+      
+      
+      
+      
+      });
+  });
