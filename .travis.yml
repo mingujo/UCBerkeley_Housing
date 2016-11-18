@@ -10,8 +10,9 @@ cache: bundler
 script:
   - RAILS_ENV=test bundle exec rake db:migrate --trace
   - bundle exec rake db:test:prepare
-  - bundle exec rspec
   - bundle exec cucumber
+  - bundle exec rspec
+
 
 # env:
 #   - GMAIL_DOMAIN=gmail.com 
