@@ -1,7 +1,6 @@
 require 'time'
 require_relative 'google_api_authorization'
 require_relative '../mailers/scheduler_mailer'
-require 'byebug'
 
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"

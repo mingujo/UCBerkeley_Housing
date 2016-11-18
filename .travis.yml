@@ -13,6 +13,7 @@ script:
   - bundle exec cucumber
   - bundle exec rspec
 
+
 # env:
 #   - GMAIL_DOMAIN=gmail.com 
 #   - GMAIL_USERNAME=housingnotificationsystem@gmail.com 

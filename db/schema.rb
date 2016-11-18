@@ -49,7 +49,6 @@ ActiveRecord::Schema.define(version: 20161117051517) do
   add_index "events", ["event_series_id"], name: "index_events_on_event_series_id"
 
   create_table "timeslots", force: :cascade do |t|
-    t.datetime "starttime"
     t.integer  "ca_id"
     t.string   "client_name"
     t.string   "phone_number"
@@ -59,6 +58,7 @@ ActiveRecord::Schema.define(version: 20161117051517) do
     t.datetime "updated_at",                              null: false
     t.boolean  "new_schedule_email_sent", default: false
     t.boolean  "cancellation_sent",       default: false
+    t.datetime "starttime"
     t.datetime "endtime"
   end
 
