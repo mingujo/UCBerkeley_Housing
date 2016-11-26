@@ -1,4 +1,3 @@
-require 'byebug'
 class EventsController < ApplicationController
     
   def new
@@ -57,19 +56,26 @@ class EventsController < ApplicationController
   
   def move
     @event = Event.find_by_id(params[:id])
-    if @event
+    ts = Timeslot.where(:ca_id => @event.ca_id, :starttime => @event.start_time).first
+    if @event and ts
       @event.start_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.start_time))
       @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
+      ts.starttime = @event.start_time
+      ts.endtime = @event.end_time
       @event.save
+      ts.save
     end
     render :nothing => true
   end
   
   def resize
     @event = Event.find_by_id(params[:id])
-    if @event
+    ts = Timeslot.where(:ca_id => @event.ca_id, :starttime => @event.start_time).first
+    if @event and ts
       @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
+      ts.endtime = @event.end_time
       @event.save
+      ts.save
     end    
     render :nothing => true
   end
