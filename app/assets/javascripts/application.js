@@ -5,7 +5,7 @@
 
 function moveEvent(event, dayDelta, minuteDelta, allDay){
     jQuery.ajax({
-        data: 'id=' + event.id + '&title=' + event.title + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&all_day=' + allDay + '&authenticity_token=' + authenticity_token,
+        data: 'id=' + event.id + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&authenticity_token=' + authenticity_token,
         dataType: 'script',
         type: 'post',
         url: "/events/move"
@@ -14,7 +14,7 @@ function moveEvent(event, dayDelta, minuteDelta, allDay){
 
 function resizeEvent(event, dayDelta, minuteDelta){
     jQuery.ajax({
-        data: 'id=' + event.id + '&title=' + event.title + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&authenticity_token=' + authenticity_token,
+        data: 'id=' + event.id + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&authenticity_token=' + authenticity_token,
         dataType: 'script',
         type: 'post',
         url: "/events/resize"
@@ -45,7 +45,7 @@ function showEventDetails(event){
     $('#desc_dialog').dialog({
         title: "CA: " + event.ca_name,
         modal: true,
-        width: 500,
+        width: 400,
         close: function(event, ui){
             $('#desc_dialog').dialog('destroy')
         }
