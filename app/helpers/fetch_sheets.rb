@@ -5,11 +5,14 @@ require_relative '../mailers/scheduler_mailer'
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
 
+# This portion just initializes the Google API 
+# :nocov:
 if not ENV['TESTING_ENV']
     $service = Google::Apis::SheetsV4::SheetsService.new
     $service.client_options.application_name = APPLICATION_NAME
     $service.authorization = authorize
 end
+# :nocov:
 
 def fetch_month_sheets()
     for day in ('1'..'2').to_a
@@ -19,9 +22,12 @@ def fetch_month_sheets()
     end 
 end
 
+# This portion just fetches data from spreadsheet using API (has to be mocked)
+# :nocov:
 def get_sheet_response(range)
     $service.get_spreadsheet_values(ENV["SPREADSHEET_ID"], range).values # mock this
 end
+# :nocov:
 
 def detect_change_send_email(info_list)
     str_date = info_list[0][0].split(" ")[0]

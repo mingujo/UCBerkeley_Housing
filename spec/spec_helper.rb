@@ -19,10 +19,11 @@
 
 require 'factory_girl_rails'
 # coverage
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
 require 'simplecov'
-SimpleCov.start 'rails'
+require 'coveralls'
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+Coveralls.wear_merged!
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

@@ -15,6 +15,9 @@ SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS
 # the user's default browser will be launched to approve the request.
 #
 # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
+
+# This portion is from Google spreadsheet API tutorial (example usage)
+# :nocov:
 def authorize
   FileUtils.mkdir_p(File.dirname(CREDENTIALS_PATH))
 
@@ -34,4 +37,4 @@ def authorize
   # end
   credentials
 end
-
+# :nocov:

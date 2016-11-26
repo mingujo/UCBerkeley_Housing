@@ -37,6 +37,7 @@ gem "omniauth-google-oauth2"
 gem 'fullcalendar-rails'
 gem 'momentjs-rails'
 gem 'jquery-turbolinks'
+gem 'coveralls', require: false
 
 group :development, :test do
   gem 'byebug'
@@ -61,6 +62,7 @@ end
 group :test do
   gem 'codeclimate-test-reporter', require: nil
   gem 'cucumber-rails', :require => false
+  gem 'database_cleaner'
 end
 
 group :production do
