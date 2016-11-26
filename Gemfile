@@ -38,6 +38,8 @@ gem 'fullcalendar-rails'
 gem 'momentjs-rails'
 gem 'jquery-turbolinks'
 gem 'coveralls', require: false
+gem 'bootstrap-sass', '2.3.2.0'
+gem 'bootstrap-will_paginate', '0.0.9'
 
 group :development, :test do
   gem 'byebug'

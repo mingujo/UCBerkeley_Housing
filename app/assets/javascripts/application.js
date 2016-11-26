@@ -1,6 +1,7 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
+//= require bootstrap
 //= require_tree .
 
 function moveEvent(event, dayDelta, minuteDelta, allDay){

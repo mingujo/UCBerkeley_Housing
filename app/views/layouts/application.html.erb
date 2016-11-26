@@ -6,6 +6,7 @@
     <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
   </head>
   <body class="subpage">
+    <%= render 'layouts/header' %>
     <div class="wrapper">
       <div class="subPageContent">
         <% if flash[:notice] -%>
@@ -18,21 +19,23 @@
           <%= flash[:error] %>
         </div>
         <%end -%>
-        <div class="aplicationContent">
-          <div class="appRightContent">
-            <%= yield %>
-          </div>
-        </div>
       </div>
     </div>
+    
+    <div class="container">
+      <% flash.each do |key, value| %>
+        <div class="alert alert-<%= key %>"><%= value %></div>
+      <% end %>
+      <%= yield %>
+      <%= render 'layouts/footer' %>
+      <%= debug(params) if Rails.env.development? %>
+    </div>
+    
+    
     <script type="text/javascript">
       authenticity_token = "<%= form_authenticity_token %>"
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
     </script>
-    <script type="text/javascript">
-      try {
-        var pageTracker = _gat._getTracker("UA-1010763-3");
-        pageTracker._trackPageview();
-        } catch(err) {}</script>
+
+
   </body>
 </html>
