@@ -57,7 +57,7 @@
             $('#create_event_dialog').dialog({
               title: 'New Open House Schedule',
               modal: true,
-              width: 500,
+              width: 200,
               close: function(event, ui) { $('#create_event_dialog').dialog('destroy') }
             });
           }
@@ -65,6 +65,7 @@
       });
 
       $('#calendar').fullCalendar({
+          defaultEventMinutes : 30,
           editable: true,
           header: {
               left: 'prev,next today',

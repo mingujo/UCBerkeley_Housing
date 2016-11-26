@@ -22,7 +22,15 @@ function resizeEvent(event, dayDelta, minuteDelta){
 }
 
 function showEventDetails(event){
-    $('#event_desc').html(event.description);
+    if (event.client_name) {
+      $('#event_desc').html("Client Name: " + event.client_name + 
+                            "<br>Client's Phone Number: " + event.phone_number +
+                            "<br>APT Number: " + event.apt_number +
+                            "<br>Current Tenant: " + event.current_tenant);
+    } else {
+      $('#event_desc').html("Not Scheduled Yet");
+    }
+    
     $('#edit_event').html("<a href = 'javascript:void(0);' onclick ='editEvent(" + event.id + ")'>Edit</a>");
     if (event.recurring) {
         title = event.title + "(Recurring)";
@@ -31,11 +39,11 @@ function showEventDetails(event){
         $('#delete_event').append("&nbsp;&nbsp; <a href = 'javascript:void(0);' onclick ='deleteEvent(" + event.id + ", \"future\")'>Delete All Future Events</a>")
     }
     else {
-        title = event.title;
+        title = event.ca_name;
         $('#delete_event').html("<a href = 'javascript:void(0);' onclick ='deleteEvent(" + event.id + ", " + false + ")'>Delete</a>");
     }
     $('#desc_dialog').dialog({
-        title: title,
+        title: "CA: " + event.ca_name,
         modal: true,
         width: 500,
         close: function(event, ui){

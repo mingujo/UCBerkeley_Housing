@@ -1,3 +1,4 @@
+require 'byebug'
 class EventsController < ApplicationController
     
   def new
@@ -32,7 +33,24 @@ class EventsController < ApplicationController
     @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] )
     events = [] 
     @events.each do |event|
-      events << {:id => event.id, :ca_name => Ca.find(event.ca_id).name, :start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :recurring => (event.event_series_id)? true: false}
+      ts = Timeslot.where(:ca_id => event.ca_id, :starttime => event.start_time).first
+      if not ts.blank? and not ts.client_name.nil?
+        events << {:id => event.id, 
+                   :ca_name => Ca.find(event.ca_id).name,
+                   :client_name => ts.client_name,
+                   :phone_number => ts.phone_number,
+                   :apt_number => ts.apt_number,
+                   :current_tenant => ts.current_tenant,
+                   :start => "#{event.start_time.iso8601}", 
+                   :end => "#{event.end_time.iso8601}", 
+                   :recurring => (event.event_series_id)? true: false}
+      else
+        events << {:id => event.id, 
+                   :ca_name => Ca.find(event.ca_id).name,
+                   :start => "#{event.start_time.iso8601}", 
+                   :end => "#{event.end_time.iso8601}", 
+                   :recurring => (event.event_series_id)? true: false}
+      end
     end
     render :text => events.to_json
   end
