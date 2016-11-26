@@ -35,6 +35,7 @@ var defaults = {
 	//disableDragging: false,
 	//disableResizing: false,
 	
+	allDayDefault: true,
 	ignoreTimezone: true,
 	
 	// event ajax
@@ -563,8 +564,8 @@ function Calendar(element, options, eventSources) {
 	-----------------------------------------------------------------------------*/
 	
 
-	function select(start, end) {
-		currentView.select(start, end);
+	function select(start, end, allDay) {
+		currentView.select(start, end, allDay===undefined ? true : allDay);
 	}
 	
 
@@ -1680,16 +1681,16 @@ fc.applyAll = applyAll;
 
 function exclEndDay(event) {
 	if (event.end) {
-		return _exclEndDay(event.end);
+		return _exclEndDay(event.end, event.allDay);
 	}else{
 		return addDays(cloneDate(event.start), 1);
 	}
 }
 
 
-function _exclEndDay(end) {
+function _exclEndDay(end, allDay) {
 	end = cloneDate(end);
-	return end.getHours() || end.getMinutes() ? addDays(end, 1) : clearTime(end);
+	return allDay || end.getHours() || end.getMinutes() ? addDays(end, 1) : clearTime(end);
 	// why don't we check for seconds/ms too?
 }
 
@@ -2125,6 +2126,8 @@ function BasicView(element, calendar, viewName) {
 	t.colRight = colRight;
 	t.colContentLeft = colContentLeft;
 	t.colContentRight = colContentRight;
+	t.getIsCellAllDay = function() { return true };
+	t.allDayRow = allDayRow;
 	t.getRowCnt = function() { return rowCnt };
 	t.getColCnt = function() { return colCnt };
 	t.getColWidth = function() { return colWidth };
@@ -2438,7 +2441,7 @@ function BasicView(element, calendar, viewName) {
 	}
 	
 	
-	
+
 	/* Day clicking and binding
 	-----------------------------------------------------------*/
 	
@@ -2496,12 +2499,12 @@ function BasicView(element, calendar, viewName) {
 	-----------------------------------------------------------------------*/
 	
 	
-	function defaultSelectionEnd(startDate) {
+	function defaultSelectionEnd(startDate, allDay) {
 		return cloneDate(startDate);
 	}
 	
 	
-	function renderSelection(startDate, endDate) {
+	function renderSelection(startDate, endDate, allDay) {
 		renderDayOverlay(startDate, addDays(cloneDate(endDate), 1), true); // rebuild every time???
 	}
 	
@@ -2511,10 +2514,10 @@ function BasicView(element, calendar, viewName) {
 	}
 	
 	
-	function reportDayClick(date, ev) {
+	function reportDayClick(date, allDay, ev) {
 		var cell = dateToCell(date);
 		var _element = bodyCells[cell.row*colCnt + cell.col];
-		trigger('dayClick', _element, date, ev);
+		trigger('dayClick', _element, date, allDay, ev);
 	}
 	
 	
@@ -2610,6 +2613,10 @@ function BasicView(element, calendar, viewName) {
 		return colContentPositions.right(col);
 	}
 	
+	
+	function allDayRow(i) {
+		return bodyRows.eq(i);
+	}
 	
 }
 
@@ -2741,6 +2748,7 @@ function AgendaDayView(element, calendar) {
 ;;
 
 setDefaults({
+	allDayText: 'all-day',
 	firstHour: 6,
 	slotMinutes: 30,
 	defaultEventMinutes: 120,
@@ -2772,6 +2780,8 @@ function AgendaView(element, calendar, viewName) {
 	t.afterRender = afterRender;
 	t.defaultEventEnd = defaultEventEnd;
 	t.timePosition = timePosition;
+	t.getIsCellAllDay = getIsCellAllDay;
+	t.allDayRow = getAllDayRow;
 	t.getCoordinateGrid = function() { return coordinateGrid }; // specifically for AgendaEventRenderer
 	t.getHoverListener = function() { return hoverListener };
 	t.colLeft = colLeft;

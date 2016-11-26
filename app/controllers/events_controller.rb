@@ -28,46 +28,33 @@ class EventsController < ApplicationController
   def index
   end
   
-  
   def get_events
     @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] )
     events = [] 
     @events.each do |event|
-      events << {:id => event.id, :start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :recurring => (event.event_series_id)? true: false}
+      events << {:id => event.id, :ca_name => Ca.find(event.ca_id).name, :start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :recurring => (event.event_series_id)? true: false}
     end
     render :text => events.to_json
   end
   
-  
-  def get_ca_events
-    ca_id = params[:ca_id]
-    @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] ).where(:ca_id => ca_id)
-    events = [] 
-    @events.each do |event|
-      events << {:id => event.id, :start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :recurring => (event.event_series_id)? true: false}
+  def move
+    @event = Event.find_by_id(params[:id])
+    if @event
+      @event.start_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.start_time))
+      @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
+      @event.save
     end
-    render :text => events.to_json
+    render :nothing => true
   end
   
-  # def move
-  #   @event = Event.find_by_id(params[:id])
-  #   if @event
-  #     @event.start_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.start_time))
-  #     @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
-  #     @event.save
-  #   end
-  #   render :nothing => true
-  # end
-  
-  
-  # def resize
-  #   @event = Event.find_by_id(params[:id])
-  #   if @event
-  #     @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
-  #     @event.save
-  #   end    
-  #   render :nothing => true
-  # end
+  def resize
+    @event = Event.find_by_id(params[:id])
+    if @event
+      @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
+      @event.save
+    end    
+    render :nothing => true
+  end
   
   def edit
     @event = Event.find_by_id(params[:id])

@@ -39,6 +39,8 @@
 :javascript  
   $(document).ready(function(){
       // page is now ready, initialize the calendar...
+      var url = document.URL;
+      var ca_id = url.substring(url.lastIndexOf('/') + 1);
       $('#new_event').click(function(event) {
         event.preventDefault();
         var url = $(this).attr('href');
@@ -53,7 +55,7 @@
           success: function(data) {
             $('#create_event').replaceWith(data['form']);
             $('#create_event_dialog').dialog({
-              title: 'New Event',
+              title: 'New Open House Schedule',
               modal: true,
               width: 500,
               close: function(event, ui) { $('#create_event_dialog').dialog('destroy') }
@@ -69,7 +71,8 @@
               center: 'title',
               right: 'month,agendaWeek,agendaDay'
           },
-          defaultView: 'agendaWeek',
+          weekends: false,
+          defaultView: 'month',
           slotMinutes: 15,
           aspectRatio: 1.5,
           loading: function(bool){
@@ -78,7 +81,7 @@
               else 
                   $('#loading').hide();
           },
-          events: "/events/get_events",
+          events: "/cas/"+ca_id+"/get_ca_events",
           timeFormat: 'h:mm t{ - h:mm t} ',
           dragOpacity: "0.5",
           eventDrop: function(event, dayDelta, minuteDelta, revertFunc){
@@ -91,11 +94,13 @@
           },
           
           eventClick: function(event, jsEvent, view){
+            // change the border color just for fun
+            $(this).css('border-color', 'red');
               showEventDetails(event);
           },
-      
-      
-      
+          eventRender: function (event, element) {
+              element.find('.fc-event-title').append("<br/>" + event.ca_name); 
+          }
       
       });
   });

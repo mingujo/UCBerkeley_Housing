@@ -48,12 +48,13 @@
       });
   
     $('#calendar').fullCalendar({
-      editable: true,
+      editable: false,
       header: {
         left: 'prev,next today',
         center: 'title',
         right: "month,agendaWeek,agendaDay,listDay"
       },
+      weekends: false,
       slotMinutes: 15,
       aspectRatio: 1.5,
       listDayFormat: true,
@@ -66,16 +67,10 @@
       events: "/events/get_events",
       timeFormat: 'h:mm t{ - h:mm t} ',
       dragOpacity: "0.5",
-      eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
-        moveEvent(event, dayDelta, minuteDelta, allDay);
-      },
-      eventResize: function(event, dayDelta, minuteDelta, revertFunc){
-        resizeEvent(event, dayDelta, minuteDelta);
-      },
-      
-      eventClick: function(event, jsEvent, view){
-        showEventDetails(event);
+      eventRender: function (event, element) {
+          element.find('.fc-event-title').append("<br/>" + event.ca_name); 
       }
+      
     });
   });
 

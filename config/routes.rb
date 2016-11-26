@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   resources :events do 
     collection do 
       get :get_events
-      get :get_ca_events
       post :move
       post :resize
     end
@@ -15,6 +14,7 @@ Rails.application.routes.draw do
   get '/auth/login', to: 'sessions#login'
   
   resources :cas do
+    get :get_ca_events
     resources :events, only: [:new]
   end
   

@@ -1,3 +1,5 @@
+require 'byebug'
+
 class CasController < ApplicationController
   before_action :set_ca, only: [:show, :edit, :update, :destroy]
   before_action :require_login
@@ -72,6 +74,18 @@ class CasController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def get_ca_events
+    ca_id = params[:ca_id]
+    @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] ).where(:ca_id => ca_id)
+    events = [] 
+    @events.each do |event|
+      if event.ca_id == ca_id.to_i
+        events << {:id => event.id, :ca_name => Ca.find(event.ca_id).name,:start => "#{event.start_time.iso8601}", :end => "#{event.end_time.iso8601}", :recurring => (event.event_series_id)? true: false}
+      end
+    end
+    render :text => events.to_json
+	 end
 
   private
     # Use callbacks to share common setup or constraints between actions.

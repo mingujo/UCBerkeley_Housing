@@ -12,8 +12,84 @@
  *= require_tree .
  */
 
- #calendar{
- 	width: 1200px;
- 	margin: 0 auto;
- }
+#calendar{
+	width: 1200px;
+	margin: 0 auto;
+}
 
+#body {
+   font-family: Helvetica, Geneva, Arial, sans-serif;
+   font-size: small;
+   font-color: #000;
+   background-color: #fff;
+}
+
+a:link, a:active, a:visited {
+   color: #CD0000;
+}
+
+input { 
+   margin-bottom: 5px;
+}
+
+p { 
+   line-height: 150%;
+}
+
+#container {
+   width: 760px;
+   margin: 0 auto;
+}
+
+#header {
+   text-align: center;
+   padding-bottom: 15px;
+}
+
+#content {
+   float: left;
+   width: 450px;
+   padding: 10px;
+}
+
+#content h3 {
+   margin-top: 15px;
+}
+
+#books {
+   list-style-type: none;
+}
+
+#books li {
+   line-height: 140%;
+}
+
+#sidebar {
+   width: 200px;
+   margin-left: 480px;
+}
+
+#subjects {
+   width: 700px;
+   text-align: center;
+   padding: 5px;
+   background-color: #ececec;
+   border: 1px solid #ccc;
+   margin-bottom: 20px;
+}
+
+#subjects li {
+   display: inline;
+   padding-left: 5px;
+}
+
+@font-face {
+    font-family: 'icofonts';
+    src:url('fonts/icofonts.eot');
+    src:url('fonts/icofonts.eot?#iefix') format('embedded-opentype'),
+        url('fonts/icofonts.ttf') format('truetype'),
+        url('fonts/icofonts.woff') format('woff'),
+        url('fonts/icofonts.svg#icofonts') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}   
