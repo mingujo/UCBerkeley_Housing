@@ -30,13 +30,9 @@
 }
 
 a:link, a:active, a:visited {
-   color: #CD0000;
+   color: #FFD700;
 }
 
 input { 
    margin-bottom: 5px;
-}
-
-p { 
-   line-height: 150%;
 }

@@ -1,25 +1,18 @@
-%head
-  = link_to 'CALENDAR', events_path, :class => 'buttons'
-  = link_to 'CA INFO', cas_path, :class => 'buttons'
-  = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
-
 
 %center
-  %h1 
+  %h2 
     %big Schedule for <em><b>#{@ca.name}</b></em>
 
 %h3
-  = @ca.email 
+  Email: #{@ca.email} 
   %br/
-  = @ca.phone_number
+  Phone Number: #{@ca.phone_number}
+
+%h4
+  = link_to 'Add Availability', new_ca_event_path(@ca), :id => 'new_event', style: 'background-color:#1E90FF; color: white;'
+  = button_to 'Edit CA Info', edit_ca_path(@ca), style: 'background-color:#1E90FF; color: white;', :method => :get
 
 %body
-  %p
-    = link_to 'Add Availability', new_ca_event_path(@ca), :id => 'new_event'
-    %br/
-    = link_to 'Edit CA Info', edit_ca_path(@ca)
-    %br/
-    = link_to 'Back', cas_path
   %p
     %div
       #calendar

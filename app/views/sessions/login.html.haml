@@ -1,5 +1,8 @@
 - if flash[:notice]
     %p= flash[:notice]
 
-%p Please login to view this website
-= link_to 'Login', '/auth/google_oauth2'
+%p 
+%div{:class => "alert alert-notice"} Please login to view this website
+
+
+= button_to 'Login', '/auth/google_oauth2'

@@ -7,20 +7,6 @@
   </head>
   <body class="subpage">
     <%= render 'layouts/header' %>
-    <div class="wrapper">
-      <div class="subPageContent">
-        <% if flash[:notice] -%>
-        <div id = 'flash_notice'>
-          <%= flash[:notice] %>
-        </div>
-        <% end -%>
-        <% if flash[:error] -%>
-        <div id = 'flash_error'>
-          <%= flash[:error] %>
-        </div>
-        <%end -%>
-      </div>
-    </div>
     
     <div class="container">
       <% flash.each do |key, value| %>

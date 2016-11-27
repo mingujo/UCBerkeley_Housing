@@ -1,7 +1,5 @@
-%h1 Editing CA
-
+%main Edit info of CA
 = form_tag ca_path(@ca), :method => :put do
-
 
   = label :ca, :name, 'Name'
   = text_field :ca, 'name'
@@ -11,7 +9,7 @@
   
   = label :ca, :phone_number, 'Phone Number'
   = text_field :ca, 'phone_number'
-  
+%br
   =submit_tag 'Save'
         
 = link_to 'Show', @ca

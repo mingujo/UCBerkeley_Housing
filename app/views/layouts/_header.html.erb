@@ -4,11 +4,21 @@
       <%= link_to "UCB Family Housing", root_path, id: "logo" %>
       <nav>
         <ul class="nav pull-right">
+          <% if signed_in? %>
             <li id="fat-menu" class="dropdown">
-              <%= link_to "Sign out", auth_logout_path, method: "delete" %>
+              <%= link_to "Sign out", '/auth/logout', {:style=>'color:#FFD700;'}%>
             </li>
+          <% else %>
+            <li id="fat-menu" class="dropdown">
+              <%= link_to "Sign in", '/auth/google_oauth2',  {:style=>'color:#FFD700;'}%>
+            </li>
+          <% end %>
         </ul>
       </nav>
     </div>
   </div>
 </header>
+<h1>
+  <%= link_to 'CALENDAR', events_path, :class => 'buttons'%>
+  <%= link_to 'CA INFO', cas_path, :class => 'buttons'%>
+</h1>

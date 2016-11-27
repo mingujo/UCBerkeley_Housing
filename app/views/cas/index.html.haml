@@ -1,26 +1,17 @@
-%br
-%br
-%head
-  = link_to 'CALENDAR', events_path, :class => 'buttons'
-  = link_to 'CA INFO', cas_path, :class => 'buttons'
-  = link_to 'ADD CA', new_ca_path, :class => 'buttons button3'
+%h2 LIST of CA
+%h4
+  = button_to 'ADD CA', new_ca_path, style: 'background-color:#1E90FF; color: white;', :method => :get
 %table    
   %thead
     %tr
-      %th{:style => "padding:40px 300px 0px 15px;"} NAME
-      %th{:style => "padding:40px 400px 0px 15px;"} EMAIL
-      %th{:style => "padding:40px 200px 0px 15px;"} PHONE
-      %th{:style => "padding:40px 50px 0px 15px"}
+      %th{:style => "padding:20px 300px 0px 15px;"} NAME
+      %th{:style => "padding:20px 400px 0px 15px;"} EMAIL
+      %th{:style => "padding:20px 200px 0px 15px;"} PHONE
+      %th{:style => "padding:20px 50px 0px 15px"}
   %tbody
     - @ca.each do |item|
       %tr
         %td= item.name
         %td= item.email
         %td= item.phone_number
-        %td= link_to "Details", ca_path(item)
-  
-          
-
-
-
-          
+        %td= link_to "Details", ca_path(item), style: 'background-color:#00BFFF; color: white;', :method => :get
