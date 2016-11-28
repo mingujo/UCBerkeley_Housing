@@ -1,12 +1,17 @@
-%h2 LIST of CA
+%center
+  %h2.header_block LIST of CA
 %h4
-  = button_to 'ADD CA', new_ca_path, style: 'background-color:#1E90FF; color: white;', :method => :get
-%table    
+  = link_to 'ADD CA', new_ca_path, class: "addButton", style: 'color: white;'
+%br
+%br
+%br
+%br
+%table.myTable
   %thead
     %tr
-      %th{:style => "padding:20px 300px 0px 15px;"} NAME
-      %th{:style => "padding:20px 400px 0px 15px;"} EMAIL
-      %th{:style => "padding:20px 200px 0px 15px;"} PHONE
+      %th{:style => "padding:20px 150px 0px 15px;"} NAME
+      %th{:style => "padding:20px 150px 0px 15px;"} EMAIL
+      %th{:style => "padding:20px 150px 0px 15px;"} PHONE
       %th{:style => "padding:20px 50px 0px 15px"}
   %tbody
     - @ca.each do |item|
@@ -14,4 +19,4 @@
         %td= item.name
         %td= item.email
         %td= item.phone_number
-        %td= link_to "Details", ca_path(item), style: 'background-color:#00BFFF; color: white;', :method => :get
+        %td= link_to "Details".html_safe, ca_path(item), class: "myButton"

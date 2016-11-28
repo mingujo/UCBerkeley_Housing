@@ -13,7 +13,7 @@
  */
 
 #calendar{
-	width: 1000px;
+	width: 800px;
 	margin: 0 auto;
 }
 
@@ -27,10 +27,6 @@
     display: inline-block;
     width: auto;
     vertical-align: middle;
-}
-
-a:link, a:active, a:visited {
-   color: #FFD700;
 }
 
 input { 

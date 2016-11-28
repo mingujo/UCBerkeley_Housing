@@ -1,17 +1,17 @@
-%main Edit info of CA
+%center
+  %main.header_block Edit info of CA
+%br
 = form_tag ca_path(@ca), :method => :put do
 
-  = label :ca, :name, 'Name'
+  = label :ca, :name, 'Name', :class => "edit_label"
   = text_field :ca, 'name'
 
-  = label :ca, :email, 'Email'
+  = label :ca, :email, 'Email', :class => "edit_label"
   = text_field :ca, 'email'
   
-  = label :ca, :phone_number, 'Phone Number'
+  = label :ca, :phone_number, 'Phone Number', :class => "edit_label"
   = text_field :ca, 'phone_number'
 %br
-  =submit_tag 'Save'
+  =submit_tag 'Save', :class => "savebutton"
         
-= link_to 'Show', @ca
-= link_to 'Back', cas_path 
-= button_to 'Delete', ca_path(@ca), :method => :delete, :confirm => 'Are you sure?'
+= button_to 'Delete', ca_path(@ca), :method => :delete, :confirm => 'Are you sure?', :class => "deletebutton"

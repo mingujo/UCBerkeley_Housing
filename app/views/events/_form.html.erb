@@ -2,14 +2,12 @@
 <%= form_for @event, :html => { :id => 'event_form' } do |f| %>
 <p>
   <%=f.label :start_time, 'Start Time' %>
-  <br/>
   <div class="form-group">
     <%=f.datetime_select :start_time, ampm: true, minute_step: 30, start_hour: 8, end_hour: 17 %>
   </div>
 </p>
 <p>
   <%=f.label :end_time, 'End Time' %>
-  <br/>
   <div class="form-group">
     <%=f.datetime_select :end_time, ampm: true, minute_step: 30, start_hour: 8, end_hour: 17 %>
   </div>

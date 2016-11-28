@@ -1,16 +1,17 @@
 
 %center
-  %h2 
+  %h2.header_block
     %big Schedule for <em><b>#{@ca.name}</b></em>
-
-%h3
+  %br
+  %br
+%h3.info_block
   Email: #{@ca.email} 
   %br/
   Phone Number: #{@ca.phone_number}
 
 %h4
-  = link_to 'Add Availability', new_ca_event_path(@ca), :id => 'new_event', style: 'background-color:#1E90FF; color: white;'
-  = button_to 'Edit CA Info', edit_ca_path(@ca), style: 'background-color:#1E90FF; color: white;', :method => :get
+  = link_to "Add Availability", new_ca_event_path(@ca), id: 'new_event', class: "addButton", style: 'color: white;'
+  = link_to "Edit CA Info", edit_ca_path(@ca), class: "addButton", style: 'color: white;'
 
 %body
   %p

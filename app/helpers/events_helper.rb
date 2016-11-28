@@ -1,4 +1,3 @@
-require 'byebug'
 module EventsHelper
 	
 	def make_event_json(events, ca_id=nil)

@@ -29,6 +29,12 @@ class CasController < ApplicationController
 
   # GET /cas/1/edit
   def edit
+    # if @ca.update_attributes(ca_params)
+    #   flash[:success] = "Profile updated"
+    #   redirect_to @ca
+    # else
+    #   render 'edit'
+    # end
   end
 
   # POST /cas
@@ -68,6 +74,8 @@ class CasController < ApplicationController
   # DELETE /cas/1
   # DELETE /cas/1.json
   def destroy
+    Event.destroy_all(:ca_id => @ca.id)
+    Timeslot.destroy_all(:ca_id => @ca.id)
     @ca.destroy
     respond_to do |format|
       format.html { redirect_to cas_url, notice: 'Ca was successfully destroyed.' }
