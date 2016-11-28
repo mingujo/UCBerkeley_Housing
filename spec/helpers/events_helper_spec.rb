@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'time'
-require 'byebug'
 
 # Specs in this file have access to a helper object that includes
 # the CalendarHelper. For example:
