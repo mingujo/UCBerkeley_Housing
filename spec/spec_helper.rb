@@ -30,6 +30,10 @@ RSpec.configure do |config|
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
   
+  # clear before seed
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
   # seed test db
   config.before(:suite) do
     Rails.application.load_seed # loading seeds

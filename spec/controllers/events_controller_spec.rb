@@ -52,20 +52,6 @@ RSpec.describe EventsController, type: :controller do
       expect(assigns(:events)).to include(event2)
     end
   end
-  
-  
-    
-  describe "GET #get_ca_events" do
-    it "gets all events belonging to a particular CA" do
-      event1 = FactoryGirl.create(:event, :ca_id => 1)
-      event2 = FactoryGirl.create(:event, :ca_id => 2)
-      event3 = FactoryGirl.create(:event, :ca_id => 2)
-      get :get_ca_events, :ca_id => 2, start: "1477810800", end: "1481443200"
-      expect(assigns(:events)).to include(event2)
-      expect(assigns(:events)).to include(event3)
-      expect(assigns(:events)).not_to include(event1)
-    end
-  end
 
 
   describe "GET #new" do
@@ -142,7 +128,6 @@ describe "GET #edit" do
           :ca_id => 3,
           :period => "Does not repeat"}}
         }.to change(Event, :count).by(1)
-        expect(Timeslot.count).to be(1)
     end
      
     it "creates a new event series" do
