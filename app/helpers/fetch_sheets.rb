@@ -14,6 +14,10 @@ if not ENV['TESTING_ENV']
 end
 # :nocov:
 
+# This portion is only for cron job scheduler. 
+# This is only for looping 31 days of a month
+# This function uses detect_change_send_email function which is tested already
+# :nocov:
 def fetch_month_sheets()
     for day in ('1'..'2').to_a
         range = day + "!" + ENV["CELL_RANGE"]
@@ -21,6 +25,7 @@ def fetch_month_sheets()
         detect_change_send_email(info_list)
     end 
 end
+# :nocov:
 
 # This portion just fetches data from spreadsheet using API (has to be mocked)
 # :nocov:
