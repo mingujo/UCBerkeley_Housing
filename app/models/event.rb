@@ -11,6 +11,7 @@
 class Event < ActiveRecord::Base
   attr_accessor :period, :frequency, :commit_button
   belongs_to :event_series
+  validates_uniqueness_of :start_time
   validates :start_time, :end_time, :ca_id, :presence => true
   validate :validate_timings
   REPEATS = [
@@ -22,7 +23,7 @@ class Event < ActiveRecord::Base
   
   def validate_timings
     if start_time.present? and end_time.present?
-      if (start_time >= end_time)
+      if (start_time > end_time)
         errors[:base] << "Start Time must be less than End Time"
       end
     end

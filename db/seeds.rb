@@ -11,15 +11,15 @@ Admin.create(email: "housingnotificationsystem@gmail.com")
 
 Event.create(id: 2,
 			 start_time: Time.parse('2016-11-24 09:00:00'),
-			 end_time: Time.parse('2016-11-24 10:00:00'),
+			 end_time: Time.parse('2016-11-24 09:30:00'),
 			 ca_id: 1)
 Event.create(id: 4,
 			 start_time: Time.parse('2016-11-24 14:00:00'),
-			 end_time: Time.parse('2016-11-24 15:00:00'),
+			 end_time: Time.parse('2016-11-24 14:30:00'),
 			 ca_id: 2)
 Event.create(id: 6,
 			 start_time: Time.parse('2016-11-25 08:00:00'),
-			 end_time: Time.parse('2016-11-25 09:00:00'),
+			 end_time: Time.parse('2016-11-25 08:30:00'),
 			 ca_id: 1)
 Event.create(id: 7,
 			 start_time: Time.parse('2016-11-24 15:00:00'),
@@ -33,17 +33,17 @@ Timeslot.create(id: 2,
 				apt_number: "301",
 				current_tenant: "George",
 				starttime: Time.parse('2016-11-24 09:00:00'),
-				endtime: Time.parse('2016-11-24 10:00:00'))
+				endtime: Time.parse('2016-11-24 09:30:00'))
 				
 Timeslot.create(id: 4,
 				ca_id: 2,
 				starttime: Time.parse('2016-11-24 14:00:00'),
-				endtime: Time.parse('2016-11-24 15:00:00'))
+				endtime: Time.parse('2016-11-24 14:30:00'))
 
 Timeslot.create(id: 6,
 				ca_id: 1,
 				starttime: Time.parse('2016-11-25 08:00:00'),
-				endtime: Time.parse('2016-11-25 09:00:00'))
+				endtime: Time.parse('2016-11-25 08:30:00'))
 
 Timeslot.create(id: 7,
 				ca_id: 1,
