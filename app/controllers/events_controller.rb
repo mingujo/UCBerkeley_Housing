@@ -81,21 +81,32 @@ class EventsController < ApplicationController
   end
   
   def update
-    @event = Event.find_by_id(params[:event][:id])
+    @event = Event.find_by_id(params[:id])
     ts = Timeslot.where(:ca_id => @event.ca_id, :starttime => @event.start_time).first
     @event.attributes = event_params
+    if @event.attributes["end_time"] - @event.attributes["start_time"] != @@THIRTY_MIN
+      render :text => "Please input valid start and end time. \nThe duration should be 30 minutes", :status => 422
+      return
+    end
+    ts.starttime = @event.start_time
+    ts.endtime = @event.end_time
+    ts.save
     @event.save
     render :nothing => true    
   end  
   
   def destroy
     @event = Event.find_by_id(params[:id])
-    if params[:delete_all] == 'true'
+    if params[:delete_all]
+      events = Event.where(:event_series_id => @event.event_series_id)
+      for event in events
+        if Timeslot.find_by_starttime_and_ca_id(event.start_time, event.ca_id)
+          ts_id = Timeslot.find_by_starttime_and_ca_id(event.start_time, event.ca_id)[:id]
+          Timeslot.destroy(ts_id)
+        end
+        event.destroy
+      end
       @event.event_series.destroy
-      # not implemented yet
-    elsif params[:delete_all] == 'future'
-      @events = @event.event_series.events.find(:all, :conditions => ["start_time > '#{@event.start_time.to_formatted_s(:db)}' "])
-      @event.event_series.events.delete(@events)
     else
       @event.destroy
       if Timeslot.find_by_starttime_and_ca_id(@event.start_time, @event.ca_id)

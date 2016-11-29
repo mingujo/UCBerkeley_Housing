@@ -119,9 +119,9 @@ RSpec.describe EventsController, type: :controller do
           'start_time(5i)' => 0,
           'end_time(1i)' =>2016, 
           'end_time(2i)' =>11, 
-          'end_time(3i)' =>15, 
+          'end_time(3i)' =>24, 
           'end_time(4i)' =>9, 
-          'end_time(5i)' =>0,
+          'end_time(5i)' =>30,
           :id => 10,
           :ca_id => 5,
           :period => "Does not repeat"}
@@ -179,38 +179,48 @@ RSpec.describe EventsController, type: :controller do
       }
 
       it "updates the requested event" do
-        event = FactoryGirl.create(:event)
-        new_event = FactoryGirl.create(:event, :start_time => "2016-11-16 00:00:00", :end_time => "2016-11-16 00:00:01")
-        put :update, id: event.to_param, event: new_event.attributes
+        event = Event.find(2)
+        put :update, id: event.to_param, event: {
+                                                  'start_time(1i)' => 2016, 
+                                                  'start_time(2i)' => 11,
+                                                  'start_time(3i)' => 16, 
+                                                  'start_time(4i)' => 10, 
+                                                  'start_time(5i)' => 0,
+                                                  'end_time(1i)' =>2016, 
+                                                  'end_time(2i)' =>11, 
+                                                  'end_time(3i)' =>16, 
+                                                  'end_time(4i)' =>10, 
+                                                  'end_time(5i)' =>30,
+                                                }
         event.reload
-        expect(assigns(:event).start_time).to eq("2016-11-16 00:00:00")
+        expect(assigns(:event).start_time).to eq("2016-11-16 10:00:00")
       end
 
-      # it "assigns the requested event as @event" do
-      #   event = Event.create! valid_attributes
-      #   put :update, params: {id: event.to_param, event: valid_attributes}, session: valid_session
-      #   expect(assigns(:event)).to eq(event)
-      # end
+    end
+    
+    context "with invalid params" do
+      let(:new_attributes) {
+        skip("Add a hash of attributes valid for your model")
+      }
 
-    #   it "redirects to the event" do
-    #     event = Event.create! valid_attributes
-    #     put :update, params: {id: event.to_param, event: valid_attributes}, session: valid_session
-    #     expect(response).to redirect_to(event)
-    #   end
-    # end
+      it "updates the requested event" do
+        event = Event.find(2)
+        put :update, id: event.to_param, event: {
+                                                  'start_time(1i)' => 2016, 
+                                                  'start_time(2i)' => 11,
+                                                  'start_time(3i)' => 16, 
+                                                  'start_time(4i)' => 10, 
+                                                  'start_time(5i)' => 0,
+                                                  'end_time(1i)' =>2016, 
+                                                  'end_time(2i)' =>11, 
+                                                  'end_time(3i)' =>16, 
+                                                  'end_time(4i)' =>10, 
+                                                  'end_time(5i)' =>00,
+                                                }
+        event.reload
+        expect(event.start_time).to eq("2016-11-24 09:00:00")
+      end
 
-    # context "with invalid params" do
-    #   it "assigns the event as @event" do
-    #     event = Event.create! valid_attributes
-    #     put :update, params: {id: event.to_param, event: invalid_attributes}, session: valid_session
-    #     expect(assigns(:event)).to eq(event)
-    #   end
-
-      # it "re-renders the 'edit' template" do
-      #   event = Event.create! valid_attributes
-      #   put :update, params: {id: event.to_param, event: invalid_attributes}, session: valid_session
-      #   expect(response).to render_template("edit")
-      # end
     end
   end
 
@@ -220,13 +230,12 @@ RSpec.describe EventsController, type: :controller do
         delete :destroy, {:id => '7'}
       }.to change(Event.all, :count).by(-1).and change(Timeslot.all, :count).by(-1)
     end
+    
+    it "destroys the requested event series" do
+      expect {
+        delete :destroy, {:id => '8', :delete_all => true}
+      }.to change(Event.all, :count).by(-2).and change(Timeslot.all, :count).by(-2)
+    end
   end
-
-#     it "redirects to the events list" do
-#       event = Event.create! valid_attributes
-#       delete :destroy, params: {id: event.to_param}, session: valid_session
-#       expect(response).to redirect_to(events_url)
-#     end
-#   end
 
 end

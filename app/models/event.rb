@@ -27,31 +27,4 @@ class Event < ActiveRecord::Base
     end
   end
   
-  def update_events(events, event)
-    events.each do |e|
-      begin 
-        st, et = e.start_time, e.end_time
-        e.attributes = event
-        if event_series.period.downcase == 'monthly' or event_series.period.downcase == 'yearly'
-          nst = DateTime.parse("#{e.start_time.hour}:#{e.start_time.min}:#{e.start_time.sec}, #{e.start_time.day}-#{st.month}-#{st.year}")  
-          net = DateTime.parse("#{e.end_time.hour}:#{e.end_time.min}:#{e.end_time.sec}, #{e.end_time.day}-#{et.month}-#{et.year}")
-        else
-          nst = DateTime.parse("#{e.start_time.hour}:#{e.start_time.min}:#{e.start_time.sec}, #{st.day}-#{st.month}-#{st.year}")  
-          net = DateTime.parse("#{e.end_time.hour}:#{e.end_time.min}:#{e.end_time.sec}, #{et.day}-#{et.month}-#{et.year}")
-        end
-      rescue
-        nst = net = nil
-      end
-      if nst and net
-        e.start_time, e.end_time = nst, net
-        e.save
-      end
-    end
-    
-    event_series.attributes = event
-    event_series.save
-  end
-  
-  
-  
 end

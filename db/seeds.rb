@@ -49,6 +49,7 @@ Timeslot.create(id: 7,
 				ca_id: 1,
 				starttime: Time.parse('2016-11-24 15:00:00'),
 				endtime: Time.parse('2016-11-24 15:30:00'))
+
 				
 Ca.create(id: 1,
 		  name: "Tony",
@@ -66,6 +67,11 @@ Ca.create(id: 3,
 		  phone_number: "510-356-2334")
 
 
+EventSeries.create(id: 1,
+				   start_time: Time.parse('2016-11-01 10:00:00'),
+				   end_time: Time.parse('2016-11-01 10:30:00'),
+				   frequency: 2,
+				   ca_id: 3)
 
 
 

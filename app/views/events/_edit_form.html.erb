@@ -29,7 +29,6 @@
   <%if @event.event_series -%>
   <%=f.submit 'Update Only This Occurrence', :onclick => "document.getElementById('event_commit_button').value = this.value"%>
   <%=f.submit 'Update All Occurrence', :onclick => "document.getElementById('event_commit_button').value = this.value"%>
-  <%=f.submit 'Update All Following Occurrence', :onclick => "document.getElementById('event_commit_button').value = this.value"%>
   <%else-%>
   <%=f.submit 'Update', :onclick => "document.getElementById('event_commit_button').value = this.value"%>
   <%end-%>
