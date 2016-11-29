@@ -1,6 +1,7 @@
 include EventsHelper
 
 class EventsController < ApplicationController
+  include SessionsHelper
   before_action :require_login
     
   def new
@@ -100,22 +101,6 @@ class EventsController < ApplicationController
       end
     end
     render :nothing => true   
-  end
-    
-  def require_login
-    if session[:user_id].nil?
-      redirect_to '/auth/login'
-    else
-      user = Ca.get_by_user_id(session[:user_id])
-      if user.nil?
-        user = Admin.get_by_user_id(session[:user_id])
-      end
-      if user.nil?
-        flash[:notice] = "This email is not authorized"
-        session[:user_id] = nil
-        redirect_to '/auth/login'
-      end
-    end
   end
 
   private
