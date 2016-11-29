@@ -108,6 +108,26 @@ RSpec.describe EventsController, type: :controller do
           }
         }.to change(Event, :count).by(2)
       end
+
+      it "attempts to create an existing Event" do
+        expect {
+          post :create, {:event => {
+          'start_time(1i)' => 2016, 
+          'start_time(2i)' => 11,
+          'start_time(3i)' => 24, 
+          'start_time(4i)' => 9, 
+          'start_time(5i)' => 0,
+          'end_time(1i)' =>2016, 
+          'end_time(2i)' =>11, 
+          'end_time(3i)' =>15, 
+          'end_time(4i)' =>9, 
+          'end_time(5i)' =>0,
+          :id => 10,
+          :ca_id => 5,
+          :period => "Does not repeat"}
+          }
+        }.to change(Event, :count).by(0)
+      end
       
       it "creates a new Event with start time is larger than end time" do
         expect {
