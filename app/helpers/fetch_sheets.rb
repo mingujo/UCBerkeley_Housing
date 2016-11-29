@@ -34,6 +34,13 @@ def get_sheet_response(range)
 end
 # :nocov:
 
+def write_sheet_values(range, values)
+    value_range = Google::Apis::SheetsV4::ValueRange.new
+    value_range.values = values
+    value_range.range = range
+    $service.update_spreadsheet_value(ENV["SPREADSHEET_ID"], range, value_range, value_input_option: "USER_ENTERED")
+end
+
 def detect_change_send_email(info_list)
     str_date = info_list[0][0].split(" ")[0]
     
