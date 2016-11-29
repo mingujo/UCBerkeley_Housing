@@ -11,7 +11,7 @@
   
   = label :ca, :phone_number, 'Phone Number', :class => "edit_label"
   = text_field :ca, 'phone_number'
-%br
+  %br
   =submit_tag 'Save', :class => "savebutton"
         
 = button_to 'Delete', ca_path(@ca), :method => :delete, :confirm => 'Are you sure?', :class => "deletebutton"
