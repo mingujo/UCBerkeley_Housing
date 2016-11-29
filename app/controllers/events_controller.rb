@@ -88,6 +88,20 @@ class EventsController < ApplicationController
       render :text => "Please input valid start and end time. \nThe duration should be 30 minutes", :status => 422
       return
     end
+    if params[:event][:commit_button] == "Update All Occurrence"
+      events = Event.where(:event_series_id => @event.event_series_id)
+      for event in events
+        ts = Timeslot.find_by_starttime_and_ca_id(event.start_time, event.ca_id)
+        ts.starttime = Time.parse(ts.starttime.time.to_s[0,10]+" "+@event.start_time.to_s[11,15])
+        ts.endtime = Time.parse(ts.starttime.time.to_s[0,10]+" "+@event.end_time.to_s[11,15])
+        ts.save
+        event.start_time = Time.parse(event.start_time.time.to_s[0,10]+" "+@event.start_time.to_s[11,15])
+        event.end_time = Time.parse(event.end_time.time.to_s[0,10]+" "+@event.end_time.to_s[11,15])
+        event.save
+      end
+      render :nothing => true 
+      return
+    end
     ts.starttime = @event.start_time
     ts.endtime = @event.end_time
     ts.save
@@ -97,7 +111,7 @@ class EventsController < ApplicationController
   
   def destroy
     @event = Event.find_by_id(params[:id])
-    if params[:delete_all]
+    if params[:delete_all] == "true"
       events = Event.where(:event_series_id => @event.event_series_id)
       for event in events
         if Timeslot.find_by_starttime_and_ca_id(event.start_time, event.ca_id)

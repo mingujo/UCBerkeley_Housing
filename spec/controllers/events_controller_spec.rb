@@ -222,6 +222,35 @@ RSpec.describe EventsController, type: :controller do
       end
 
     end
+    
+    context "an Event Series not event" do
+      let(:new_attributes) {
+        skip("Add a hash of attributes valid for your model")
+      }
+
+      it "updates the requested event" do
+        event = Event.find(8)
+        put :update, id: event.to_param, event: {
+                                                  'start_time(1i)' => 2016, 
+                                                  'start_time(2i)' => 11,
+                                                  'start_time(3i)' => 16, 
+                                                  'start_time(4i)' => 12, 
+                                                  'start_time(5i)' => 0,
+                                                  'end_time(1i)' =>2016, 
+                                                  'end_time(2i)' =>11, 
+                                                  'end_time(3i)' =>16, 
+                                                  'end_time(4i)' =>12, 
+                                                  'end_time(5i)' =>30,
+                                                  :commit_button => "Update All Occurrence"
+                                                }
+        event.reload
+        expect(Event.find(8).start_time).to eq("2016-11-01 12:00:00")
+        expect(Event.find(9).start_time).to eq("2016-11-08 12:00:00")
+        expect(Timeslot.find(8).starttime).to eq("2016-11-01 12:00:00")
+        expect(Timeslot.find(9).starttime).to eq("2016-11-08 12:00:00")
+      end
+
+    end
   end
 
   describe "DELETE #destroy" do
@@ -233,7 +262,7 @@ RSpec.describe EventsController, type: :controller do
     
     it "destroys the requested event series" do
       expect {
-        delete :destroy, {:id => '8', :delete_all => true}
+        delete :destroy, {:id => '8', :delete_all => "true"}
       }.to change(Event.all, :count).by(-2).and change(Timeslot.all, :count).by(-2)
     end
   end

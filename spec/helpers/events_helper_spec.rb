@@ -27,7 +27,7 @@ RSpec.describe EventsHelper, type: :helper do
 		
 		it "makes json with whole events for certain ca when there is no ca specified" do
 			lst_of_jsons = make_event_json(Event.all)
-			expect(lst_of_jsons.length).to eq(4)
+			expect(lst_of_jsons.length).to eq(6)
 			expect(lst_of_jsons[0][:ca_name]).to eq("Tony")
 			expect(lst_of_jsons[1][:ca_name]).to eq("Chris")
 			expect(lst_of_jsons[2][:ca_name]).to eq("Tony")
