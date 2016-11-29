@@ -117,7 +117,6 @@ def find_row(starttime, sheet_ID)
     while (starttime != format_time(vals[row][0])) do
         row += 1
     end
-     byebug
     return row
 end
 
