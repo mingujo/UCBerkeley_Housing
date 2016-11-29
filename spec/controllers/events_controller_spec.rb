@@ -89,17 +89,17 @@ RSpec.describe EventsController, type: :controller do
     end    
   end
   
-  describe "POST #resize" do
-    it "extend an event 30 minutes more" do
-        post :resize, {:id => '7', :minute_delta => '30'}
-        changed_event = Event.find(7)
-        changed_ts = Timeslot.find(7)
-        expect(changed_event.start_time).to eq(Time.parse("2016-11-24 15:00:00"))
-        expect(changed_event.end_time).to eq(Time.parse("2016-11-24 16:00:00"))
-        expect(changed_ts.starttime).to eq(Time.parse("2016-11-24 15:00:00"))
-        expect(changed_ts.endtime).to eq(Time.parse("2016-11-24 16:00:00"))
-    end    
-  end
+  # describe "POST #resize" do
+  #   it "extend an event 30 minutes more" do
+  #       post :resize, {:id => '7', :minute_delta => '30'}
+  #       changed_event = Event.find(7)
+  #       changed_ts = Timeslot.find(7)
+  #       expect(changed_event.start_time).to eq(Time.parse("2016-11-24 15:00:00"))
+  #       expect(changed_event.end_time).to eq(Time.parse("2016-11-24 16:00:00"))
+  #       expect(changed_ts.starttime).to eq(Time.parse("2016-11-24 15:00:00"))
+  #       expect(changed_ts.endtime).to eq(Time.parse("2016-11-24 16:00:00"))
+  #   end    
+  # end
 
   describe "POST #create" do
     context "with valid params" do
@@ -203,10 +203,9 @@ RSpec.describe EventsController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested event" do
-      event = FactoryGirl.create(:event)
       expect {
-        delete :destroy, id: event.to_param
-      }.to change(Event.all, :count).by(-1)
+        delete :destroy, {:id => '7'}
+      }.to change(Event.all, :count).by(-1).and change(Timeslot.all, :count).by(-1)
     end
   end
 

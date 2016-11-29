@@ -1,4 +1,5 @@
 include EventsHelper
+require 'byebug'
 
 class EventsController < ApplicationController
   include SessionsHelper
@@ -53,17 +54,17 @@ class EventsController < ApplicationController
     render :nothing => true
   end
   
-  def resize
-    @event = Event.find_by_id(params[:id])
-    ts = Timeslot.where(:ca_id => @event.ca_id, :starttime => @event.start_time).first
-    if @event and ts
-      @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
-      ts.endtime = @event.end_time
-      @event.save
-      ts.save
-    end    
-    render :nothing => true
-  end
+  # def resize
+  #   @event = Event.find_by_id(params[:id])
+  #   ts = Timeslot.where(:ca_id => @event.ca_id, :starttime => @event.start_time).first
+  #   if @event and ts
+  #     @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
+  #     ts.endtime = @event.end_time
+  #     @event.save
+  #     ts.save
+  #   end    
+  #   render :nothing => true
+  # end
   
   def edit
     @event = Event.find_by_id(params[:id])
@@ -72,16 +73,9 @@ class EventsController < ApplicationController
   
   def update
     @event = Event.find_by_id(params[:event][:id])
-    if params[:event][:commit_button] == "Update All Occurrence"
-      @events = @event.event_series.events #.find(:all, :conditions => ["start_time > '#{@event.start_time.to_formatted_s(:db)}' "])
-      @event.update_events(@events, event_params)
-    elsif params[:event][:commit_button] == "Update All Following Occurrence"
-      @events = @event.event_series.events.find(:all, :conditions => ["start_time > '#{@event.start_time.to_formatted_s(:db)}' "])
-      @event.update_events(@events, event_params)
-    else
-      @event.attributes = event_params
-      @event.save
-    end
+    ts = Timeslot.where(:ca_id => @event.ca_id, :starttime => @event.start_time).first
+    @event.attributes = event_params
+    @event.save
     render :nothing => true    
   end  
   

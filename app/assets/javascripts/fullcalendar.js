@@ -2751,7 +2751,7 @@ setDefaults({
 	allDayText: 'all-day',
 	firstHour: 6,
 	slotMinutes: 30,
-	defaultEventMinutes: 120,
+	defaultEventMinutes: 30,
 	axisFormat: 'h(:mm)tt',
 	timeFormat: {
 		agenda: 'h:mm{ - h:mm}'
@@ -2759,8 +2759,8 @@ setDefaults({
 	dragOpacity: {
 		agenda: .5
 	},
-	minTime: 8,
-	maxTime: 17.5,
+	minTime: "08:00:00",
+	maxTime: "18:00:00",
 	slotEventOverlap: true
 });
 
