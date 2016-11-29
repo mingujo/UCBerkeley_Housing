@@ -352,7 +352,11 @@ p {
   font-weight: bold;
   line-height: 1;
   &:hover {
-    color: white;
+    color: hotpink;
+    text-decoration: none;
+    background-color: transparent;
+  }
+  &:visited {
     text-decoration: none;
   }
 }
@@ -366,22 +370,27 @@ footer {
   color: #FEFECC;
   a {
     color: #FEFECC;
+    text-decoration: none;
     &:hover {
       color: #F95151;
+      text-decoration: none;
     }
   }
   small {
     float: right;
     color: #FFFFFF;
+    text-decoration: none;
   }
   ul {
     float: left;
     list-style: none;
     color: #FEFECC;
+    text-decoration: none;
     li {
       float: left;
       margin-left: 10px;
       color: #FFFFFF;
+      text-decoration: none;
     }
   }
 }
@@ -537,6 +546,7 @@ aside {
 /* mouse over link */
 .a_link:hover {
     color: hotpink;
+    background-color: transparent;
 }
 
 /* header text block */

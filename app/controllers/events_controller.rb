@@ -2,11 +2,10 @@ include EventsHelper
 require 'byebug'
 
 class EventsController < ApplicationController
-  include SessionsHelper
   before_action :require_login
     
   def new
-    @event = Event.new(:end_time => 1.hour.from_now, :period => "Does not repeat")
+    @event = Event.new(:end_time => 30.minutes.from_now, :period => "Does not repeat")
     @ca = Ca.find(params[:ca_id])
     render :json => {:form => render_to_string(:partial => 'form')}
   end
@@ -54,18 +53,6 @@ class EventsController < ApplicationController
     render :nothing => true
   end
   
-  # def resize
-  #   @event = Event.find_by_id(params[:id])
-  #   ts = Timeslot.where(:ca_id => @event.ca_id, :starttime => @event.start_time).first
-  #   if @event and ts
-  #     @event.end_time = (params[:minute_delta].to_i).minutes.from_now((params[:day_delta].to_i).days.from_now(@event.end_time))
-  #     ts.endtime = @event.end_time
-  #     @event.save
-  #     ts.save
-  #   end    
-  #   render :nothing => true
-  # end
-  
   def edit
     @event = Event.find_by_id(params[:id])
     render :json => { :form => render_to_string(:partial => 'edit_form') } 
@@ -95,6 +82,22 @@ class EventsController < ApplicationController
       end
     end
     render :nothing => true   
+  end
+    
+  def require_login
+    if session[:user_id].nil?
+      redirect_to '/auth/login'
+    else
+      user = Ca.get_by_user_id(session[:user_id])
+      if user.nil?
+        user = Admin.get_by_user_id(session[:user_id])
+      end
+      if user.nil?
+        flash[:notice] = "This email is not authorized"
+        session[:user_id] = nil
+        redirect_to '/auth/login'
+      end
+    end
   end
 
   private

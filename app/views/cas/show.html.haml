@@ -70,6 +70,7 @@
           defaultView: 'month',
           slotMinutes: 30,
           aspectRatio: 1.5,
+          disableResizing: true,
           loading: function(bool){
               if (bool) 
                   $('#loading').show();
@@ -84,17 +85,13 @@
 
           },
           
-          eventResize: function(event, dayDelta, minuteDelta, revertFunc){
-                  resizeEvent(event, dayDelta, minuteDelta);
-          },
-          
           eventClick: function(event, jsEvent, view){
             // change the border color just for fun
             $(this).css('border-color', 'red');
               showEventDetails(event);
           },
           eventRender: function (event, element) {
-              element.find('.fc-event-title').append("<br/>" + event.ca_name); 
+              element.find('.fc-event-title').append("  " + event.ca_name.toUpperCase()); 
           }
       
       });

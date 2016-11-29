@@ -88,18 +88,6 @@ RSpec.describe EventsController, type: :controller do
         expect(changed_ts.endtime).to eq(Time.parse("2016-11-23 15:30:00"))
     end    
   end
-  
-  # describe "POST #resize" do
-  #   it "extend an event 30 minutes more" do
-  #       post :resize, {:id => '7', :minute_delta => '30'}
-  #       changed_event = Event.find(7)
-  #       changed_ts = Timeslot.find(7)
-  #       expect(changed_event.start_time).to eq(Time.parse("2016-11-24 15:00:00"))
-  #       expect(changed_event.end_time).to eq(Time.parse("2016-11-24 16:00:00"))
-  #       expect(changed_ts.starttime).to eq(Time.parse("2016-11-24 15:00:00"))
-  #       expect(changed_ts.endtime).to eq(Time.parse("2016-11-24 16:00:00"))
-  #   end    
-  # end
 
   describe "POST #create" do
     context "with valid params" do
@@ -144,21 +132,6 @@ RSpec.describe EventsController, type: :controller do
     end
   end
      
-
-
-  #   context "with invalid params" do
-  #     it "assigns a newly created but unsaved event as @event" do
-  #       post :create, params: {event: invalid_attributes}, session: valid_session
-  #       expect(assigns(:event)).to be_a_new(Event)
-  #     end
-
-  #     it "re-renders the 'new' template" do
-  #       post :create, params: {event: invalid_attributes}, session: valid_session
-  #       expect(response).to render_template("new")
-  #     end
-  #   end
-  # end
-
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
