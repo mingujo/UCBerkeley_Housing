@@ -1,6 +1,7 @@
 include EventsHelper
 
 class EventsController < ApplicationController
+  before_action :require_login
     
   def new
     @event = Event.new(:end_time => 1.hour.from_now, :period => "Does not repeat")
@@ -99,6 +100,22 @@ class EventsController < ApplicationController
       end
     end
     render :nothing => true   
+  end
+    
+  def require_login
+    if session[:user_id].nil?
+      redirect_to '/auth/login'
+    else
+      user = Ca.get_by_user_id(session[:user_id])
+      if user.nil?
+        user = Admin.get_by_user_id(session[:user_id])
+      end
+      if user.nil?
+        flash[:notice] = "This email is not authorized"
+        session[:user_id] = nil
+        redirect_to '/auth/login'
+      end
+    end
   end
 
   private

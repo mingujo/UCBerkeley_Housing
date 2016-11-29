@@ -110,9 +110,9 @@ class CasController < ApplicationController
           user = Admin.get_by_user_id(session[:user_id])
         end
         if user.nil?
-          flash[:notice] = "This email is not authorized"
-          session[:user_id] = nil
-          redirect_to '/auth/login'
+            flash[:notice] = "This email is not authorized"
+            session[:user_id] = nil
+            redirect_to '/auth/login'
         end
       end
     end
