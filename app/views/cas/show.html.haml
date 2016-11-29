@@ -22,8 +22,8 @@
       %br/
       %br/
       #event_actions
-        %span#edit_event
-        %span#delete_event
+        %span#edit_event.savebutton
+        %span#delete_event.deletebutton
     #create_event_dialog.dialog{:style => "display:none;"}
       #create_event
 
@@ -71,6 +71,8 @@
           slotMinutes: 30,
           aspectRatio: 1.5,
           disableResizing: true,
+          defaultTimedEventDuration: '00:30:00',
+          forceEventDuration: true,
           loading: function(bool){
               if (bool) 
                   $('#loading').show();

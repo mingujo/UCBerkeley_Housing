@@ -3,6 +3,9 @@ require 'byebug'
 
 class EventsController < ApplicationController
   before_action :require_login
+  skip_before_filter :verify_authenticity_token
+  
+  @@THIRTY_MIN = 1800
     
   def new
     @event = Event.new(:end_time => 30.minutes.from_now, :period => "Does not repeat")
@@ -16,17 +19,22 @@ class EventsController < ApplicationController
     else
       event = EventSeries.new(event_params)
     end
-    if event.save
-      if event.class.name == 'Event'
-        Timeslot.create!(:starttime => event[:start_time],
-                         :endtime => event[:end_time],
+    starttime = event.start_time
+    while event.end_time - starttime > 0
+      curr_event = Event.new(:start_time => starttime,
+                             :end_time => starttime + @@THIRTY_MIN,
+                             :ca_id => event[:ca_id])
+      if curr_event.save
+        Timeslot.create!(:starttime => starttime,
+                         :endtime => starttime + @@THIRTY_MIN,
                          :ca_id => event[:ca_id])
+        starttime += @@THIRTY_MIN
+      else
+        render :text => "The timeslot already exists. Please try again.", :status => 422
+        return
       end
-      render :nothing => true
-    else
-      render :text => event.errors.full_messages.to_sentence, :status => 422
     end
-    
+    render :nothing => true
   end
   
   def index
