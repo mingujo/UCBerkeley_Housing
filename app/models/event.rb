@@ -16,9 +16,7 @@ class Event < ActiveRecord::Base
   validate :validate_timings
   REPEATS = [
               "Does not repeat",
-              "Daily"          ,
-              "Weekly"         ,
-              "Monthly"           
+              "Weekly"         
   ]
   
   def validate_timings

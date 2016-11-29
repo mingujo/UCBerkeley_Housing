@@ -25,7 +25,7 @@ RSpec.describe EventsController, type: :controller do
   # Event. As you add validations to Event, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    {:ca_id => "1", :start_time => Time.now, :end_time => Time.now+1.hour}
+    {:ca_id => "1", :start_time => Time.now, :end_time => Time.now+30.minutes}
   }
 
   let(:invalid_attributes) {
@@ -50,10 +50,8 @@ RSpec.describe EventsController, type: :controller do
   describe "GET #get_events" do
     it "gets all events" do
       event1 = FactoryGirl.create(:event, :ca_id => 1)
-      event2 = FactoryGirl.create(:event, :ca_id => 2)
       get :get_events, start: "1477810800", end: "1481443200"
       expect(assigns(:events)).to include(event1)
-      expect(assigns(:events)).to include(event2)
     end
   end
 
@@ -108,24 +106,46 @@ RSpec.describe EventsController, type: :controller do
           :ca_id => 5,
           :period => "Does not repeat"}
           }
-        }.to change(Event, :count).by(1)
+        }.to change(Event, :count).by(2)
       end
-     
+      
+      it "creates a new Event with start time is larger than end time" do
+        expect {
+          post :create, {:event => {
+          'start_time(1i)' => 2016, 
+          'start_time(2i)' => 11,
+          'start_time(3i)' => 15, 
+          'start_time(4i)' => 9, 
+          'start_time(5i)' => 0,
+          'end_time(1i)' =>2016, 
+          'end_time(2i)' =>11, 
+          'end_time(3i)' =>15, 
+          'end_time(4i)' =>9, 
+          'end_time(5i)' =>0,
+          :id => 10,
+          :ca_id => 5,
+          :period => "Does not repeat"}
+          }
+        }.to change(Event, :count).by(0)
+      end
+      
       it "creates a new event series" do
         expect {
           post :create, {:event => {
             'start_time(1i)' => 2016, 
             'start_time(2i)' => 11,
             'start_time(3i)' => 11, 
-            'start_time(4i)' => 8, 
+            'start_time(4i)' => 10, 
             'start_time(5i)' => 0,
             'end_time(1i)' =>2016, 
-            'end_time(2i)' =>12, 
-            'end_time(3i)' =>1, 
-            'end_time(4i)' =>8, 
+            'end_time(2i)' =>11, 
+            'end_time(3i)' =>11, 
+            'end_time(4i)' =>10, 
             'end_time(5i)' =>30,
             :id => 2,
-            :period => 'Weekly'
+            :ca_id => 5,
+            :period => 'Weekly',
+            :frequency => 3
           }}
           }.to change(EventSeries, :count).by(1)
       end

@@ -9,52 +9,55 @@
 #  created_at :datetime
 #  updated_at :datetime
 #
-require 'date'
-RECURRING_EVENTS_UPTO = (Date.today.beginning_of_year + 1.years).to_time
+require 'time'
 
 class EventSeries < ActiveRecord::Base
-  attr_accessor :commit_button
-  
   validates_presence_of :frequency, :period, :start_time, :end_time
-  
+  validates_uniqueness_of :start_time
+  validate :validate_timings
   has_many :events, :dependent => :destroy
 
   after_create :create_events_until_end_time
-  
-  def create_events_until_end_time(end_time=RECURRING_EVENTS_UPTO)
-    st = start_time
-    et = end_time
-    p = r_period(period)
-    nst, net = st, et
-    while frequency.send(p).from_now(st) <= end_time
-      nst = st = frequency.send(p).from_now(st)
-      net = et = frequency.send(p).from_now(nst)
-      self.events.create(:start_time => nst, :end_time => net)
-      # Timeslot.create!(:starttime => event[:start_time],
-      #                   :endtime => event[:end_time],
-      #                   :ca_id => event[:ca_id])
-      
-      if period.downcase == 'monthly' or period.downcase == 'yearly'
-        begin 
-          nst = DateTime.parse("#{start_time.hour}:#{start_time.min}:#{start_time.sec}, #{start_time.day}-#{st.month}-#{st.year}")  
-          net = DateTime.parse("#{end_time.hour}:#{end_time.min}:#{end_time.sec}, #{end_time.day}-#{et.month}-#{et.year}")
-        rescue
-          nst = net = nil
-        end
+
+  def validate_timings
+    if start_time.present? and end_time.present?
+      if (start_time > end_time)
+        errors[:base] << "Start Time must be less than End Time"
       end
     end
   end
   
-  def r_period(period)
-    case period
-      when 'Daily'
-      p = 'days'
-      when "Weekly"
-      p = 'weeks'
-      when "Monthly"
-      p = 'months'
+  def create_events_until_end_time()
+    next_month = (start_time.month.to_i + 1).to_s
+    end_recur = Time.parse(start_time.year.to_s+"-"+next_month+"-"+1.to_s)
+    st = start_time
+    et = end_time
+    p = "weeks"
+    week_counter = 0
+    while week_counter < frequency
+      if week_counter.send(p).from_now(st) > end_recur
+        break
+      end
+      if week_counter == 0
+        self.events.create(:start_time => st,
+                          :end_time => et,
+                          :ca_id => ca_id)
+        Timeslot.create!(:starttime => st,
+                         :endtime => et,
+                         :ca_id => ca_id)
+      else
+        nst = week_counter.send(p).from_now(st)
+        net = week_counter.send(p).from_now(et)
+        self.events.create(:start_time => nst,
+                          :end_time => net,
+                          :ca_id => ca_id)
+        Timeslot.create!(:starttime => nst,
+                         :endtime => net,
+                         :ca_id => ca_id)
+      end
+      week_counter += 1
     end
-    return p
   end
+
   
 end

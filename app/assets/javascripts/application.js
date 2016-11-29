@@ -83,16 +83,8 @@ function refetch_events_and_close_dialog() {
 function showPeriodAndFrequency(value){
 
     switch (value) {
-        case 'Daily':
-            $('#period').html('day');
-            $('#frequency').show();
-            break;
         case 'Weekly':
             $('#period').html('week');
-            $('#frequency').show();
-            break;
-        case 'Monthly':
-            $('#period').html('month');
             $('#frequency').show();
             break;
             

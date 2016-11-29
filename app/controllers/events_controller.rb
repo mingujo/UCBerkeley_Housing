@@ -20,14 +20,28 @@ class EventsController < ApplicationController
       event = EventSeries.new(event_params)
     end
     starttime = event.start_time
+    if starttime >= event.end_time
+      render :text => "Please input valid start and end time.", :status => 422
+      return
+    end
     while event.end_time - starttime > 0
-      curr_event = Event.new(:start_time => starttime,
-                             :end_time => starttime + @@THIRTY_MIN,
-                             :ca_id => event[:ca_id])
-      if curr_event.save
+      if event.class == Event
+        curr_event = Event.new(:start_time => starttime,
+                               :end_time => starttime + @@THIRTY_MIN,
+                               :ca_id => event[:ca_id])
+      else
+        curr_event = EventSeries.new(:start_time => starttime,
+                               :end_time => starttime + @@THIRTY_MIN,
+                               :ca_id => event[:ca_id],
+                               :period => event[:period],
+                               :frequency => event[:frequency])
+      end
+      if curr_event.class == Event and curr_event.save
         Timeslot.create!(:starttime => starttime,
                          :endtime => starttime + @@THIRTY_MIN,
                          :ca_id => event[:ca_id])
+        starttime += @@THIRTY_MIN
+      elsif curr_event.class == EventSeries and curr_event.save
         starttime += @@THIRTY_MIN
       else
         render :text => "The timeslot already exists. Please try again.", :status => 422
