@@ -2,6 +2,7 @@ require 'time'
 require_relative 'google_api_authorization'
 require_relative '../mailers/scheduler_mailer'
 
+
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
 
@@ -12,6 +13,12 @@ if not ENV['TESTING_ENV']
     $service.client_options.application_name = APPLICATION_NAME
     $service.authorization = authorize
 end
+
+
+
+$service = Google::Apis::SheetsV4::SheetsService.new
+$service.client_options.application_name = APPLICATION_NAME
+$service.authorization = authorize
 # :nocov:
 
 # This portion is only for cron job scheduler. 
@@ -33,13 +40,6 @@ def get_sheet_response(range)
     $service.get_spreadsheet_values(ENV["SPREADSHEET_ID"], range).values # mock this
 end
 # :nocov:
-
-def write_sheet_values(range, values)
-    value_range = Google::Apis::SheetsV4::ValueRange.new
-    value_range.values = values
-    value_range.range = range
-    $service.update_spreadsheet_value(ENV["SPREADSHEET_ID"], range, value_range, value_input_option: "USER_ENTERED")
-end
 
 def detect_change_send_email(info_list)
     str_date = info_list[0][0].split(" ")[0]
@@ -85,39 +85,73 @@ def update_ts(ts, client_name, phone_number, apt_number, current_tenant)
     })
 end
 
-# for CA putting their availability
-def write_to_spreadsheet(row, name, email)
-    requests = []
-    requests.push({
-    update_cells: {
-      start: {sheet_id: 0, row_index: row, column_index: 0},
-      rows: [
-        {
-          values: [
-            {
-                user_entered_value: {string_value: name}
-            }
-          ]
-        }
-      ],
-      fields: 'userEnteredValue'
-    }
-    })
-    requests.push({
-    update_cells: {
-    start: {sheet_id: 0, row_index: row, column_index: 2},
-    rows: [
-      {
-        values: [
-          {
-            user_entered_value: {string_value: email}
-          }
-        ]
-      }
-    ],
-    fields: 'userEnteredValue'
-    }
-    })
-    batch_update_request = {requests: requests}
-    $service.batch_update_spreadsheet($spreadsheet_id, batch_update_request, {})
+
+def get_starttime(timeslot)
+    return timeslot.starttime.strftime("%I:%M")
+    #format => hour:min
 end
+
+def format_time(time)
+    first_colon = time.index(':')
+    if first_colon.nil? 
+        #if it's not a time
+        return time
+    end
+    second_colon = time.index(':', first_colon + 1)
+    result = time[0, first_colon]
+    if result.length < 2
+        result = "0#{result}"
+    end
+    if second_colon.nil?
+        second_colon = time.length
+    end
+    result += time[first_colon, second_colon - first_colon]
+    return result
+end
+
+
+def find_row(starttime, sheet_ID)
+    #list representation of the cells in the spreadsheet
+    vals =  $service.get_spreadsheet_values(ENV["SPREADSHEET_ID"], "#{sheet_ID}!A1:B" ).values
+    row = 0
+    while (starttime != format_time(vals[row][0])) do
+        row += 1
+    end
+     byebug
+    return row
+end
+
+# this is for the CA name column
+def get_CA_name(timeslot)
+    id = timeslot.ca_id
+    ca = Ca.find(id)
+    return ca.name
+end
+
+# to determine sheet ID in range
+def get_day(timeslot)
+    return timeslot.starttime.strftime("%d").to_i
+end
+
+# :nocov:
+
+def write_sheet_values(range, values)
+    value_range = Google::Apis::SheetsV4::ValueRange.new
+    value_range.values = values
+    value_range.range = range
+    $service.update_spreadsheet_value(ENV["SPREADSHEET_ID"], range, value_range, value_input_option: "USER_ENTERED")
+end
+# :nocov:
+
+def write_to_spreadsheet(timeslot)
+    #needs to lookup spreadsheet ID in spreadsheet ID model: has 2 columns, month: 1-12, and IDs
+
+    day = get_day(timeslot)
+    starttime = get_starttime(timeslot)
+    row = find_row(starttime, day)
+    range = "#{day}!B#{row}"
+    ca_name = get_CA_name(timeslot)
+    write_sheet_values(range, [[ca_name]])
+end
+
+
