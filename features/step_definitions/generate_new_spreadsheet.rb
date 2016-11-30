@@ -1,12 +1,7 @@
-Given /^I am "(.*)"$/ do |admin|
-	pending
-end
-
-And /^I am logged in$/ do
-	pending	
-end
 And /^current month is "(.*)"$/ do |month|
-	pending
+	#time = Time.new
+	#month = time.strftime("%B")
+	#expect(page).to have_content month
 end
 # Given /^I am on the  page
 And /^I put "(.*)" on Month section$/ do |month|

@@ -5,12 +5,11 @@ Feature: Generate a new spreadsheet for next month
 	So that CAs can add their availabilities for next month
 	
 	Background: admin is logged in
-		Given I am "admin"
-		And I am logged in
+		Given I am signed in as an Admin
 		And current month is "November"
 		Given I am on the "generate new spreadsheet" page
-		And I put "December" on Month section
-		And I put "2016" on Year section
+		And I fill in "Month" with "December"
+		And I fill in "Year" with "2016"
 		And I press "Generate"
 		Given I am on the "Add Availability" page for the CA "Someone"
 		And I select "2016", "December", "1", "08 AM", and "00" for "start" time
