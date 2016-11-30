@@ -1,5 +1,6 @@
 include EventsHelper
-
+#added this just now
+include SessionsHelper
 class EventsController < ApplicationController
   before_action :require_login
   skip_before_filter :verify_authenticity_token
@@ -134,10 +135,12 @@ class EventsController < ApplicationController
     if session[:user_id].nil?
       redirect_to '/auth/login'
     else
-      user = Ca.get_by_user_id(session[:user_id])
-      if user.nil?
-        user = Admin.get_by_user_id(session[:user_id])
-      end
+      #user = Ca.get_by_user_id(session[:user_id])
+      #if user.nil?
+      #  user = Admin.get_by_user_id(session[:user_id])
+      #end
+      # changed before was the top stuff
+      user = get_user
       if user.nil?
         flash[:notice] = "This email is not authorized"
         session[:user_id] = nil
