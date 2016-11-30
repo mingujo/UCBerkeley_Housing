@@ -38,7 +38,7 @@ RSpec.describe EventsController, type: :controller do
     @request.session[:user_id] = double()
     allow(Ca).to receive(:get_by_user_id) { |id| double("Ca") }
     # added line
-    allow(Admin).to receive(:get_by_user_id) { |id| double("Admin") }
+    #allow(Admin).to receive(:get_by_user_id) { |id| double("Admin") }
   end
 
   # This should return the minimal set of values that should be in the session
