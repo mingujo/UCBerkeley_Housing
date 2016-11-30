@@ -1,5 +1,6 @@
 require 'time'
 require 'google_api_authorization'
+require 'signet/oauth_2/client'
 require 'byebug'
 #require_relative '../mailers/scheduler_mailer'
 
@@ -157,7 +158,22 @@ end
 
 
 
-# create sheet 0, the template sheet to be copied, in the new spreadsheet
+
+
+# --------------Generate Spreadsheet -----------------
+
+
+# Create the new spreadsheet. make sure authorization access is set
+
+def create_new_spreadsheet()
+    auth_option = Google::Apis::RequestOptions.new
+    #auth_option.authorization = ...        #set authorization.
+    new_spreadsheet = $service.create_spreadsheet(auth_option)
+    return new_spreadsheet
+end
+
+
+# create sheet 1, the template sheet to be copied, in the new spreadsheet
 def set_template_sheet(spreadsheet_id)
     
  #return this for now
@@ -169,6 +185,7 @@ end
 # return id of new sheet
 
 def copy_sheet(spreadsheet_id, sheet_id = 0)
+    sheet_id = 1587703089
     copy_request = Google::Apis::SheetsV4::CopySheetToAnotherSpreadsheetRequest.new
     copy_request.destination_spreadsheet_id = spreadsheet_id
     new_sheet_properties = $service.copy_spreadsheet(spreadsheet_id, sheet_id, copy_request)
@@ -177,7 +194,8 @@ end
 
 
 # name: day of the month; a string
-def change_name_of_sheet(name, sheet_id,spreadsheet_id)
+
+def set_name_of_sheet(name, sheet_id, spreadsheet_id)
     #initialize the requests
     
     #BatchUpdateRequest attribute: array of Requests
@@ -199,26 +217,72 @@ def change_name_of_sheet(name, sheet_id,spreadsheet_id)
     $service.batch_update_spreadsheet(spreadsheet_id, batch_update_request) 
 end
 
-def create_new_sheet(name, spreadsheet_id)
-    new_sheet_id = copy_sheet(spreadsheet_id)
-    change_name_of_sheet(name, new_sheet_id, spreadsheet_id)
+
+
+
+
+# return day of week, string
+def get_weekday(date)
+    weekdays = { 1 => "Monday", 2 => "Tuesday", 3 => "Wednesday", 4 => "Thursday", 5 => "Friday", 6 => "Saturday", 7 => "Sunday"}
+    return weekdays[date%8]
 end
 
 
-def generate_spreadsheet(days_in_month)
+# returns number of day that the month starts at
+def get_start_day(weekday)
+    weekdays = {"Monday" => 1, "Tuesday" => 2, "Wednesday" => 3, "Thursday" => 4, "Friday" => 5, "Saturday" => 6, "Sunday" => 7}
+    return weekdays[weekday]
+end
 
+#date_array: date, month, year
+def set_day_of_sheet(date_arr, sheet_id, spreadsheet_id)
+    date = date_arr[0]
+    month = date_arr[1]
+    year = date_arr[2]
+    day = get_weekday(date)
+    formatted_date = "#{month}/#{date}/#{year} #{day}"
+    range = "#{date}!A2"                #sheet_name = date
+    write_sheet_values(range, [[formatted_date]])
+end
+
+
+#name = sheet_name = date (1-31)
+def create_new_sheet(name, date_arr, spreadsheet_id)
+    new_sheet_id = copy_sheet(spreadsheet_id)
+    change_name_of_sheet(name, new_sheet_id, spreadsheet_id)
+    set_day_of_sheet(date_arr, name, spreadsheet_id)
+end
+
+
+
+
+#start_day = string, day of week that month starts on
+#probably have user enter days_in_month
+#month, year = int
+def generate_spreadsheet(days_in_month, start_day, month, year)
+    curr_day = get_start_day(start_day) #keeps track of day of week
     new_spreadsheet_id = "1AZz5QK3aTJdBv5x5V30OAutjm9ugcQXnezP8tfRSwok" #need to actually create a new one
     #set_template_sheet(new_spreadsheet_id) //still need to implement this; figure out how to set access when creating a new spreadsheet
     
-    (2..days_in_month).each do |day|
-        create_new_sheet(day.to_s, new_spreadsheet_id)
+    
+    (2..days_in_month).each do |date|
+        date_arr = [curr_day, month, year]
+        create_new_sheet(date.to_s, date_arr, new_spreadsheet_id)
+        curr_day += 1
     end
     
 end
 
 
 
-
-
 #http://www.rubydoc.info/github/google/google-api-ruby-client/Google/Apis/SheetsV4/SheetsService#create_spreadsheet-instance_method
 #https://github.com/google/google-api-ruby-client/blob/master/generated/google/apis/sheets_v4/classes.rb
+
+
+# client = Signet::OAuth2::Client.new(
+#   :authorization_uri => 'https://accounts.google.com/o/oauth2/auth',
+#   :token_credential_uri =>  'https://www.googleapis.com/oauth2/v3/token',
+#   :client_id => '428814932170-vk43ec40v8544c6l76gbd8v75lvcrfm1.apps.googleusercontent.com',
+#   :client_secret => '9tdEqzQG2eFY8RGlXx0exdn_',
+#   :scope => 'spreadsheets', #??
+# )
