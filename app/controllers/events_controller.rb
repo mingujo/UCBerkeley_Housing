@@ -1,6 +1,8 @@
 include EventsHelper
-#added this just now
 include SessionsHelper
+require_relative '../helpers/fetch_sheets.rb'
+
+# NO COVs here should not be called!!! Those are actual API calls
 class EventsController < ApplicationController
   before_action :require_login
   skip_before_filter :verify_authenticity_token
@@ -82,7 +84,7 @@ class EventsController < ApplicationController
   
   def update
     @event = Event.find_by_id(params[:id])
-    ts = Timeslot.where(:ca_id => @event.ca_id, :starttime => @event.start_time).first
+    ts = Timeslot.find_by_starttime_and_ca_id(@event.start_time, @event.ca_id)
     @event.attributes = event_params
     if @event.attributes["end_time"] - @event.attributes["start_time"] != @@THIRTY_MIN
       render :text => "Please input valid start and end time. \nThe duration should be 30 minutes", :status => 422
@@ -92,9 +94,19 @@ class EventsController < ApplicationController
       events = Event.where(:event_series_id => @event.event_series_id)
       for event in events
         ts = Timeslot.find_by_starttime_and_ca_id(event.start_time, event.ca_id)
-        ts.starttime = Time.parse(ts.starttime.time.to_s[0,10]+" "+@event.start_time.to_s[11,15])
-        ts.endtime = Time.parse(ts.starttime.time.to_s[0,10]+" "+@event.end_time.to_s[11,15])
-        ts.save
+        if ENV["TESTING_ENV"] == "false"
+          # :nocov:
+          remove_name_from_spreadsheet(ts)
+          # :nocov:
+        end
+        st = Time.parse(ts.starttime.time.to_s[0,10]+" "+@event.start_time.to_s[11,15])
+        et = Time.parse(ts.starttime.time.to_s[0,10]+" "+@event.end_time.to_s[11,15])
+        Timeslot.update(ts[:id], :starttime => st, :endtime => et)
+        if ENV["TESTING_ENV"] == "false"
+          # :nocov:
+          write_to_spreadsheet(Timeslot.find(ts[:id]))
+          # :nocov:
+        end
         event.start_time = Time.parse(event.start_time.time.to_s[0,10]+" "+@event.start_time.to_s[11,15])
         event.end_time = Time.parse(event.end_time.time.to_s[0,10]+" "+@event.end_time.to_s[11,15])
         event.save
@@ -102,9 +114,19 @@ class EventsController < ApplicationController
       render :nothing => true 
       return
     end
-    ts.starttime = @event.start_time
-    ts.endtime = @event.end_time
-    ts.save
+    if ENV["TESTING_ENV"] == "false"
+      # :nocov:
+      remove_name_from_spreadsheet(ts)
+      # :nocov:
+    end
+    st = @event.start_time
+    et = @event.end_time
+		Timeslot.update(ts[:id], :starttime => st, :endtime => et)
+		if ENV["TESTING_ENV"] == "false"
+		  # :nocov:
+			write_to_spreadsheet(Timeslot.find(ts[:id]))
+			# :nocov:
+		end
     @event.save
     render :nothing => true    
   end  
@@ -116,7 +138,12 @@ class EventsController < ApplicationController
       for event in events
         if Timeslot.find_by_starttime_and_ca_id(event.start_time, event.ca_id)
           ts_id = Timeslot.find_by_starttime_and_ca_id(event.start_time, event.ca_id)[:id]
-          Timeslot.destroy(ts_id)
+          if ENV["TESTING_ENV"] == "false"
+            # :nocov:
+            remove_name_from_spreadsheet(Timeslot.find(ts_id))
+            # :nocov:
+          end
+          Timeslot.delete(ts_id)
         end
         event.destroy
       end
@@ -125,7 +152,12 @@ class EventsController < ApplicationController
       @event.destroy
       if Timeslot.find_by_starttime_and_ca_id(@event.start_time, @event.ca_id)
         ts_id = Timeslot.find_by_starttime_and_ca_id(@event.start_time, @event.ca_id)[:id]
-        Timeslot.destroy(ts_id)
+        if ENV["TESTING_ENV"] == "false"
+          # :nocov:
+    			remove_name_from_spreadsheet(Timeslot.find(ts_id))
+    			# :nocov:
+    		end
+        Timeslot.delete(ts_id)
       end
     end
     render :nothing => true   

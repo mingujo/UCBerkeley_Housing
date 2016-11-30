@@ -1,5 +1,5 @@
 include EventsHelper
-require 'byebug'
+require_relative '../helpers/fetch_sheets.rb'
 
 class CasController < ApplicationController
   include SessionsHelper
@@ -73,6 +73,12 @@ class CasController < ApplicationController
   # DELETE /cas/1.json
   def destroy
     Event.destroy_all(:ca_id => @ca.id)
+    timeslots = Timeslot.where(:ca_id => @ca.id)
+    for ts in timeslots
+      if ENV["TESTING_ENV"] == "false"
+  			remove_name_from_spreadsheet(ts)
+  		end
+    end
     Timeslot.destroy_all(:ca_id => @ca.id)
     @ca.destroy
     respond_to do |format|
