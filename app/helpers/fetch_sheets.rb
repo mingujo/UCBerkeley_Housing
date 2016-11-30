@@ -143,9 +143,9 @@ def write_sheet_values(range, values)
 end
 # :nocov:
 
-def write_to_spreadsheet(timeslot)
-    #needs to lookup spreadsheet ID in spreadsheet ID model: has 2 columns, month: 1-12, and IDs
-
+def write_name_to_spreadsheet(timeslot)
+    # called when 
+    # needs to lookup spreadsheet ID in spreadsheet ID model: has 2 columns, month: 1-12, and IDs
     day = get_day(timeslot)
     starttime = get_starttime(timeslot)
     row = find_row(starttime, day)
@@ -154,4 +154,11 @@ def write_to_spreadsheet(timeslot)
     write_sheet_values(range, [[ca_name]])
 end
 
+def remove_name_from_spreadsheet(timeslot)
+    day = get_day(timeslot)
+    starttime = get_starttime(timeslot)
+    row = find_row(starttime, day)
+    range = "#{day}!B#{row}"
+    write_sheet_values(range, [[""]])
+end
 
