@@ -1,4 +1,5 @@
 include EventsHelper
+require 'byebug'
 
 class CasController < ApplicationController
   include SessionsHelper
@@ -7,9 +8,6 @@ class CasController < ApplicationController
   before_action :require_ca_login, only: [:show, :edit, :update]
   before_action :require_admin_login, only: [:index, :new, :create, :update, :destroy]
   
-  def ca_params
-    params.require(:ca).permit(:name, :email, :phone_number)
-  end
 
   # GET /cas
   # GET /cas.json
@@ -24,7 +22,6 @@ class CasController < ApplicationController
 
   # GET /cas/new
   def new
-    print "In new method"
     @ca = Ca.new
   end
 
@@ -41,15 +38,14 @@ class CasController < ApplicationController
   # POST /cas
   # POST /cas.json
   def create
-    print "In create method"
     params.permit!
-    @ca = Ca.create(ca_params)
+    @ca = Ca.new(params[:ca])
     
     if @ca.save
-      puts "In create now saving and redirecting to"
       redirect_to cas_path
     else
-      redirect_to action: 'error'
+      flash[:error] = "Please input your name and email at least."
+      redirect_to new_ca_path
     end
     
   end
@@ -66,8 +62,9 @@ class CasController < ApplicationController
         format.html { redirect_to @ca, notice: 'Ca was successfully updated.' }
         format.json { render :show, status: :ok, location: @ca }
       else
-        format.html { render :edit }
-        format.json { render json: @ca.errors, status: :unprocessable_entity }
+        flash[:error] = "Please input your name and email at least."
+        redirect_to edit_ca_path, :d => @ca.id
+        return
       end
     end
   end
