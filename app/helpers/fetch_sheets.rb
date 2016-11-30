@@ -1,6 +1,7 @@
 require 'time'
-require_relative 'google_api_authorization'
-require_relative '../mailers/scheduler_mailer'
+require 'google_api_authorization'
+require 'byebug'
+#require_relative '../mailers/scheduler_mailer'
 
 
 NEW_SCHEDULE = "new_schedule"
@@ -13,7 +14,6 @@ if not ENV['TESTING_ENV']
     $service.client_options.application_name = APPLICATION_NAME
     $service.authorization = authorize
 end
-
 
 
 $service = Google::Apis::SheetsV4::SheetsService.new
@@ -139,13 +139,14 @@ def write_sheet_values(range, values)
     value_range = Google::Apis::SheetsV4::ValueRange.new
     value_range.values = values
     value_range.range = range
-    $service.update_spreadsheet_value(ENV["SPREADSHEET_ID"], range, value_range, value_input_option: "USER_ENTERED")
+    #$service.update_spreadsheet_value(ENV["SPREADSHEET_ID"], range, value_range, value_input_option: "USER_ENTERED")
+    a = $service.update_spreadsheet_value("1AZz5QK3aTJdBv5x5V30OAutjm9ugcQXnezP8tfRSwok", range, value_range, value_input_option: "USER_ENTERED")
 end
 # :nocov:
 
-def write_name_to_spreadsheet(timeslot)
-    # called when 
-    # needs to lookup spreadsheet ID in spreadsheet ID model: has 2 columns, month: 1-12, and IDs
+def write_to_spreadsheet(timeslot)
+    #needs to lookup spreadsheet ID in spreadsheet ID model: has 2 columns, month: 1-12, and IDs
+
     day = get_day(timeslot)
     starttime = get_starttime(timeslot)
     row = find_row(starttime, day)
@@ -154,11 +155,70 @@ def write_name_to_spreadsheet(timeslot)
     write_sheet_values(range, [[ca_name]])
 end
 
-def remove_name_from_spreadsheet(timeslot)
-    day = get_day(timeslot)
-    starttime = get_starttime(timeslot)
-    row = find_row(starttime, day)
-    range = "#{day}!B#{row}"
-    write_sheet_values(range, [[""]])
+
+
+# create sheet 0, the template sheet to be copied, in the new spreadsheet
+def set_template_sheet(spreadsheet_id)
+    
+ #return this for now
+ return $service.get_spreadsheet("1AZz5QK3aTJdBv5x5V30OAutjm9ugcQXnezP8tfRSwok").sheets[0]
 end
 
+
+# makes copy sheet_id, which defaults to zero. the copy appears as last sheet
+# return id of new sheet
+
+def copy_sheet(spreadsheet_id, sheet_id = 0)
+    copy_request = Google::Apis::SheetsV4::CopySheetToAnotherSpreadsheetRequest.new
+    copy_request.destination_spreadsheet_id = spreadsheet_id
+    new_sheet_properties = $service.copy_spreadsheet(spreadsheet_id, sheet_id, copy_request)
+    return new_sheet_properties.sheet_id
+end
+
+
+# name: day of the month; a string
+def change_name_of_sheet(name, sheet_id,spreadsheet_id)
+    #initialize the requests
+    
+    #BatchUpdateRequest attribute: array of Requests
+        # Request attribute: update_sheet_properties = UpdateSheetPropertiesRequest
+            #UpdateSheetPropertiesRequest attributes: fields, properties
+    property_update_request = Google::Apis::SheetsV4::UpdateSheetPropertiesRequest.new
+    name_change_request = Google::Apis::SheetsV4::Request.new
+    batch_update_request = Google::Apis::SheetsV4::BatchUpdateSpreadsheetRequest.new
+    
+    #set the actual property to change
+    property_update_request.fields = "title"
+    property_update_request.properties = {sheet_id: sheet_id, title: name}
+    
+    #assign the requests
+    name_change_request.update_sheet_properties = property_update_request
+    batch_update_request.requests = [name_change_request]
+    
+    #call the update
+    $service.batch_update_spreadsheet(spreadsheet_id, batch_update_request) 
+end
+
+def create_new_sheet(name, spreadsheet_id)
+    new_sheet_id = copy_sheet(spreadsheet_id)
+    change_name_of_sheet(name, new_sheet_id, spreadsheet_id)
+end
+
+
+def generate_spreadsheet(days_in_month)
+
+    new_spreadsheet_id = "1AZz5QK3aTJdBv5x5V30OAutjm9ugcQXnezP8tfRSwok" #need to actually create a new one
+    #set_template_sheet(new_spreadsheet_id) //still need to implement this; figure out how to set access when creating a new spreadsheet
+    
+    (2..days_in_month).each do |day|
+        create_new_sheet(day.to_s, new_spreadsheet_id)
+    end
+    
+end
+
+
+
+
+
+#http://www.rubydoc.info/github/google/google-api-ruby-client/Google/Apis/SheetsV4/SheetsService#create_spreadsheet-instance_method
+#https://github.com/google/google-api-ruby-client/blob/master/generated/google/apis/sheets_v4/classes.rb
