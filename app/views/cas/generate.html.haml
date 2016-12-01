@@ -1,12 +1,12 @@
 %center
     %main.header_block Generate New Spreadsheet
-= form_tag cas_path do #change
+= form_tag cas_path do
 
-    = label :ca, :month, 'Month', :class => "edit_label"
-    = text_field :ca, 'month'
+    = label :ca, :id, 'Id', :class => "edit_label"
+    = text_field :ca, 'id'
 
-    = label :ca, :year, 'Year', :class => "edit_label"
-    = text_field :ca, 'year'
+    = label :ca, :days, 'Days', :class => "edit_label"
+    = text_field :ca, 'days'
 
     %br
     = submit_tag 'Generate', :class => "savebutton"

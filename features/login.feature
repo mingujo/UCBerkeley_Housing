@@ -31,6 +31,7 @@ Feature: Login
   Scenario: Whitelist email
     Given I am signed in as an Admin
     When I go to the add CA page
+    And I fill in "Name" with "Foo Bar"
     And I fill in "Email" with "foo@berkeley.edu"
     And I press "Add"
     Then I should be on the CA page
