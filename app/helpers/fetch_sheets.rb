@@ -16,10 +16,6 @@ if not ENV['TESTING_ENV']
     $service.authorization = authorize
 end
 
-
-$service = Google::Apis::SheetsV4::SheetsService.new
-$service.client_options.application_name = APPLICATION_NAME
-$service.authorization = authorize
 # :nocov:
 
 # This portion is only for cron job scheduler. 
@@ -38,7 +34,7 @@ end
 # This portion just fetches data from spreadsheet using API (has to be mocked)
 # :nocov:
 def get_sheet_response(range)
-    $service.get_spreadsheet_values(ENV["SPREADSHEET_ID"], range).values # mock this
+    $service.get_spreadsheet_values(get_spreadsheet_id(Time.now), range).values # mock this
 end
 # :nocov:
 
@@ -113,7 +109,7 @@ end
 
 def find_row(starttime, sheet_ID)
     #list representation of the cells in the spreadsheet
-    vals =  $service.get_spreadsheet_values(ENV["SPREADSHEET_ID"], "#{sheet_ID}!A1:B" ).values
+    vals = $service.get_spreadsheet_values(get_spreadsheet_id(starttime), "#{sheet_ID}!A1:B" ).values
     row = 0
     while (starttime != format_time(vals[row][0])) do
         row += 1
@@ -136,12 +132,12 @@ end
 
 # :nocov:
 
-def write_sheet_values(range, values)
+def write_sheet_values(range, values, date_time)
     value_range = Google::Apis::SheetsV4::ValueRange.new
     value_range.values = values
     value_range.range = range
     #$service.update_spreadsheet_value(ENV["SPREADSHEET_ID"], range, value_range, value_input_option: "USER_ENTERED")
-    a = $service.update_spreadsheet_value("1AZz5QK3aTJdBv5x5V30OAutjm9ugcQXnezP8tfRSwok", range, value_range, value_input_option: "USER_ENTERED")
+   $service.update_spreadsheet_value(get_spreadsheet_id(date_time), range, value_range, value_input_option: "USER_ENTERED")
 end
 # :nocov:
 
@@ -153,10 +149,27 @@ def write_to_spreadsheet(timeslot)
     row = find_row(starttime, day)
     range = "#{day}!B#{row}"
     ca_name = get_CA_name(timeslot)
-    write_sheet_values(range, [[ca_name]])
+    write_sheet_values(range, [[ca_name]], timeslot.starttime)
 end
 
 
+def remove_name_from_spreadsheet(timeslot)
+    day = get_day(timeslot)
+    starttime = get_starttime(timeslot)
+    row = find_row(starttime, day)
+    range = "#{day}!B#{row}"
+    write_sheet_values(range, [[""]])
+end
+
+
+ # get id of the spreadsheet for the corresponding month and year, taken from a datetime object
+ # date_time = either current date/time or a timeslot's starttime
+def get_spreadsheet_id(date_time)
+    month = date_time.strftime("%m").to_i
+    year = date_time.strftime("%y").to_i
+    id = Spreadsheet.get_url_by_date(month, year)
+    return id
+end
 
 
 
