@@ -12,8 +12,13 @@ Rails.application.routes.draw do
   get '/auth/logout', to: 'sessions#destroy'
   get '/auth/login', to: 'sessions#login'
   
+  get '/cas/generate', to: 'cas#generate'
+  post '/cas/admin_generate_spreadsheet', to: 'cas#admin_generate_spreadsheet'
+  
+  
   resources :cas do
     get :get_ca_events
+    
     resources :events, only: [:new]
   end
   

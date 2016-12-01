@@ -1,4 +1,6 @@
 include EventsHelper
+require_relative '../helpers/fetch_sheets.rb'
+require 'byebug'
 
 class CasController < ApplicationController
   include SessionsHelper
@@ -89,7 +91,22 @@ class CasController < ApplicationController
     @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] ).where(:ca_id => ca_id)
     events = make_event_json(@events, ca_id=ca_id) 
     render :text => events.to_json
-	 end
+	end
+	
+	def admin_generate_spreadsheet
+      # need to know # of months 
+      #exibyebug
+      spreadsheet_url = params[:ca][:spreadsheet_url]
+      id = /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/.match(spreadsheet_url)[1] 
+      days_in_month = params[:ca][:days_in_month]
+      #byebug
+      generate_spreadsheet(days_in_month, id)
+      flash[:notice] = "Spreadsheet has been created"
+  end
+  
+  def generate #just renders view
+    
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
