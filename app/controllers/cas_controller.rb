@@ -13,6 +13,7 @@ class CasController < ApplicationController
   # GET /cas.json
   def index
     @ca = Ca.all
+    
   end
 
   # GET /cas/1
@@ -72,6 +73,7 @@ class CasController < ApplicationController
   # DELETE /cas/1
   # DELETE /cas/1.json
   def destroy
+    
     Event.destroy_all(:ca_id => @ca.id)
     timeslots = Timeslot.where(:ca_id => @ca.id)
     for ts in timeslots
