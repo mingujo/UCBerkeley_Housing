@@ -1,6 +1,6 @@
 %center
     %main.header_block Generate Spreadsheet
-= form_tag cas_admin_generate_spreadsheet_path do
+= form_tag spreadsheets_path do
 
     = label :ca, :spreadsheet_url, 'New Spreadsheet Url', :class => "edit_label"
     = text_field :ca, 'spreadsheet_url'

@@ -265,7 +265,7 @@ end
 #user passes in spreadsheet ID and creates the first sheet. then we make copies of it and change name and sheet id
     #from first sheet, we get month/date/year day
 
-def generate_spreadsheet(days_in_month, new_spreadsheet_id)
+def generate_spreadsheet(days_in_month, new_spreadsheet_id, link)
     full_date = get_date_array(new_spreadsheet_id) 
     weekday_tracker = get_start_day(full_date[3]) #int that keeps track of day of week
     
@@ -274,5 +274,5 @@ def generate_spreadsheet(days_in_month, new_spreadsheet_id)
         weekday_tracker += 1
     end
     
-    Spreadsheet.create(month: full_date[0], year: full_date[2], url: new_spreadsheet_id)
+    Spreadsheet.create(month: full_date[0], year: full_date[2], url: new_spreadsheet_id, link: link)
 end

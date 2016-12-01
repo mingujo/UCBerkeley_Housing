@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161201060020) do
+ActiveRecord::Schema.define(version: 20161201073418) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20161201060020) do
     t.integer "month"
     t.integer "year"
     t.string  "url"
+    t.string  "link"
   end
 
   create_table "timeslots", force: :cascade do |t|

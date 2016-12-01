@@ -92,21 +92,6 @@ class CasController < ApplicationController
     events = make_event_json(@events, ca_id=ca_id) 
     render :text => events.to_json
 	end
-	
-	def admin_generate_spreadsheet
-      # need to know # of months 
-      #exibyebug
-      spreadsheet_url = params[:ca][:spreadsheet_url]
-      id = /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/.match(spreadsheet_url)[1] 
-      days_in_month = params[:ca][:days_in_month]
-      #byebug
-      generate_spreadsheet(days_in_month, id)
-      flash[:notice] = "Spreadsheet has been created"
-  end
-  
-  def generate #just renders view
-    
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -117,24 +102,5 @@ class CasController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def ca_params
       params.fetch(:ca, {})
-    end
-    
-    def require_ca_login
-      user = Ca.get_by_user_id(session[:user_id])
-      unless user.nil?
-        if @ca.id != user.id
-          flash[:notice] = "You cannot access that user's info"
-          redirect_to ca_path(user.id)
-        end
-      end
-    end
-    
-    def require_admin_login
-      user = Admin.get_by_user_id(session[:user_id])
-      if user.nil?
-        flash[:notice] = "You must be admin to access that page"
-        user = Ca.get_by_user_id(session[:user_id])
-        redirect_to ca_path(user.id)
-      end
     end
 end
