@@ -163,22 +163,50 @@ end
 # --------------Generate Spreadsheet -----------------
 
 
-# Create the new spreadsheet. make sure authorization access is set
 
-def create_new_spreadsheet()
-    auth_option = Google::Apis::RequestOptions.new
-    #auth_option.authorization = ...        #set authorization.
-    new_spreadsheet = $service.create_spreadsheet(auth_option)
-    return new_spreadsheet
+
+# incoming date format: "month/date/year day"
+
+def get_date_array(spreadsheet_id)
+    full_date = $service.get_spreadsheet_values(spreadsheet_id, "1!A2").values[0][0]
+    month = /^[0-9]+/.match(full_date).to_s
+    date = /\/[0-9]+/.match(full_date).to_s
+    date = full_date[1..date.length - 1]
+    year = /\d{4}/.match(full_date).to_s
+    day = /[A-Za-z]+/.match(full_date).to_s
+    return [month, date, year, day]
 end
 
 
-# create sheet 1, the template sheet to be copied, in the new spreadsheet
-def set_template_sheet(spreadsheet_id)
-    
- #return this for now
- return $service.get_spreadsheet("1AZz5QK3aTJdBv5x5V30OAutjm9ugcQXnezP8tfRSwok").sheets[0]
+
+
+# return day of week, string
+
+def get_weekday(date)
+    weekdays = { 1 => "Monday", 2 => "Tuesday", 3 => "Wednesday", 4 => "Thursday", 5 => "Friday", 6 => "Saturday", 7 => "Sunday"}
+    return weekdays[date%8]
 end
+
+
+# returns number of day that the month starts at
+
+def get_start_day(weekday)
+    weekdays = {"Monday" => 1, "Tuesday" => 2, "Wednesday" => 3, "Thursday" => 4, "Friday" => 5, "Saturday" => 6, "Sunday" => 7}
+    return weekdays[weekday]
+end
+
+
+
+def set_date_of_sheet(date, full_date, weekday_tracker, spreadsheet_id)
+    month = full_date[0]
+    year = full_date[2]
+    weekday = get_weekday(weekday_tracker)
+    formatted_date = "#{month}/#{date}/#{year} #{weekday}"
+    range = "#{date}!A2"                #sheet_name = date
+    write_sheet_values(range, [[formatted_date]])
+end
+
+
 
 
 # makes copy sheet_id, which defaults to zero. the copy appears as last sheet
@@ -219,55 +247,12 @@ end
 
 
 
-
-
-# return day of week, string
-def get_weekday(date)
-    weekdays = { 1 => "Monday", 2 => "Tuesday", 3 => "Wednesday", 4 => "Thursday", 5 => "Friday", 6 => "Saturday", 7 => "Sunday"}
-    return weekdays[date%8]
-end
-
-
-# returns number of day that the month starts at
-def get_start_day(weekday)
-    weekdays = {"Monday" => 1, "Tuesday" => 2, "Wednesday" => 3, "Thursday" => 4, "Friday" => 5, "Saturday" => 6, "Sunday" => 7}
-    return weekdays[weekday]
-end
-
-#date_array: month, day, year
-#sheet_name == current day
-
-def set_day_of_sheet(date, full_date, weekday_tracker, spreadsheet_id)
-    month = full_date[0]
-    year = full_date[2]
-    weekday = get_weekday(weekday_tracker)
-    formatted_date = "#{month}/#{date}/#{year} #{weekday}"
-    range = "#{date}!A2"                #sheet_name = date
-    write_sheet_values(range, [[formatted_date]])
-end
-
-
 #name = sheet_name = date (1-31)
+
 def create_new_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
     new_sheet_id = copy_sheet(spreadsheet_id)
+    set_date_of_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
     set_name_of_sheet(name, new_sheet_id, spreadsheet_id)
-    set_day_of_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
-end
-
-
-def get_date_from_first_sheet(spreadsheet_id)
-    return $service.get_spreadsheet_values(spreadsheet_id, "1!A2").values[0][0]
-end
-
-#format: month/date/year day
-def get_date_array(spreadsheet_id)
-    full_date = get_date_from_first_sheet(spreadsheet_id)
-    month = /^[0-9]+/.match(full_date).to_s
-    date = /\/[0-9]+/.match(full_date).to_s
-    date = full_date[1..date.length - 1]
-    year = /\d{4}/.match(full_date).to_s
-    day = /[A-Za-z]+/.match(full_date).to_s
-    return [month, date, year, day]
 end
 
 
@@ -278,17 +263,11 @@ end
 
 def generate_spreadsheet(days_in_month, new_spreadsheet_id)
     full_date = get_date_array(new_spreadsheet_id) 
-    weekday_tracker = get_start_day(date[3]) #int that keeps track of day of week
+    weekday_tracker = get_start_day(full_date[3]) #int that keeps track of day of week
+    
     (2..days_in_month).each do |d|
         create_new_sheet(d.to_s, full_date, weekday_tracker, new_spreadsheet_id)
         weekday_tracker += 1
     end
     
 end
-
-
-
-#http://www.rubydoc.info/github/google/google-api-ruby-client/Google/Apis/SheetsV4/SheetsService#create_spreadsheet-instance_method
-#https://github.com/google/google-api-ruby-client/blob/master/generated/google/apis/sheets_v4/classes.rb
-
-generate_spreadsheet(3, id)
