@@ -234,41 +234,54 @@ def get_start_day(weekday)
     return weekdays[weekday]
 end
 
-#date_array: date, month, year
-def set_day_of_sheet(date_arr, sheet_id, spreadsheet_id)
-    date = date_arr[0]
-    month = date_arr[1]
-    year = date_arr[2]
-    day = get_weekday(date)
-    formatted_date = "#{month}/#{date}/#{year} #{day}"
+#date_array: month, day, year
+#sheet_name == current day
+
+def set_day_of_sheet(date, full_date, weekday_tracker, spreadsheet_id)
+    month = full_date[0]
+    year = full_date[2]
+    weekday = get_weekday(weekday_tracker)
+    formatted_date = "#{month}/#{date}/#{year} #{weekday}"
     range = "#{date}!A2"                #sheet_name = date
     write_sheet_values(range, [[formatted_date]])
 end
 
 
 #name = sheet_name = date (1-31)
-def create_new_sheet(name, date_arr, spreadsheet_id)
+def create_new_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
     new_sheet_id = copy_sheet(spreadsheet_id)
-    change_name_of_sheet(name, new_sheet_id, spreadsheet_id)
-    set_day_of_sheet(date_arr, name, spreadsheet_id)
+    set_name_of_sheet(name, new_sheet_id, spreadsheet_id)
+    set_day_of_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
+end
+
+
+def get_date_from_first_sheet(spreadsheet_id)
+    return $service.get_spreadsheet_values(spreadsheet_id, "1!A2").values[0][0]
+end
+
+#format: month/date/year day
+def get_date_array(spreadsheet_id)
+    full_date = get_date_from_first_sheet(spreadsheet_id)
+    month = /^[0-9]+/.match(full_date).to_s
+    date = /\/[0-9]+/.match(full_date).to_s
+    date = full_date[1..date.length - 1]
+    year = /\d{4}/.match(full_date).to_s
+    day = /[A-Za-z]+/.match(full_date).to_s
+    return [month, date, year, day]
 end
 
 
 
 
-#start_day = string, day of week that month starts on
-#probably have user enter days_in_month
-#month, year = int
-def generate_spreadsheet(days_in_month, start_day, month, year)
-    curr_day = get_start_day(start_day) #keeps track of day of week
-    new_spreadsheet_id = "1AZz5QK3aTJdBv5x5V30OAutjm9ugcQXnezP8tfRSwok" #need to actually create a new one
-    #set_template_sheet(new_spreadsheet_id) //still need to implement this; figure out how to set access when creating a new spreadsheet
-    
-    
-    (2..days_in_month).each do |date|
-        date_arr = [curr_day, month, year]
-        create_new_sheet(date.to_s, date_arr, new_spreadsheet_id)
-        curr_day += 1
+#user passes in spreadsheet ID and creates the first sheet. then we make copies of it and change name and sheet id
+    #from first sheet, we get month/date/year day
+
+def generate_spreadsheet(days_in_month, new_spreadsheet_id)
+    full_date = get_date_array(new_spreadsheet_id) 
+    weekday_tracker = get_start_day(date[3]) #int that keeps track of day of week
+    (2..days_in_month).each do |d|
+        create_new_sheet(d.to_s, full_date, weekday_tracker, new_spreadsheet_id)
+        weekday_tracker += 1
     end
     
 end
@@ -278,11 +291,4 @@ end
 #http://www.rubydoc.info/github/google/google-api-ruby-client/Google/Apis/SheetsV4/SheetsService#create_spreadsheet-instance_method
 #https://github.com/google/google-api-ruby-client/blob/master/generated/google/apis/sheets_v4/classes.rb
 
-
-# client = Signet::OAuth2::Client.new(
-#   :authorization_uri => 'https://accounts.google.com/o/oauth2/auth',
-#   :token_credential_uri =>  'https://www.googleapis.com/oauth2/v3/token',
-#   :client_id => '428814932170-vk43ec40v8544c6l76gbd8v75lvcrfm1.apps.googleusercontent.com',
-#   :client_secret => '9tdEqzQG2eFY8RGlXx0exdn_',
-#   :scope => 'spreadsheets', #??
-# )
+generate_spreadsheet(3, id)
