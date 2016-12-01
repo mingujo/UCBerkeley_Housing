@@ -15,19 +15,19 @@ class SpreadsheetsController < ApplicationController
     
     def create
         spreadsheet_url = params[:ca][:spreadsheet_url]
-        id = /\/spreadsheets\/d\/([a-zA-Z0-9\-_]+)/.match(spreadsheet_url) 
-        if !id
+        spreadsheet_id = /\/spreadsheets\/d\/([a-zA-Z0-9\-_]+)/.match(spreadsheet_url) 
+        if !spreadsheet_id
             flash[:error] = "Invalid spreadsheet url"
             redirect_to new_spreadsheet_path
             return
         end
-        id = id[1]
+        spreadsheet_id = spreadsheet_id[1]
         
         days_in_month = params[:ca][:days_in_month].to_i
         if days_in_month < 28 or days_in_month > 31
-            #flash[:error] = "Invalid number of days in month"
-            #redirect_to cas_generate_path
-            #return
+            flash[:error] = "Invalid number of days in month"
+            redirect_to cas_generate_path
+            return
         end
       
         if !validate_date(id)
@@ -36,7 +36,7 @@ class SpreadsheetsController < ApplicationController
             return
         end
       
-        populate_spreadsheet(days_in_month, id, spreadsheet_url)
+        populate_spreadsheet(days_in_month, spreadsheet_id, spreadsheet_url)
         flash[:notice] = "Spreadsheet has been created"
     end
 end

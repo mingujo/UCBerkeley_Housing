@@ -1,11 +1,15 @@
 class Spreadsheet < ActiveRecord::Base
-    validates :month, :year, :url, :link, :presence => true
+    validates :month, :year, :spreadsheet_id, :link, :presence => true
     
-    def self.get_url_by_date(month, year)
+    
+    
+    def self.get_id_by_date(month, year)
         spreadsheet = find_by(month: month, year: year)
         if spreadsheet.nil?
             return nil
         end
-        return spreadsheet.url
+        return spreadsheet.spreadsheet_id
     end
+    
+    
 end

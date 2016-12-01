@@ -31,10 +31,26 @@ def fetch_month_sheets()
 end
 # :nocov:
 
+=begin
+    Get id of the spreadsheet for the corresponding month and year, taken from a datetime object.
+    date_time = either current date/time or a timeslot's starttime. 
+    Methods that check for changes will only look at the current month. But when writing to the spreadsheet,
+    we need to know if the change is being made to this month's sheet or next month's sheet
+=end
+
+def get_spreadsheet_id(date_time)
+    month = date_time.strftime("%m").to_i
+    year = date_time.strftime("%y").to_i
+    id = Spreadsheet.get_url_by_date(month, year)
+    return id
+end
+
+
 # This portion just fetches data from spreadsheet using API (has to be mocked)
 # :nocov:
 def get_sheet_response(range)
-    $service.get_spreadsheet_values(get_spreadsheet_id(Time.now), range).values # mock this
+    spreadsheet_id = get_spreadsheet_id(Time.now) #gets id of spreadsheet of current month
+    $service.get_spreadsheet_values(spreadsheet_id, range).values # mock this
 end
 # :nocov:
 
@@ -83,11 +99,21 @@ def update_ts(ts, client_name, phone_number, apt_number, current_tenant)
 end
 
 
+
+#--------------Write to Spreadsheet----------------------
+
+#TODO: write CA info to spreadsheet the first time that they add their schedule there
+
+
+#return starttime of timeslot in format: hour:min
 def get_starttime(timeslot)
     return timeslot.starttime.strftime("%I:%M")
-    #format => hour:min
 end
 
+
+# format time so that it is in format: h:m
+# so that hour is not zero-padded, and takes out the seconds 
+# ie: 04:30:00 => 4:30
 def format_time(time)
     first_colon = time.index(':')
     if first_colon.nil? 
@@ -106,23 +132,23 @@ def format_time(time)
     return result
 end
 
-
+# find row number corresponding to the starttime of the appointment
 def find_row(starttime, sheet_ID)
-    #list representation of the cells in the spreadsheet
-    vals = $service.get_spreadsheet_values(get_spreadsheet_id(starttime), "#{sheet_ID}!A1:B" ).values
+    spreadsheet_id = get_spreadsheet_id(starttime)
+    vals = $service.get_spreadsheet_values(spreadsheet_id, "#{sheet_ID}!A1:B" ).values
+    # vals = list representation of the cells in the spreadsheet
     row = 0
     while (starttime != format_time(vals[row][0])) do
         row += 1
     end
-     byebug
     return row
 end
 
 # this is for the CA name column
-def get_CA_name(timeslot)
+def get_CA(timeslot)
     id = timeslot.ca_id
     ca = Ca.find(id)
-    return ca.name
+    return ca
 end
 
 # to determine sheet ID in range
@@ -130,16 +156,26 @@ def get_day(timeslot)
     return timeslot.starttime.strftime("%d").to_i
 end
 
+
+
+
 # :nocov:
 
 def write_sheet_values(range, values, date_time)
     value_range = Google::Apis::SheetsV4::ValueRange.new
     value_range.values = values
     value_range.range = range
-    #$service.update_spreadsheet_value(ENV["SPREADSHEET_ID"], range, value_range, value_input_option: "USER_ENTERED")
-   $service.update_spreadsheet_value(get_spreadsheet_id(date_time), range, value_range, value_input_option: "USER_ENTERED")
+    spreadsheet_id = get_spreadsheet_id(date_time)
+    $service.update_spreadsheet_value(spreadsheet_id, range, value_range, value_input_option: "USER_ENTERED")
 end
 # :nocov:
+
+
+# when a CA has listed availabilites on a certain day on the spreadsheet, 
+# their name, email and phone number should be listed on the bottom.
+def write_ca_info_to_spreadsheet(timeslot)
+    #...
+end
 
 def write_to_spreadsheet(timeslot)
     #needs to lookup spreadsheet ID in spreadsheet ID model: has 2 columns, month: 1-12, and IDs
@@ -148,9 +184,11 @@ def write_to_spreadsheet(timeslot)
     starttime = get_starttime(timeslot)
     row = find_row(starttime, day)
     range = "#{day}!B#{row}"
-    ca_name = get_CA_name(timeslot)
+    ca_name = get_CA(timeslot).name
     write_sheet_values(range, [[ca_name]], timeslot.starttime)
+    write_ca_info_to_spreadsheet(timeslot)
 end
+
 
 
 def remove_name_from_spreadsheet(timeslot)
@@ -162,19 +200,13 @@ def remove_name_from_spreadsheet(timeslot)
 end
 
 
- # get id of the spreadsheet for the corresponding month and year, taken from a datetime object
- # date_time = either current date/time or a timeslot's starttime
-def get_spreadsheet_id(date_time)
-    month = date_time.strftime("%m").to_i
-    year = date_time.strftime("%y").to_i
-    id = Spreadsheet.get_url_by_date(month, year)
-    return id
-end
-
 
 
 # --------------Generate Spreadsheet -----------------
 
+
+#TODO: create the template sheet, so that admin can just create the new spreadsheet and doesn't have to create the first page
+# this entails requiring input of date of first day in month in the view
 
 
 
@@ -190,6 +222,8 @@ def get_date_array(spreadsheet_id)
     return [month, date, year, day]
 end
 
+# ensure that the date on the first spreadsheet is properly formatted. 
+# alternatively, will change it so that user can enter date in view and then we write it to spreadsheet.
 def validate_date(spreadsheet_id)
     date = get_date_array(spreadsheet_id)
     if date[0].to_i >= 1 and date[0].to_i <= 12 and date[1].to_i == 1 and date[2].to_i >= 2016 and get_start_day(date[3]) != nil
@@ -201,7 +235,6 @@ end
 
 
 # return day of week, string
-
 def get_weekday(date)
     weekdays = { 1 => "Monday", 2 => "Tuesday", 3 => "Wednesday", 4 => "Thursday", 5 => "Friday", 6 => "Saturday", 7 => "Sunday"}
     return weekdays[date%8]
@@ -209,14 +242,14 @@ end
 
 
 # returns number of day that the month starts at
-
 def get_start_day(weekday)
     weekdays = {"Monday" => 1, "Tuesday" => 2, "Wednesday" => 3, "Thursday" => 4, "Friday" => 5, "Saturday" => 6, "Sunday" => 7}
     return weekdays[weekday]
 end
 
 
-
+# writes date of sheet, which is on the second row.
+# format: month/date/year weekday
 def set_date_of_sheet(date, full_date, weekday_tracker, spreadsheet_id)
     month = full_date[0]
     year = full_date[2]
@@ -289,6 +322,5 @@ def populate_spreadsheet(days_in_month, new_spreadsheet_id, link)
         weekday_tracker += 1
     end
     
-    Spreadsheet.create(month: full_date[0], year: full_date[2], url: new_spreadsheet_id, link: link)
+    Spreadsheet.create(month: full_date[0], year: full_date[2], spreadsheet_id: new_spreadsheet_id, link: link)
 end
-
