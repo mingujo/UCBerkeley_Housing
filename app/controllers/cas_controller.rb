@@ -86,6 +86,8 @@ class CasController < ApplicationController
     end
   end
   
+
+  
   def get_ca_events
     ca_id = params[:ca_id]
     @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] ).where(:ca_id => ca_id)
