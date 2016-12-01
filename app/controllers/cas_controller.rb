@@ -94,40 +94,6 @@ class CasController < ApplicationController
     events = make_event_json(@events, ca_id=ca_id) 
     render :text => events.to_json
 	end
-	
-	def admin_generate_spreadsheet
-      spreadsheet_url = params[:ca][:spreadsheet_url]
-      id = /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/.match(spreadsheet_url) 
-      #byebug
-      if !id
-        flash[:error] = "Invalid spreadsheet url"
-        redirect_to cas_generate_path
-        return
-      end
-      id = id[1]
-      
-      days_in_month = params[:ca][:days_in_month].to_i
-      if days_in_month < 28 or days_in_month > 31
-        flash[:error] = "Invalid number of days in month"
-        redirect_to cas_generate_path
-        return
-      end
-      
-      if !validate_date(id)
-        flash[:error] = "Invalid date on spreadsheet. Please make sure the first day of the month is on the second row in the following format: M/D/YYYY Weekday"
-        redirect_to cas_generate_path
-        return
-      end
-      
-      generate_spreadsheet(days_in_month, id)
-      flash[:notice] = "Spreadsheet has been created"
-      redirect_to cas_pat
-    end
-  
-  
-  def generate #just renders view
-    
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -138,24 +104,5 @@ class CasController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def ca_params
       params.fetch(:ca, {})
-    end
-    
-    def require_ca_login
-      user = Ca.get_by_user_id(session[:user_id])
-      unless user.nil?
-        if @ca.id != user.id
-          flash[:notice] = "You cannot access that user's info"
-          redirect_to ca_path(user.id)
-        end
-      end
-    end
-    
-    def require_admin_login
-      user = Admin.get_by_user_id(session[:user_id])
-      if user.nil?
-        flash[:notice] = "You must be admin to access that page"
-        user = Ca.get_by_user_id(session[:user_id])
-        redirect_to ca_path(user.id)
-      end
     end
 end

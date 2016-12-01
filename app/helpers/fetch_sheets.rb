@@ -17,6 +17,9 @@ if not ENV['TESTING_ENV']
 end
 
 
+$service = Google::Apis::SheetsV4::SheetsService.new
+$service.client_options.application_name = APPLICATION_NAME
+$service.authorization = authorize
 # :nocov:
 
 # This portion is only for cron job scheduler. 
@@ -35,7 +38,7 @@ end
 # This portion just fetches data from spreadsheet using API (has to be mocked)
 # :nocov:
 def get_sheet_response(range)
-    $service.get_spreadsheet_values(get_spreadsheet_id(Time.now), range).values # mock this
+    $service.get_spreadsheet_values(ENV["SPREADSHEET_ID"], range).values # mock this
 end
 # :nocov:
 
@@ -110,7 +113,7 @@ end
 
 def find_row(starttime, sheet_ID)
     #list representation of the cells in the spreadsheet
-    vals =  $service.get_spreadsheet_values(get_spreadsheet_id(starttime), "#{sheet_ID}!A1:B" ).values
+    vals =  $service.get_spreadsheet_values(ENV["SPREADSHEET_ID"], "#{sheet_ID}!A1:B" ).values
     row = 0
     while (starttime != format_time(vals[row][0])) do
         row += 1
@@ -133,11 +136,12 @@ end
 
 # :nocov:
 
-def write_sheet_values(range, values, date_time)
+def write_sheet_values(range, values)
     value_range = Google::Apis::SheetsV4::ValueRange.new
     value_range.values = values
     value_range.range = range
-    $service.update_spreadsheet_value(get_spreadsheet_id(date_time), range, value_range, value_input_option: "USER_ENTERED")
+    #$service.update_spreadsheet_value(ENV["SPREADSHEET_ID"], range, value_range, value_input_option: "USER_ENTERED")
+    a = $service.update_spreadsheet_value("1AZz5QK3aTJdBv5x5V30OAutjm9ugcQXnezP8tfRSwok", range, value_range, value_input_option: "USER_ENTERED")
 end
 # :nocov:
 
@@ -149,16 +153,11 @@ def write_to_spreadsheet(timeslot)
     row = find_row(starttime, day)
     range = "#{day}!B#{row}"
     ca_name = get_CA_name(timeslot)
-    write_sheet_values(range, [[ca_name]], timeslot.starttime)
+    write_sheet_values(range, [[ca_name]])
 end
 
 
 
-def get_spreadsheet_id(date_time)
-    month = date_time.strftime("%m").to_i
-    year = date_time.strftime("%y").to_i
-    id = Spreadsheet.get_url_by_date(month, year)
-return id
 
 
 # --------------Generate Spreadsheet -----------------
@@ -269,7 +268,7 @@ end
 #user passes in spreadsheet ID and creates the first sheet. then we make copies of it and change name and sheet id
     #from first sheet, we get month/date/year day
 
-def populate_spreadsheet(days_in_month, new_spreadsheet_id)
+def populate_spreadsheet(days_in_month, new_spreadsheet_id, link)
     full_date = get_date_array(new_spreadsheet_id) 
     weekday_tracker = get_start_day(full_date[3]) #int that keeps track of day of week
     (2..days_in_month).each do |d|
@@ -277,6 +276,6 @@ def populate_spreadsheet(days_in_month, new_spreadsheet_id)
         weekday_tracker += 1
     end
     
-    Spreadsheet.create(month: full_date[0], year: full_date[2], url: new_spreadsheet_id)
+    Spreadsheet.create(month: full_date[0], year: full_date[2], url: new_spreadsheet_id, link: link)
 end
 

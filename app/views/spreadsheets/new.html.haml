@@ -1,7 +1,7 @@
 %center
     %main.header_block Populate Spreadsheet
     %h2 Please input the URL to a spreadsheet that has the first day of the month completely formatted. Please Name the first sheet "1".
-= form_tag cas_admin_generate_spreadsheet_path do
+= form_tag spreadsheets_path do
 
     = label :ca, :spreadsheet_url, 'New Spreadsheet Url', :class => "edit_label"
     = text_field :ca, 'spreadsheet_url'
