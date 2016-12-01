@@ -108,13 +108,13 @@ class CasController < ApplicationController
       
       days_in_month = params[:ca][:days_in_month].to_i
       if days_in_month < 28 or days_in_month > 31
-        #flash[:error] = "Invalid number of days in month"
-        #redirect_to cas_generate_path
-        #return
+        flash[:error] = "Invalid number of days in month"
+        redirect_to cas_generate_path
+        return
       end
       
       if !validate_date(id)
-        flash[:error] = "Invalid date on spreadsheet. Please make sure the first day of the month is on the second row in the format of m/d/y weekday"
+        flash[:error] = "Invalid date on spreadsheet. Please make sure the first day of the month is on the second row in the following format: M/D/YYYY Weekday"
         redirect_to cas_generate_path
         return
       end
