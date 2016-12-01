@@ -100,8 +100,9 @@ class CasController < ApplicationController
       id = /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/.match(spreadsheet_url)[1] 
       days_in_month = params[:ca][:days_in_month]
       #byebug
-      generate_spreadsheet(days_in_month, id)
+      generate_spreadsheet(days_in_month.to_i, id)
       flash[:notice] = "Spreadsheet has been created"
+      redirect_to cas_path
   end
   
   def generate #just renders view

@@ -4,13 +4,13 @@ require 'signet/oauth_2/client'
 require 'byebug'
 #require_relative '../mailers/scheduler_mailer'
 
-Figaro.load
+
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
 
 # This portion just initializes the Google API 
 # :nocov:
-if not ENV['TESTING_ENV'] == "true"
+if not ENV['TESTING_ENV']
     $service = Google::Apis::SheetsV4::SheetsService.new
     $service.client_options.application_name = APPLICATION_NAME
     $service.authorization = authorize
@@ -118,7 +118,8 @@ def find_row(starttime, sheet_ID)
     while (starttime != format_time(vals[row][0])) do
         row += 1
     end
-    return row+1
+     byebug
+    return row
 end
 
 # this is for the CA name column
@@ -134,6 +135,7 @@ def get_day(timeslot)
 end
 
 # :nocov:
+
 def write_sheet_values(range, values)
     value_range = Google::Apis::SheetsV4::ValueRange.new
     value_range.values = values
@@ -145,6 +147,7 @@ end
 
 def write_to_spreadsheet(timeslot)
     #needs to lookup spreadsheet ID in spreadsheet ID model: has 2 columns, month: 1-12, and IDs
+
     day = get_day(timeslot)
     starttime = get_starttime(timeslot)
     row = find_row(starttime, day)
@@ -153,13 +156,6 @@ def write_to_spreadsheet(timeslot)
     write_sheet_values(range, [[ca_name]])
 end
 
-def remove_name_from_spreadsheet(timeslot)
-    day = get_day(timeslot)
-    starttime = get_starttime(timeslot)
-    row = find_row(starttime, day)
-    range = "#{day}!B#{row}"
-    write_sheet_values(range, [[""]])
-end
 
 
 
@@ -255,8 +251,8 @@ end
 
 def create_new_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
     new_sheet_id = copy_sheet(spreadsheet_id)
-    set_date_of_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
     set_name_of_sheet(name, new_sheet_id, spreadsheet_id)
+    set_date_of_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
 end
 
 
@@ -268,10 +264,9 @@ end
 def generate_spreadsheet(days_in_month, new_spreadsheet_id)
     full_date = get_date_array(new_spreadsheet_id) 
     weekday_tracker = get_start_day(full_date[3]) #int that keeps track of day of week
-    
     (2..days_in_month).each do |d|
         create_new_sheet(d.to_s, full_date, weekday_tracker, new_spreadsheet_id)
         weekday_tracker += 1
     end
-    
 end
+
