@@ -7,7 +7,24 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'time'
 
+
+		  
 Admin.create(email: "housingnotificationsystem@gmail.com")
+
+Ca.create(id: 1,
+		  name: "Tony",
+		  email: "tony@gmail.com",
+		  phone_number: "510-411-1114")
+
+Ca.create(id: 2,
+		  name: "Chris",
+		  email: "chris@gmail.com",
+		  phone_number: "510-233-1431")
+
+Ca.create(id: 3,
+		  name: "Steve",
+		  email: "steve@gmail.com",
+		  phone_number: "510-356-2334")
 
 Event.create(id: 2,
 			 start_time: Time.parse('2016-11-24 09:00:00'),
@@ -50,21 +67,6 @@ Timeslot.create(id: 7,
 				starttime: Time.parse('2016-11-24 15:00:00'),
 				endtime: Time.parse('2016-11-24 15:30:00'))
 
-				
-Ca.create(id: 1,
-		  name: "Tony",
-		  email: "tony@gmail.com",
-		  phone_number: "510-411-1114")
-
-Ca.create(id: 2,
-		  name: "Chris",
-		  email: "chris@gmail.com",
-		  phone_number: "510-233-1431")
-
-Ca.create(id: 3,
-		  name: "Steve",
-		  email: "steve@gmail.com",
-		  phone_number: "510-356-2334")
 
 
 EventSeries.create(id: 1,

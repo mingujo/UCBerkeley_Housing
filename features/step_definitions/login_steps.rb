@@ -1,5 +1,5 @@
 Given(/^"([^"]*)" is whitelisted$/) do |email|
-  Ca.create(email: email)
+  Ca.create(name: email, email: email)
 end
 
 Given (/^"([^"]*)" is admin$/) do |email|
@@ -30,10 +30,6 @@ Then(/^I should be in my CA page$/) do
   end
 end
 
-When(/^I click on sign out$/) do
-  pending # Write code here that turns the phrase above into concrete actions
-end
-
 When(/^I sign in as an Admin$/) do
   step 'I sign in with "housingnotificationsystem@gmail.com"'
 end
@@ -43,6 +39,7 @@ Given(/^I am signed in as an Admin$/) do
   step 'I sign in as an Admin'
 end
 
-When(/^I click sign out$/) do
-  pending # Write code here that turns the phrase above into concrete actions
+require 'byebug'
+Given(/^test$/) do
+  byebug
 end

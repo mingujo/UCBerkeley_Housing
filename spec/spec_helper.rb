@@ -21,14 +21,34 @@ require 'factory_girl_rails'
 # coverage
 require 'simplecov'
 require 'coveralls'
+#added bottom one
+require 'rubygems'
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 Coveralls.wear_merged!
 
+#added 
+  ENV["RAILS_ENV"] ||= 'test'
+  require File.expand_path("../../config/environment", __FILE__)
+  require 'rspec/rails'
+  require 'rspec/autorun'
+ 
+  OmniAuth.config.test_mode = true
+  #deleted uid
+  omniauth_hash = { 'provider' => 'google_oauth2',
+                    'info' => {
+                        'name' => 'Admin',
+                        'email' => 'housingnotificationsystem@gmail.com',
+                    }
+  }
+ 
+  OmniAuth.config.add_mock(:google_oauth2, omniauth_hash)
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
+  # Add Factory Girl
+  config.include FactoryGirl::Syntax::Methods
   
   # clear before seed
   config.before(:suite) do
