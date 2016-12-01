@@ -4,13 +4,13 @@ require 'signet/oauth_2/client'
 require 'byebug'
 #require_relative '../mailers/scheduler_mailer'
 
-
+Figaro.load
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
 
 # This portion just initializes the Google API 
 # :nocov:
-if not ENV['TESTING_ENV']
+if not ENV['TESTING_ENV'] == "true"
     $service = Google::Apis::SheetsV4::SheetsService.new
     $service.client_options.application_name = APPLICATION_NAME
     $service.authorization = authorize
@@ -118,8 +118,7 @@ def find_row(starttime, sheet_ID)
     while (starttime != format_time(vals[row][0])) do
         row += 1
     end
-     byebug
-    return row
+    return row+1
 end
 
 # this is for the CA name column
@@ -135,7 +134,6 @@ def get_day(timeslot)
 end
 
 # :nocov:
-
 def write_sheet_values(range, values)
     value_range = Google::Apis::SheetsV4::ValueRange.new
     value_range.values = values
@@ -147,7 +145,6 @@ end
 
 def write_to_spreadsheet(timeslot)
     #needs to lookup spreadsheet ID in spreadsheet ID model: has 2 columns, month: 1-12, and IDs
-
     day = get_day(timeslot)
     starttime = get_starttime(timeslot)
     row = find_row(starttime, day)
@@ -156,6 +153,13 @@ def write_to_spreadsheet(timeslot)
     write_sheet_values(range, [[ca_name]])
 end
 
+def remove_name_from_spreadsheet(timeslot)
+    day = get_day(timeslot)
+    starttime = get_starttime(timeslot)
+    row = find_row(starttime, day)
+    range = "#{day}!B#{row}"
+    write_sheet_values(range, [[""]])
+end
 
 
 

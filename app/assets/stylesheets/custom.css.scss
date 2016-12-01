@@ -14,7 +14,7 @@ $grayMediumLight: #eaeaea;
 
 html {
   overflow-y: scroll;
-  background: url("images/background.jpg") no-repeat center center fixed;
+  background: image-url("images/background.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -27,7 +27,7 @@ body {
 }
 
 body.subpage{
-  background: url("images/background.jpg") no-repeat center center fixed;
+  background: image-url("images/background.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

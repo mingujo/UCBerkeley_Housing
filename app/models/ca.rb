@@ -1,5 +1,6 @@
 class Ca < ActiveRecord::Base
 	has_many :timeslots
+	validates :name, :email, :presence => true
 	
 	def self.get_by_email(email)
 	    return find_by(email: email)

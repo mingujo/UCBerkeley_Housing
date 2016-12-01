@@ -3,6 +3,7 @@ require 'googleauth'
 require 'googleauth/stores/file_token_store'
 require 'fileutils'
 
+Figaro.load
 OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
 APPLICATION_NAME = ENV["APP_NAME"]
 CLIENT_SECRETS_PATH = ENV["CLIENT_SECRETS"]
