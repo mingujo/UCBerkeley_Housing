@@ -86,6 +86,8 @@ class CasController < ApplicationController
     end
   end
   
+
+  
   def get_ca_events
     ca_id = params[:ca_id]
     @events = Event.where(["start_time >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and end_time <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] ).where(:ca_id => ca_id)
@@ -94,16 +96,34 @@ class CasController < ApplicationController
 	end
 	
 	def admin_generate_spreadsheet
-      # need to know # of months 
-      #exibyebug
       spreadsheet_url = params[:ca][:spreadsheet_url]
-      id = /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/.match(spreadsheet_url)[1] 
-      days_in_month = params[:ca][:days_in_month]
+      id = /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/.match(spreadsheet_url) 
       #byebug
-      generate_spreadsheet(days_in_month.to_i, id)
+      if !id
+        flash[:error] = "Invalid spreadsheet url"
+        redirect_to cas_generate_path
+        return
+      end
+      id = id[1]
+      
+      days_in_month = params[:ca][:days_in_month].to_i
+      if days_in_month < 28 or days_in_month > 31
+        #flash[:error] = "Invalid number of days in month"
+        #redirect_to cas_generate_path
+        #return
+      end
+      
+      if !validate_date(id)
+        flash[:error] = "Invalid date on spreadsheet. Please make sure the first day of the month is on the second row in the format of m/d/y weekday"
+        redirect_to cas_generate_path
+        return
+      end
+      
+      generate_spreadsheet(days_in_month, id)
       flash[:notice] = "Spreadsheet has been created"
-      redirect_to cas_path
-  end
+      redirect_to cas_pat
+    end
+  
   
   def generate #just renders view
     

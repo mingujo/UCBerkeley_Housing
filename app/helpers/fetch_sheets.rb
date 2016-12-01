@@ -177,7 +177,14 @@ def get_date_array(spreadsheet_id)
     return [month, date, year, day]
 end
 
-
+def validate_date(spreadsheet_id)
+    date = get_date_array(spreadsheet_id)
+    if date[0].to_i >= 1 and date[0].to_i <= 12 and date[1].to_i == 1 and date[2].to_i >= 2016 and get_start_day(date[3]) != nil
+        return true
+    else
+        return false
+    end
+end
 
 
 # return day of week, string
@@ -261,7 +268,7 @@ end
 #user passes in spreadsheet ID and creates the first sheet. then we make copies of it and change name and sheet id
     #from first sheet, we get month/date/year day
 
-def generate_spreadsheet(days_in_month, new_spreadsheet_id)
+def populate_spreadsheet(days_in_month, new_spreadsheet_id)
     full_date = get_date_array(new_spreadsheet_id) 
     weekday_tracker = get_start_day(full_date[3]) #int that keeps track of day of week
     (2..days_in_month).each do |d|
