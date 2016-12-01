@@ -274,4 +274,5 @@ def generate_spreadsheet(days_in_month, new_spreadsheet_id)
         weekday_tracker += 1
     end
     
+    Spreadsheet.create(month: full_date[0], year: full_date[2], url: new_spreadsheet_id)
 end
