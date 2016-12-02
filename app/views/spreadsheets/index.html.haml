@@ -11,10 +11,12 @@
     %tr
       %th{:style => "padding:20px 150px 0px 15px;"} MONTH
       %th{:style => "padding:20px 150px 0px 15px;"} YEAR
-      %th{:style => "padding:20px 150px 0px 15px;"} URL
+      %th{:style => "padding:20px 150px 0px 15px;"}
+      %th{:style => "padding:20px 150px 0px 15px;"}
   %tbody
     - @spreadsheets.each do |item|
       %tr
         %td= item.month
         %td= item.year
-        %td= link_to "Details".html_safe, item.link, class: "myButton"
+        %td= link_to "View".html_safe, item.link, class: "myButton"
+        %td= button_to 'Remove', spreadsheet_path(item), :method => :delete, :confirm => 'Are you sure?', :class => "deletebutton"
