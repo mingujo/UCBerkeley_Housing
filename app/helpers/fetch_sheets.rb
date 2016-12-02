@@ -40,8 +40,8 @@ end
 
 def get_spreadsheet_id(date_time)
     month = date_time.strftime("%m").to_i
-    year = date_time.strftime("%y").to_i
-    id = Spreadsheet.get_url_by_date(month, year)
+    year = date_time.strftime("%Y").to_i
+    id = Spreadsheet.get_id_by_date(month, year)
     return id
 end
 
@@ -236,29 +236,17 @@ def validate_date(spreadsheet_id)
 end
 
 
-# return day of week, string
-def get_weekday(date)
-    weekdays = { 1 => "Monday", 2 => "Tuesday", 3 => "Wednesday", 4 => "Thursday", 5 => "Friday", 6 => "Saturday", 7 => "Sunday"}
-    return weekdays[date%8]
-end
-
-
-# returns number of day that the month starts at
-def get_start_day(weekday)
-    weekdays = {"Monday" => 1, "Tuesday" => 2, "Wednesday" => 3, "Thursday" => 4, "Friday" => 5, "Saturday" => 6, "Sunday" => 7}
-    return weekdays[weekday]
-end
-
 
 # writes date of sheet, which is on the second row.
 # format: month/date/year weekday
-def set_date_of_sheet(date, full_date, weekday_tracker, spreadsheet_id)
-    month = full_date[0]
-    year = full_date[2]
-    weekday = get_weekday(weekday_tracker)
-    formatted_date = "#{month}/#{date}/#{year} #{weekday}"
-    range = "#{date}!A2"                #sheet_name = date
-    write_sheet_values(range, [[formatted_date]])
+def set_date_of_sheet(date, spreadsheet_id)
+    day = date.day
+    month = date.month
+    year = date.year
+    weekday = date.strftime('%A')
+    formatted_date = "#{month}/#{day}/#{year} #{weekday}"
+    range = "#{day}!A2"                #sheet_name = date
+    write_sheet_values(range, [[formatted_date]], date)
 end
 
 
@@ -268,7 +256,7 @@ end
 # return id of new sheet
 
 def copy_sheet(spreadsheet_id, sheet_id = 0)
-    sheet_id = 1587703089
+    sheet_id = 408995429
     copy_request = Google::Apis::SheetsV4::CopySheetToAnotherSpreadsheetRequest.new
     copy_request.destination_spreadsheet_id = spreadsheet_id
     new_sheet_properties = $service.copy_spreadsheet(spreadsheet_id, sheet_id, copy_request)
@@ -302,26 +290,31 @@ end
 
 
 
-#name = sheet_name = date (1-31)
+# date = Date object; can do date.month, date.day, date.year...
 
-def create_new_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
+def create_new_sheet(date, spreadsheet_id)
     new_sheet_id = copy_sheet(spreadsheet_id)
-    set_name_of_sheet(name, new_sheet_id, spreadsheet_id)
-    set_date_of_sheet(name, date_arr, weekday_tracker, spreadsheet_id)
+    set_name_of_sheet(date.day.to_s, new_sheet_id, spreadsheet_id)
+    set_date_of_sheet(date, spreadsheet_id)
 end
 
 
 
 
-#user passes in spreadsheet ID and creates the first sheet. then we make copies of it and change name and sheet id
-    #from first sheet, we get month/date/year day
+#date = Date object of first day of month
 
-def populate_spreadsheet(days_in_month, new_spreadsheet_id, link)
-    full_date = get_date_array(new_spreadsheet_id) 
-    weekday_tracker = get_start_day(full_date[3]) #int that keeps track of day of week
+def populate_spreadsheet(date, new_spreadsheet_id)
+    month = date.month
+    x = 0
     
-    (2..days_in_month).each do |d|
-        create_new_sheet(d.to_s, full_date, weekday_tracker, new_spreadsheet_id)
-        weekday_tracker += 1
+    #while date.month == month do 
+    date = date.tomorrow #probably will do this in func that generates the template sheet
+    while x < 2
+        create_new_sheet(date, new_spreadsheet_id)
+        date = date.tomorrow
+        x += 1
     end
 end
+
+
+id = "1tIuyylSNMianWOxUQCvHhYQGb8tONDDVyliWQemWwBM"

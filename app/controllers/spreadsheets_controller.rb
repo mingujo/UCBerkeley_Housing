@@ -2,8 +2,8 @@ require_relative '../helpers/fetch_sheets.rb'
 
 class SpreadsheetsController < ApplicationController
     include SessionsHelper
-    # before_action :require_login
-    # before_action :require_admin_login, only: [:new, :create, :update, :destroy]
+    before_action :require_login
+    before_action :require_admin_login, only: [:new, :create, :update, :destroy]
     
     
     
@@ -26,7 +26,6 @@ class SpreadsheetsController < ApplicationController
 
     
     def create
-        #byebug
         date = get_date
         
         link = params[:ca][:spreadsheet_url]
@@ -40,8 +39,7 @@ class SpreadsheetsController < ApplicationController
         
         @spreadsheet = Spreadsheet.new({:month => date.month, :year => date.year, :spreadsheet_id => spreadsheet_id, :link => link}) 
         if @spreadsheet.save
-            days_in_month = date.end_of_month.day
-            #populate_spreadsheet(days_in_month, spreadsheet_id, link)
+            populate_spreadsheet(date, spreadsheet_id)
             flash[:success] = "Spreadsheet has been created"
             redirect_to spreadsheets_path
         end
