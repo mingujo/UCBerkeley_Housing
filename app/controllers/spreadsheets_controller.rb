@@ -37,6 +37,6 @@ class SpreadsheetsController < ApplicationController
         end
       
         populate_spreadsheet(days_in_month, spreadsheet_id, spreadsheet_url)
-        flash[:notice] = "Spreadsheet has been created"
+        flash[:success] = "Spreadsheet has been created"
     end
 end
