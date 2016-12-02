@@ -1,6 +1,5 @@
 include EventsHelper
 require_relative '../helpers/fetch_sheets.rb'
-require 'byebug'
 
 class CasController < ApplicationController
   include SessionsHelper
@@ -31,23 +30,16 @@ class CasController < ApplicationController
 
   # GET /cas/1/edit
   def edit
-    # if @ca.update_attributes(ca_params)
-    #   flash[:success] = "Profile updated"
-    #   redirect_to @ca
-    # else
-    #   render 'edit'
-    # end
+    
   end
 
   # POST /cas
   # POST /cas.json
   def create
-    print "In create method"
     params.permit!
     @ca = Ca.create(ca_params)
     
     if @ca.save
-      puts "In create now saving and redirecting to"
       redirect_to cas_path
     else
       redirect_to action: 'error'
