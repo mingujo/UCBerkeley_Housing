@@ -11,5 +11,13 @@ class Spreadsheet < ActiveRecord::Base
         return spreadsheet.spreadsheet_id
     end
     
+    #the template sheet is a spreadsheet whose first page is the sheet that will be copied 
+    #when populating new spreadsheets. it has month and year 0.
+    def self.get_template_sheet
+        return Spreadsheet.all[0]
+       # return Spreadsheet.find_by(month: 0, year: 0)
+    end
+    
+    
     
 end

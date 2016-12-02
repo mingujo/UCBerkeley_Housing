@@ -9,6 +9,7 @@ class SpreadsheetsController < ApplicationController
     
     def index
         @spreadsheets = Spreadsheet.all
+        @template = @spreadsheets[0] #Spreadsheet.get_template_sheet
     end
     
     def new 
@@ -52,6 +53,32 @@ class SpreadsheetsController < ApplicationController
         redirect_to spreadsheets_path
     end
     
+    def update_template
+        @template = Spreadsheet.get_template_sheet
+    end
+    
+    def update_template_link
+        @template = Spreadsheet.get_template_sheet
+        new_link = params[:spreadsheet][:spreadsheet_url]
+        new_spreadsheet_id = /\/spreadsheets\/d\/([a-zA-Z0-9\-_]+)/.match(link) 
+        if !new_spreadsheet_id
+            flash[:error] = "Invalid spreadsheet url"
+            redirect_to change_template_sheet_path
+            return
+        end
+        new_spreadsheet_id = new_spreadsheet_id[1]
+        @template.spreadsheet_id = new_spreadsheet_id
+        @template.link = new_link
+        if @template.save
+            flash[:success] = "New template sheet successfully saved"
+            redirect_to spreadsheets_path
+            return
+        else
+            #??
+        end
+    end
+        
+        
     
     private
         def spreadsheet_params
