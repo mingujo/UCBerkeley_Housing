@@ -26,7 +26,6 @@ class CasController < ApplicationController
 
   # GET /cas/new
   def new
-    print "In new method"
     @ca = Ca.new
   end
 
