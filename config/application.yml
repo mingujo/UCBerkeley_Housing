@@ -23,7 +23,7 @@ CLIENT_SECRETS: client_secret.json
 CREDENTIALS_PATH: google_sheet_api_credentials.yaml
 
 development:
-  TESTING_ENV: "false"
+  TESTING_ENV: "true"
 
 production:
   GMAIL_PASSWORD: "******"

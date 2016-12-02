@@ -34,6 +34,3 @@ Feature: detect a change and send an email
     
   Scenario: Jane does not get any email
     Then "Jane" does not get any email for date: "9/12/2016", time: "09:30"
-    
-    
-    # test the email contents in mailer rspec !!!!!!!!!!!!!!!!!!!

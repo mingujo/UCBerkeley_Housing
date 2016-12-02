@@ -33,7 +33,9 @@ Given /^the following timeslots of that day exists:$/ do |timeslot_table|
     						 :ca_id => Ca.find_by_name(ts[1].downcase)[:id]})
 		end
     end
-    expect(Timeslot.distinct.count('id')).to eq ['Henri','Elissa','Jane'].length
+    for name in ['henri', 'elissa', 'jane']
+    	expect(Timeslot.where(:ca_id => Ca.find_by_name(name)[:id]).count).to eq(1)
+    end
 end
 
 
