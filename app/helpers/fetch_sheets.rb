@@ -222,6 +222,8 @@ def get_date_array(spreadsheet_id)
     return [month, date, year, day]
 end
 
+
+#WILL REMOVE THIS
 # ensure that the date on the first spreadsheet is properly formatted. 
 # alternatively, will change it so that user can enter date in view and then we write it to spreadsheet.
 def validate_date(spreadsheet_id)
@@ -317,10 +319,9 @@ end
 def populate_spreadsheet(days_in_month, new_spreadsheet_id, link)
     full_date = get_date_array(new_spreadsheet_id) 
     weekday_tracker = get_start_day(full_date[3]) #int that keeps track of day of week
+    
     (2..days_in_month).each do |d|
         create_new_sheet(d.to_s, full_date, weekday_tracker, new_spreadsheet_id)
         weekday_tracker += 1
     end
-    
-    Spreadsheet.create(month: full_date[0], year: full_date[2], spreadsheet_id: new_spreadsheet_id, link: link)
 end

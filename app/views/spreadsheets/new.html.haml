@@ -1,13 +1,17 @@
 %center
     %main.header_block Populate Spreadsheet
-    %h2 Please input the URL to a spreadsheet that has the first day of the month completely formatted. Please Name the first sheet "1".
+    %h2 Please input the URL to your new spreadsheet.
 = form_tag spreadsheets_path do
 
+    = label :ca, :month, 'Month', :class => "edit_label"
+    = text_field :ca, 'month'
+    
+
+    = label :ca, :year, 'Year', :class => "edit_label"
+    = text_field :ca, 'year'
+    
     = label :ca, :spreadsheet_url, 'New Spreadsheet Url', :class => "edit_label"
     = text_field :ca, 'spreadsheet_url'
-
-    = label :ca, :days_in_month, 'Days in Month', :class => "edit_label"
-    = text_field :ca, 'days_in_month'
 
     %br
     = submit_tag 'Populate', :class => "savebutton"
