@@ -12,10 +12,12 @@ RSpec.describe CasController, type: :controller do
 	let(:valid_session) { {} }
 	
 	before :each do
-    	@request.session[:user_id] = double()
+    	@request.session[:user_id] = 100
     	# @request.host = '127.0.0.1:3000'
 
     	allow(Ca).to receive(:get_by_user_id) { |id| double("Ca") }
+    	allow(Ca).to receive(:id).with(4)
+
     	# added line
     	allow(Admin).to receive(:get_by_user_id) { |id| double("Admin") }
 	end
@@ -81,18 +83,48 @@ RSpec.describe CasController, type: :controller do
     end
     
     
-    describe "#update" do
+    describe "PUT #update" do
 
         it "notifies after movie is updated" do
-        	ca1 = FactoryGirl.create(:ca, :name => "Hola", :user_id => "2", :email => "hola@gmail.com", :phone_number => "111-111-1111")
-        	put :update, :id => @cas.id
-            expect(flash[:notice]).to eq("Ca was successfully updated")
+        	# allow(Ca).to receive(:id).and_return(4)
+        	ca1 = FactoryGirl.create(:ca)
+          	put :update, :id => ca1.id, :ca1 => { :name => "NewName", :email => "new@email.com" }
+          	expect(ca1.email).to eq("new@email.com")
+    		expect(ca1.name).to eq("NewName")
+
+    		
+    		# expect(response).to render_template("/cas")
+
+
+            # expect(flash[:notice]).to eq("Please input your name and email at least")
         end
         
         # it "redirects to /movies/id after movie is updated" do
         #     expect(@temp_movie).to redirect_to(movie_path(@temp_movie))
         # end
     end
-
     
+    describe "DELETE #destory" do
+    	it "destroys the requested event" do
+    	  #expect {
+       #   delete :destroy, {:ca => {
+       #   	'name' => "Hola",
+       #   	'user_id' => "2",
+       #   	'email' => "hola@gmail.com",
+       #   	'phone_number' => "111-111-1111"}
+       # 	}
+    	  #}.to change(Event, :count).by(-1)
+    	  ca1 = FactoryGirl.create(:ca, :name => "Hola", :user_id => "2", :email => "hola@gmail.com", :phone_number => "111-111-1111", :id => "4")
+    	  expect {
+        	delete :destroy, {:id => ca1.id}
+    	  }.to change(Event.all, :count)
+
+    	end
+    	
+    	it "expects to render" do
+    		ca1 = FactoryGirl.create(:ca, :name => "Hola", :user_id => "2", :email => "hola@gmail.com", :phone_number => "111-111-1111")
+    		delete :destroy, {:id => 4}
+    		expect(response).to render_template("/cas")
+    	end
+    end
 end
