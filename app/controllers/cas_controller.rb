@@ -13,6 +13,7 @@ class CasController < ApplicationController
   # GET /cas.json
   def index
     @ca = Ca.all
+    
   end
 
   # GET /cas/1
@@ -27,12 +28,6 @@ class CasController < ApplicationController
 
   # GET /cas/1/edit
   def edit
-    # if @ca.update_attributes(ca_params)
-    #   flash[:success] = "Profile updated"
-    #   redirect_to @ca
-    # else
-    #   render 'edit'
-    # end
   end
 
   # POST /cas
@@ -72,6 +67,7 @@ class CasController < ApplicationController
   # DELETE /cas/1
   # DELETE /cas/1.json
   def destroy
+    
     Event.destroy_all(:ca_id => @ca.id)
     timeslots = Timeslot.where(:ca_id => @ca.id)
     for ts in timeslots
