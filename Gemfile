@@ -34,6 +34,7 @@ gem 'haml'
 gem 'figaro'
 gem 'google-api-client'
 gem "omniauth-google-oauth2"
+gem 'signet'
 gem 'fullcalendar-rails'
 gem 'momentjs-rails'
 gem 'jquery-turbolinks'

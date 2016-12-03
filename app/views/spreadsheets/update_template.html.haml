@@ -1,0 +1,20 @@
+%center
+    %main.header_block UPDATE TEMPLATE SHEET
+    %h2 If you would like to change the format of the spreadsheet, please make the changes to the template sheet. If you need to change the link to the template sheet, enter the new one below.
+%center
+    %h4 
+        = link_to "Edit Template Sheet".html_safe, @template.link, class: "myButton"
+%br
+%br
+%br
+%br
+
+= form_tag spreadsheets_path do
+
+    = label :ca, :spreadsheet_url, 'New Spreadsheet Link', :class => "edit_label"
+    = text_field :spreadsheet, 'spreadsheet_url'
+
+    %br
+    = submit_tag 'Save', :class => "savebutton"
+    
+=button_to 'Back', spreadsheets_path, :method => :get, :class => "deletebutton"

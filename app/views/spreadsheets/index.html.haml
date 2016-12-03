@@ -1,0 +1,23 @@
+%center
+  %h2.header_block SPREADSHEETS
+%h4
+  = link_to 'ADD SPREADSHEET', new_spreadsheet_path, class: "addButton", style: 'color: white;'
+  = link_to "VIEW TEMPLATE SHEET".html_safe, ENV['TEMPLATE_LINK'], class: "addButton", style: 'color: white;'
+%br
+%br
+%br
+%br
+%table.myTable
+  %thead
+    %tr
+      %th{:style => "padding:20px 150px 0px 15px;"} MONTH
+      %th{:style => "padding:20px 150px 0px 15px;"} YEAR
+      %th{:style => "padding:20px 150px 0px 15px;"}
+      %th{:style => "padding:20px 150px 0px 15px;"}
+  %tbody
+    - @spreadsheets.each do |item|
+      %tr
+        %td= item.month
+        %td= item.year
+        %td= link_to "View".html_safe, item.link, class: "myButton"
+        %td= button_to 'Remove', spreadsheet_path(item), :method => :delete, :confirm => 'Are you sure?', :class => "deletebutton"
