@@ -14,26 +14,28 @@ Given /^the following timeslots of that day exists:$/ do |timeslot_table|
     str_date = timeslot_table.raw[0][0].split(" ")[0]
     timeslot_table.raw.each_with_index do |ts, idx|
     	starttime = Time.parse(str_date + " " + ts[0])
-		if ts[1].downcase == "henri"
+		if ts[1] == "Henri"
 			Timeslot.create!({:starttime => starttime,
 							 :endtime => add_30min(starttime),
-							 :ca_id => Ca.find_by_name(ts[1].downcase)[:id]})
-		elsif ts[1].downcase == "elissa"
+							 :ca_id => Ca.find_by_name(ts[1])[:id]})
+		elsif ts[1] == "Elissa"
 		    Timeslot.create!({:starttime => starttime,
 							 :endtime => add_30min(starttime),
-							 :ca_id => Ca.find_by_name(ts[1].downcase)[:id], 
-							 :client_name => ts[2].downcase,
+							 :ca_id => Ca.find_by_name(ts[1])[:id], 
+							 :client_name => ts[2],
 							 :phone_number => ts[3],
 							 :apt_number => ts[4],
 							 :current_tenant => ts[5]
 			})
-		elsif ts[1].downcase == "jane"
+		elsif ts[1] == "Jane"
     		Timeslot.create!({:starttime => starttime,
 							 :endtime => add_30min(starttime),
-    						 :ca_id => Ca.find_by_name(ts[1].downcase)[:id]})
+    						 :ca_id => Ca.find_by_name(ts[1])[:id]})
 		end
     end
-    expect(Timeslot.distinct.count('id')).to eq ['Henri','Elissa','Jane'].length
+    for name in ['Henri', 'Elissa', 'Jane']
+    	expect(Timeslot.where(:ca_id => Ca.find_by_name(name)[:id]).count).to eq(1)
+    end
 end
 
 
@@ -41,8 +43,8 @@ Given /^the e-mail address of "([^"]*)" be "([^"]*)"$/ do |name, email|
 	if email == "TEST_GUY_EMAIL_ADDR"
 		email = ENV["TEST_GUY_EMAIL_ADDR"]
 	end
-	Ca.create!({:name => name.downcase, :email => email})
-	expect(Ca.find_by_name(name.downcase)[:name]).to eq name.downcase
+	Ca.create!({:name => name, :email => email})
+	expect(Ca.find_by_name(name)[:name]).to eq name
 	expect(Ca.find_by_email(email)[:email]).to eq email
 end
 
@@ -52,7 +54,7 @@ Then /^"([^"]*)" gets a "([^"]*)" email for date: "([^"]*)", time: "([^"]*)"$/ d
 	detect_change_send_email($info_list)
 	# test
 	starttime = Time.parse(str_date << " " << time)
-	name = name.downcase
+	name = name
 	if kind == "cancellation"
 		expect(Timeslot.find_by_starttime_and_ca_id(starttime,Ca.find_by_name(name)[:id]) \
 						[:new_schedule_email_sent]).to eq false
@@ -72,7 +74,7 @@ Then /^"([^"]*)" does not get any email for date: "([^"]*)", time: "([^"]*)"$/ d
 	detect_change_send_email($info_list)
 	# test
 	starttime = Time.parse(str_date << " " << time)
-	name = name.downcase
+	name = name
 
 	expect(Timeslot.find_by_starttime_and_ca_id(starttime,Ca.find_by_name(name)[:id]) \
 					[:new_schedule_email_sent]).to eq false
