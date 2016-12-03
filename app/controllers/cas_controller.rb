@@ -76,7 +76,9 @@ class CasController < ApplicationController
     timeslots = Timeslot.where(:ca_id => @ca.id)
     for ts in timeslots
       if ENV["TESTING_ENV"] == "false"
+        # :nocov:
   			remove_name_from_spreadsheet(ts)
+  			# :nocov:
   		end
     end
     Timeslot.destroy_all(:ca_id => @ca.id)
