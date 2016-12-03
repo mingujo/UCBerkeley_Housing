@@ -16,6 +16,7 @@ class CasController < ApplicationController
   # GET /cas.json
   def index
     @ca = Ca.all
+    
   end
 
   # GET /cas/1
@@ -30,7 +31,7 @@ class CasController < ApplicationController
 
   # GET /cas/1/edit
   def edit
-    
+
   end
 
   # POST /cas
@@ -78,7 +79,16 @@ class CasController < ApplicationController
   # DELETE /cas/1
   # DELETE /cas/1.json
   def destroy
+    
     Event.destroy_all(:ca_id => @ca.id)
+    timeslots = Timeslot.where(:ca_id => @ca.id)
+    for ts in timeslots
+      if ENV["TESTING_ENV"] == "false"
+        # :nocov:
+  			remove_name_from_spreadsheet(ts)
+  			# :nocov:
+  		end
+    end
     Timeslot.destroy_all(:ca_id => @ca.id)
     @ca.destroy
     respond_to do |format|

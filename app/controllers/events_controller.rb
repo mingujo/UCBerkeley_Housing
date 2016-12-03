@@ -99,16 +99,16 @@ class EventsController < ApplicationController
           remove_name_from_spreadsheet(ts)
           # :nocov:
         end
-        st = Time.parse(ts.starttime.time.to_s[0,10]+" "+@event.start_time.to_s[11,15])
-        et = Time.parse(ts.starttime.time.to_s[0,10]+" "+@event.end_time.to_s[11,15])
+        st = parse_day_and_time(ts.starttime, @event.start_time)
+        et = parse_day_and_time(ts.starttime, @event.end_time)
         Timeslot.update(ts[:id], :starttime => st, :endtime => et)
         if ENV["TESTING_ENV"] == "false"
           # :nocov:
           write_to_spreadsheet(Timeslot.find(ts[:id]))
           # :nocov:
         end
-        event.start_time = Time.parse(event.start_time.time.to_s[0,10]+" "+@event.start_time.to_s[11,15])
-        event.end_time = Time.parse(event.end_time.time.to_s[0,10]+" "+@event.end_time.to_s[11,15])
+        event.start_time = parse_day_and_time(event.start_time, @event.start_time)
+        event.end_time = parse_day_and_time(event.end_time, @event.end_time)
         event.save
       end
       render :nothing => true 
@@ -156,34 +156,20 @@ class EventsController < ApplicationController
           # :nocov:
     			remove_name_from_spreadsheet(Timeslot.find(ts_id))
     			# :nocov:
-    		end
+        end
         Timeslot.delete(ts_id)
       end
     end
     render :nothing => true   
   end
-    
-  def require_login
-    if session[:user_id].nil?
-      redirect_to '/auth/login'
-    else
-      #user = Ca.get_by_user_id(session[:user_id])
-      #if user.nil?
-      #  user = Admin.get_by_user_id(session[:user_id])
-      #end
-      # changed before was the top stuff
-      user = get_user
-      if user.nil?
-        flash[:notice] = "This email is not authorized"
-        session[:user_id] = nil
-        redirect_to '/auth/login'
-      end
-    end
-  end
 
   private
     def event_params
       params.require(:event).permit('start_time(1i)', 'start_time(2i)', 'start_time(3i)', 'start_time(4i)', 'start_time(5i)', 'end_time(1i)', 'end_time(2i)', 'end_time(3i)', 'end_time(4i)', 'end_time(5i)', 'period', 'frequency', 'commit_button', 'ca_id')
+    end
+    
+    def parse_day_and_time(day, time)
+      Time.parse(day.time.to_s[0,10] + " " + time.to_s[11,15])
     end
   
 end

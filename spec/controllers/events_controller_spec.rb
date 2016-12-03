@@ -169,7 +169,7 @@ RSpec.describe EventsController, type: :controller do
             :period => 'Weekly',
             :frequency => 3
           }}
-          }.to change(EventSeries, :count).by(1)
+        }.to change(EventSeries, :count).by(1)
       end
     end
   end
@@ -269,6 +269,5 @@ RSpec.describe EventsController, type: :controller do
     end
   end
   
-  #describe "" do 
 
 end
