@@ -2,12 +2,14 @@ require 'time'
 require_relative 'google_api_authorization'
 require 'signet/oauth_2/client'
 require_relative '../mailers/scheduler_mailer'
+
 Figaro.load
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
 # This portion just initializes the Google API 
 # :nocov:
-if not ENV['TESTING_ENV']
+if ENV['TESTING_ENV'] == "false"
+    puts "########### SERVICE AUTHORIZED ###############"
     $service = Google::Apis::SheetsV4::SheetsService.new
     $service.client_options.application_name = APPLICATION_NAME
     $service.authorization = authorize
@@ -79,14 +81,14 @@ def detect_change_send_email(info_list)
                 update_ts(ts, row[2].downcase, row[3], row[4], row[5])
     
                 # send new schedule notification email
-                SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
+                SchedulerMailer.send_email(ca_id, ts.starttime, NEW_SCHEDULE).deliver_now
                 
             elsif row.length == 2 and not ts[:client_name].nil?
                 # update timeslot
                 update_ts(ts, nil, nil, nil, nil)
                 
                 # send cancellation email
-                SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
+                SchedulerMailer.send_email(ca_id, ts.starttime, CANCELLATION).deliver_now
             end
         end
     end
@@ -146,7 +148,7 @@ def find_row(ts_starttime, starttime, sheet_ID)
     while (starttime != format_time(vals[row][0])) do
         row += 1
     end
-    return row
+    return row + 1
 end
 
 # this is for the CA name column
@@ -201,7 +203,7 @@ def remove_name_from_spreadsheet(timeslot)
     starttime = get_starttime(timeslot)
     row = find_row(timeslot.starttime, starttime, day)
     range = "#{day}!B#{row}"
-    write_sheet_values(range, [[""]])
+    write_sheet_values(range, [[""]], timeslot.starttime)
 end
 
 

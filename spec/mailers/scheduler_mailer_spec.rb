@@ -26,7 +26,7 @@ RSpec.describe SchedulerMailer, type: :mailer do
     
     describe "new_schedule_notification_email(guy_CA)" do
         before :all do
-            @mail = SchedulerMailer.send_email(@temp_guy.id, "new_schedule")
+            @mail = SchedulerMailer.send_email(@temp_guy.id, @temp_ts.starttime, "new_schedule")
         end
 
         it "expects email subject" do
@@ -50,7 +50,7 @@ RSpec.describe SchedulerMailer, type: :mailer do
     
     describe "cancellation_email(guy_CA)" do
         before :all do
-            @mail = SchedulerMailer.send_email(@temp_guy.id, "cancellation")
+            @mail = SchedulerMailer.send_email(@temp_guy.id, @temp_ts.starttime, "cancellation")
         end
 
         it "expects email subject" do

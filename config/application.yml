@@ -26,16 +26,16 @@ TEMPLATE_LINK: https://docs.google.com/spreadsheets/d/16nnHznRUjw5LMfPxBSzMgJeRf
 
 development:
   GMAIL_PASSWORD: 169group15
-  TESTING_ENV: "true"
+  TESTING_ENV: false
 
 production:
   GMAIL_PASSWORD: 169group15
   HOST: ucberkeley-housing.herokuapp.com
-  TESTING_ENV: "false"
+  TESTING_ENV: false
 
 test:
   GMAIL_PASSWORD: 169group15
   HOST: 0.0.0.0:3000
   TEST_GUY_EMAIL_ADDR: mingu08@berkeley.edu
   TEST_GUY_NAME: min
-  TESTING_ENV: "true"
+  TESTING_ENV: true
