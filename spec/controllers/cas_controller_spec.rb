@@ -18,28 +18,8 @@ RSpec.describe CasController, type: :controller do
 		ca = double("Ca")
 		allow(ca).to receive(:id) { 4 }
     	allow(Ca).to receive(:get_by_user_id) { |id| ca }
-    	# allow(Ca).to receive(:id).with(4)
-
-    	# added line
     	allow(Admin).to receive(:get_by_user_id) { |id| double("Admin") }
 	end
-	
-	# describe "GET #get_ca_events" do
-	# 	it "gets all events belonging to a particular CA" do
-	# 		event1 = FactoryGirl.create(:event, :ca_id => 1)
-	# 		event2 = FactoryGirl.create(:event, :ca_id => 2)
-	# 		event3 = FactoryGirl.create(:event, :ca_id => 2)
-	# 		get :get_ca_events, :ca_id => 2, start: "1477810800", end: "1481443200"
-	# 		expect(assigns(:events)).to include(event2)
-	# 		expect(assigns(:events)).to include(event3)
-	# 		expect(assigns(:events)).not_to include(event1)
-	# 	end
-	# end
-	
-# 	describe "GET #index" do
-#         ca1 = FactoryGirl.create(:ca_id, :email, :phone_number)
-#         expect{get :index}.to change(Ca, :count).by(0)
-#     end
     
     describe "GET #new" do
     	it "makes new ca" do
@@ -60,20 +40,6 @@ RSpec.describe CasController, type: :controller do
         it "creates a new Event" do
             expect {FactoryGirl.create(:ca)}.to change(Ca, :count).by(1)
         end
-        
-        # it "redirects to cas_path when ca is saved" do
-        # 	FactoryGirl.create(:ca)
-        #     post :create 
-        #     expect(response).to render_template("cas")
-        # end
-        
-      #  it "redirects and notifies when name and email are not filled out" do
-    		# @temp_ca = double("Ca", :id => 2)  
-      #  	post :create
-      #      expect(flash[:notice]).to eq("Please input your name and email at least")
-      #      expect(response).to render_template("cas/new")
-      #  end
-
     end
     
     describe "GET #index" do
