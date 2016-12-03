@@ -1,9 +1,9 @@
 class SchedulerMailer < ActionMailer::Base
     default from: ENV["GMAIL_USERNAME"]
     layout 'mailer'
-    def send_email(ca_id, subject)
+    def send_email(ca_id, starttime, subject)
         @type = subject
-        @timeslot = Timeslot.find_by_ca_id(ca_id)
+        @timeslot = Timeslot.find_by_starttime_and_ca_id(starttime, ca_id)
         if subject == "cancellation"
             subject = ENV["CANCELLATION_SUBJECT"]
             @timeslot.update({:cancellation_sent => true})
