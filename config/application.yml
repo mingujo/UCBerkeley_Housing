@@ -26,7 +26,7 @@ development:
   TESTING_ENV: "false"
 
 production:
-  GMAIL_PASSWORD: "169group15"
+  GMAIL_PASSWORD: 169group15
   HOST: ucberkeley-housing.herokuapp.com
   TESTING_ENV: "false"
 
