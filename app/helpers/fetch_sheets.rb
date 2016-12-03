@@ -48,13 +48,12 @@ def detect_change_send_email(info_list)
         starttime = Time.parse(str_date + " " + row[0])
         # find ts
         ts = Timeslot.find_by_starttime(starttime)
-        # find ca
-        
+
         if row[1].nil?
             next
         end
-        
-        ca = Ca.find_by_name(row[1].downcase)
+        # find ca
+        ca = Ca.find_by_name(row[1])
         if not ts.nil? and not ca.nil?
             # find ca_id
             ca_id = ca[:id]
