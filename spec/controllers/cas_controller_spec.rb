@@ -62,7 +62,7 @@ RSpec.describe CasController, type: :controller do
         it "gives flash message when name & email are not filled out" do
 			ca1 = FactoryGirl.create(:ca)
           	put :update, :id => ca1.id, :ca => {:name => "", :email => ""}
-            expect(flash[:error]).to eq("Please input your name and email at least.")
+            expect(flash[:error]).to eq("Please do not leave any fields blank.")
         end
     end
     

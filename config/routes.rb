@@ -19,9 +19,7 @@ Rails.application.routes.draw do
     resources :events, only: [:new]
   end
   
-  resources :spreadsheets
-  
-  get '/update_template', to: 'spreadsheets#update_template'
+  resources :spreadsheets, only: [:index, :new, :create, :destroy]
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

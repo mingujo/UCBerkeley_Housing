@@ -3,7 +3,7 @@ require_relative '../helpers/fetch_sheets.rb'
 class SpreadsheetsController < ApplicationController
     include SessionsHelper
     before_action :require_login
-    before_action :require_admin_login, only: [:new, :create, :update, :destroy]
+    before_action :require_admin_login, only: [:new, :create, :destroy]
     
     
     
@@ -33,7 +33,7 @@ class SpreadsheetsController < ApplicationController
         end
         date = Date.new(year, month, 1)
         
-        link = params[:ca][:spreadsheet_url]
+        link = params[:ca][:link]
         spreadsheet_id = /\/spreadsheets\/d\/([a-zA-Z0-9\-_]+)/.match(link) 
         if !spreadsheet_id
             flash[:error] = "Invalid spreadsheet url"
@@ -56,10 +56,6 @@ class SpreadsheetsController < ApplicationController
         flash[:notice] = "Spreadsheet was removed from this app, but still exists."
         redirect_to spreadsheets_path
     end
-    
-   
-        
-        
     
     private
         def spreadsheet_params

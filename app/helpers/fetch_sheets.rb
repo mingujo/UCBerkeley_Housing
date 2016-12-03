@@ -1,8 +1,8 @@
 require 'time'
-require 'google_api_authorization'
+require_relative 'google_api_authorization'
 require 'signet/oauth_2/client'
 require 'byebug'
-#require_relative '../mailers/scheduler_mailer'
+require_relative '../mailers/scheduler_mailer'
 
 Figaro.load
 NEW_SCHEDULE = "new_schedule"

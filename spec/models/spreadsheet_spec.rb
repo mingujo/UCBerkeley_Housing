@@ -32,13 +32,6 @@ RSpec.describe Spreadsheet, type: :model do
                     expect(Spreadsheet.get_id_by_date(month, year)).to eq("spreadsheet_id")
                 end
             end
-            
-            context "self.get_template_sheet" do
-                it "gets the template spreadsheet" do
-                    template = FactoryGirl.create(:spreadsheet, :month => 0, :year => 0)
-                    expect(Spreadsheet.get_template_sheet).to eq(template)
-                end
-            end
         end
     end
 

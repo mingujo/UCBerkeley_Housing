@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161201073418) do
+ActiveRecord::Schema.define(version: 20161202180007) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email"
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(version: 20161201073418) do
   create_table "spreadsheets", force: :cascade do |t|
     t.integer "month"
     t.integer "year"
-    t.string  "url"
+    t.string  "spreadsheet_id"
     t.string  "link"
   end
 
