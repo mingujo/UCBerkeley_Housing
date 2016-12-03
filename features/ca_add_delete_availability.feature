@@ -1,3 +1,4 @@
+# #And "Someone" is logged in
 # Feature: Add and Delete CA Availability
 
 # 	Background: there is a CA
@@ -5,7 +6,8 @@
 # 		| name                   | email             | phone number |
 # 		| Someone                | someone@test.com  | 111          |
 
-# 		And "Someone" is logged in
+
+# 		And I sign in with "someone@test.com"
 # 		And "Someone" has the following availability: 
 # 		| Day                    | Date              | Time                     |
 # 		| Wednesday              | 11/2              | 1:00pm - 2:00pm          |
