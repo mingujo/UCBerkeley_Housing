@@ -16,11 +16,21 @@ class SpreadsheetsController < ApplicationController
     end
     
 
-
+    def spreadsheet_exists(month, year)
+        if Spreadsheet.get_id_by_date(month, year)
+            return true
+        end
+        return false
+    end
     
     def create
         year = params[:ca][:year].to_i
         month = params[:ca][:month].to_i
+        if spreadsheet_exists(month, year)
+            flash[:error] = "Spreadsheet for this month and year already exists"
+            redirect_to new_spreadsheet_path
+            return
+        end
         if year.to_s.length != 4
             flash[:error] = "Please enter the year in YYYY format."
             redirect_to new_spreadsheet_path
