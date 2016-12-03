@@ -66,7 +66,6 @@ def detect_change_send_email(info_list)
         starttime = Time.parse(str_date + " " + row[0]).to_s
         # find ts
         ts = Timeslot.find_by_starttime(Time.parse(starttime))
-        
         if row[1].nil?
             next
         end
@@ -80,14 +79,14 @@ def detect_change_send_email(info_list)
                 update_ts(ts, row[2].downcase, row[3], row[4], row[5])
     
                 # send new schedule notification email
-                # SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
+                SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
                 
             elsif row.length == 2 and not ts[:client_name].nil?
                 # update timeslot
                 update_ts(ts, nil, nil, nil, nil)
                 
                 # send cancellation email
-                # SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
+                SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
             end
         end
     end
