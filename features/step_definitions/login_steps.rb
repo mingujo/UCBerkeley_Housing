@@ -38,8 +38,3 @@ Given(/^I am signed in as an Admin$/) do
   step 'I go to the login page'
   step 'I sign in as an Admin'
 end
-
-# require 'byebug'
-# Given(/^test$/) do
-#   byebug
-# end
