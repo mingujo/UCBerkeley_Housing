@@ -37,6 +37,11 @@ class CasController < ApplicationController
   # POST /cas.json
   def create
     params.permit!
+    if params[:ca][:name] == "" or params[:ca][:email] == ""  or params[:ca][:phone_number] == "" 
+      flash[:error] = "Please do not leave any fields blank."
+      redirect_to new_ca_path
+      return
+    end
     @ca = Ca.create(ca_params)
     
     if @ca.save
