@@ -13,7 +13,6 @@
 GMAIL_DOMAIN: gmail.com
 GMAIL_USERNAME: housingnotificationsystem@gmail.com
 GMAIL_PORT: "587"
-SPREADSHEET_ID: 1uO5sg1kHQJ7rgDJSL1jXf1ww7rkEP0nRYBTQbjZwWCQ
 CELL_RANGE: A2:F
 APP_URL: http://ucberkeley-housing.herokuapp.com/
 CANCELLATION_SUBJECT: Someone just cancelled open house schedule!
@@ -21,8 +20,12 @@ NEW_SCHEDULE_SUBJECT: Your new open house schedule!
 APP_NAME: ucberkeley-housing
 CLIENT_SECRETS: client_secret.json
 CREDENTIALS_PATH: google_sheet_api_credentials.yaml
+TEMPLATE_SHEET_ID: 693730742
+TEMPLATE_SPREADSHEET_ID: 16nnHznRUjw5LMfPxBSzMgJeRftTwA4KH70D5GQwiBUE
+TEMPLATE_LINK: https://docs.google.com/spreadsheets/d/16nnHznRUjw5LMfPxBSzMgJeRftTwA4KH70D5GQwiBUE/edit#gid=693730742
 
 development:
+  GMAIL_PASSWORD: 169group15
   TESTING_ENV: "false"
 
 production:
@@ -31,6 +34,7 @@ production:
   TESTING_ENV: "false"
 
 test:
+  GMAIL_PASSWORD: 169group15
   HOST: 0.0.0.0:3000
   TEST_GUY_EMAIL_ADDR: mingu08@berkeley.edu
   TEST_GUY_NAME: min

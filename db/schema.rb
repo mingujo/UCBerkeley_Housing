@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161117051517) do
+ActiveRecord::Schema.define(version: 20161202180007) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20161117051517) do
 
   create_table "event_series", force: :cascade do |t|
     t.integer  "frequency",  default: 1
-    t.string   "period",     default: "weekly"
+    t.string   "period",     default: "monthly"
     t.datetime "start_time"
     t.datetime "end_time"
     t.datetime "created_at"
@@ -48,7 +48,15 @@ ActiveRecord::Schema.define(version: 20161117051517) do
 
   add_index "events", ["event_series_id"], name: "index_events_on_event_series_id"
 
+  create_table "spreadsheets", force: :cascade do |t|
+    t.integer "month"
+    t.integer "year"
+    t.string  "spreadsheet_id"
+    t.string  "link"
+  end
+
   create_table "timeslots", force: :cascade do |t|
+    t.datetime "starttime"
     t.integer  "ca_id"
     t.string   "client_name"
     t.string   "phone_number"
@@ -58,7 +66,6 @@ ActiveRecord::Schema.define(version: 20161117051517) do
     t.datetime "updated_at",                              null: false
     t.boolean  "new_schedule_email_sent", default: false
     t.boolean  "cancellation_sent",       default: false
-    t.datetime "starttime"
     t.datetime "endtime"
   end
 
