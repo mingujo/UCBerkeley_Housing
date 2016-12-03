@@ -60,7 +60,7 @@ class CasController < ApplicationController
   # PATCH/PUT /cas/1.json
   def update
     params.permit!
-    if params[:ca][:name] == "" or params[:ca][:email] == ""  or params[:ca][:phone_number] == "" 
+    if params[:ca][:name] == "" or params[:ca][:email] == ""  or params[:ca][:phone_number] == ""
       flash[:error] = "Please do not leave any fields blank."
       redirect_to edit_ca_path
       return

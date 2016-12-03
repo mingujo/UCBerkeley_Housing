@@ -37,6 +37,7 @@ Feature: Edit CA info
 		#should have editable text boxes already filled with current info
 		Given I am on the "edit" page for "Someone"
 		And I fill in "Name" with "Noone"
+		And I fill in "Phone Number" with "000"
 		And I press "Save"
 		Then I should be on the CA page for "Noone"
 		And I should see "Noone"

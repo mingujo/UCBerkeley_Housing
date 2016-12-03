@@ -33,6 +33,7 @@ Feature: Login
     When I go to the add CA page
     And I fill in "Name" with "Foo Bar"
     And I fill in "Email" with "foo@berkeley.edu"
+    And I fill in "Phone Number" with "foo-foo-fooo"
     And I press "Add"
     Then I should be on the CA page
     And I should see "foo@berkeley.edu"
