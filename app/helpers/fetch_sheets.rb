@@ -1,13 +1,11 @@
 require 'time'
 require_relative 'google_api_authorization'
 require 'signet/oauth_2/client'
-require 'byebug'
 require_relative '../mailers/scheduler_mailer'
 
 Figaro.load
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
-
 # This portion just initializes the Google API 
 # :nocov:
 if not ENV['TESTING_ENV']
@@ -23,7 +21,9 @@ end
 # This function uses detect_change_send_email function which is tested already
 # :nocov:
 def fetch_month_sheets()
-    for day in ('1'..'2').to_a
+    date = Date.today
+    days_in_month = date.end_of_month.day
+    for day in ('1'..days_in_month.to_s).to_a
         range = day + "!" + ENV["CELL_RANGE"]
         info_list = get_sheet_response(range)
         detect_change_send_email(info_list)
@@ -56,24 +56,23 @@ end
 
 def detect_change_send_email(info_list)
     str_date = info_list[0][0].split(" ")[0]
-    
+    str_date = str_date.split('/')
+    str_date = str_date[1]+'/'+str_date[0]+'/'+str_date[2]
     # ONE SAD PATH: if there is no ca and scheduler puts the client name, it will error out
     # ONE SAD PATH: check if client is being replaced
-    
     for row in info_list[3..-1]
         if row[0].nil?
             next
         end
-        starttime = Time.parse(str_date + " " + row[0])
+        starttime = Time.parse(str_date + " " + row[0]).to_s
         # find ts
-        ts = Timeslot.find_by_starttime(starttime)
-        # find ca
+        ts = Timeslot.find_by_starttime(Time.parse(starttime))
         
         if row[1].nil?
             next
         end
-        
-        ca = Ca.find_by_name(row[1].downcase)
+        # find ca
+        ca = Ca.find_by_name(row[1])
         if not ts.nil? and not ca.nil?
             # find ca_id
             ca_id = ca[:id]
@@ -82,14 +81,14 @@ def detect_change_send_email(info_list)
                 update_ts(ts, row[2].downcase, row[3], row[4], row[5])
     
                 # send new schedule notification email
-                SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
+                # SchedulerMailer.send_email(ca_id, NEW_SCHEDULE).deliver_now
                 
             elsif row.length == 2 and not ts[:client_name].nil?
                 # update timeslot
                 update_ts(ts, nil, nil, nil, nil)
                 
                 # send cancellation email
-                SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
+                # SchedulerMailer.send_email(ca_id, CANCELLATION).deliver_now
             end
         end
     end
