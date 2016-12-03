@@ -9,25 +9,29 @@ class SpreadsheetsController < ApplicationController
     
     def index
         @spreadsheets = Spreadsheet.all
-        @template = @spreadsheets[0] #Spreadsheet.get_template_sheet
     end
     
     def new 
         @spreadsheet = Spreadsheet.new
     end
     
-    
-    def get_date
-        year = params[:ca][:year].to_i
-        month = params[:ca][:month].to_i
-        date = Date.new(year, month, 1)
-        return date
-    end
-    
+
 
     
     def create
-        date = get_date
+        year = params[:ca][:year].to_i
+        month = params[:ca][:month].to_i
+        if year.to_s.length != 4
+            flash[:error] = "Please enter the year in YYYY format."
+            redirect_to new_spreadsheet_path
+            return
+        end
+        if month < 1 or month > 12
+            flash[:error] = "Please enter a month from 1-12."
+            redirect_to new_spreadsheet_path
+            return
+        end
+        date = Date.new(year, month, 1)
         
         link = params[:ca][:spreadsheet_url]
         spreadsheet_id = /\/spreadsheets\/d\/([a-zA-Z0-9\-_]+)/.match(link) 
@@ -40,7 +44,7 @@ class SpreadsheetsController < ApplicationController
         
         @spreadsheet = Spreadsheet.new({:month => date.month, :year => date.year, :spreadsheet_id => spreadsheet_id, :link => link}) 
         if @spreadsheet.save
-            populate_spreadsheet(date, spreadsheet_id)
+            populate_spreadsheet(date, link, spreadsheet_id)
             flash[:success] = "Spreadsheet has been created"
             redirect_to spreadsheets_path
         end
@@ -53,30 +57,7 @@ class SpreadsheetsController < ApplicationController
         redirect_to spreadsheets_path
     end
     
-    def update_template
-        @template = Spreadsheet.get_template_sheet
-    end
-    
-    def update_template_link
-        @template = Spreadsheet.get_template_sheet
-        new_link = params[:spreadsheet][:spreadsheet_url]
-        new_spreadsheet_id = /\/spreadsheets\/d\/([a-zA-Z0-9\-_]+)/.match(link) 
-        if !new_spreadsheet_id
-            flash[:error] = "Invalid spreadsheet url"
-            redirect_to change_template_sheet_path
-            return
-        end
-        new_spreadsheet_id = new_spreadsheet_id[1]
-        @template.spreadsheet_id = new_spreadsheet_id
-        @template.link = new_link
-        if @template.save
-            flash[:success] = "New template sheet successfully saved"
-            redirect_to spreadsheets_path
-            return
-        else
-            #??
-        end
-    end
+   
         
         
     

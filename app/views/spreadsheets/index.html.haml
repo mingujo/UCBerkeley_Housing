@@ -1,8 +1,8 @@
 %center
-  %h2.header_block LIST of SPREADSHEETS
+  %h2.header_block SPREADSHEETS
 %h4
   = link_to 'ADD SPREADSHEET', new_spreadsheet_path, class: "addButton", style: 'color: white;'
-  = link_to "EDIT TEMPLATE SHEET", update_template_path, class: "addButton", style: 'color: white'
+  = link_to "VIEW TEMPLATE SHEET".html_safe, ENV['TEMPLATE_LINK'], class: "addButton", style: 'color: white;'
 %br
 %br
 %br

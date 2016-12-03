@@ -4,7 +4,7 @@ require 'signet/oauth_2/client'
 require 'byebug'
 #require_relative '../mailers/scheduler_mailer'
 
-
+Figaro.load
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
 
@@ -206,7 +206,7 @@ end
 
 
 #TODO: create the template sheet, so that admin can just create the new spreadsheet and doesn't have to create the first page
-# this entails requiring input of date of first day in month in the view
+
 
 
 
@@ -250,16 +250,17 @@ def set_date_of_sheet(date, spreadsheet_id)
 end
 
 
+# dest_spreadsheet_id = new spreadsheet id 
+# makes copy sheet_id. the copy appears as last sheet
 
-
-# makes copy sheet_id, which defaults to zero. the copy appears as last sheet
 # return id of new sheet
 
-def copy_sheet(spreadsheet_id, sheet_id = 0)
-    sheet_id = 408995429
+def copy_sheet(dest_spreadsheet_id)
+    template_sheet_id = ENV["TEMPLATE_SHEET_ID"]
+    template_spreadsheet_id = ENV["TEMPLATE_SPREADSHEET_ID"]
     copy_request = Google::Apis::SheetsV4::CopySheetToAnotherSpreadsheetRequest.new
-    copy_request.destination_spreadsheet_id = spreadsheet_id
-    new_sheet_properties = $service.copy_spreadsheet(spreadsheet_id, sheet_id, copy_request)
+    copy_request.destination_spreadsheet_id = dest_spreadsheet_id
+    new_sheet_properties = $service.copy_spreadsheet(template_spreadsheet_id, template_sheet_id, copy_request)
     return new_sheet_properties.sheet_id
 end
 
@@ -291,30 +292,50 @@ end
 
 
 # date = Date object; can do date.month, date.day, date.year...
+#template = arr of sheet id and spreadsheet id
 
-def create_new_sheet(date, spreadsheet_id)
-    new_sheet_id = copy_sheet(spreadsheet_id)
-    set_name_of_sheet(date.day.to_s, new_sheet_id, spreadsheet_id)
-    set_date_of_sheet(date, spreadsheet_id)
+def create_new_sheet(date, new_spreadsheet_id)
+    #make copy of template sheet to new spreadsheet
+    new_sheet_id = copy_sheet(new_spreadsheet_id)
+    
+    #set the name of that sheet
+    set_name_of_sheet(date.day.to_s, new_sheet_id, new_spreadsheet_id)
+    
+    #set the date on the sheet
+    set_date_of_sheet(date, new_spreadsheet_id)
 end
 
-
+def delete_sheet(spreadsheet_link, spreadsheet_id)
+    delete_id = /gid=[0-9]+$/.match(spreadsheet_link).to_s
+    delete_id = /[0-9]+/.match(delete_id).to_s
+    
+    #create the requests
+    delete_request = Google::Apis::SheetsV4::DeleteSheetRequest.new
+    new_request = Google::Apis::SheetsV4::Request.new
+    batch_update_request = Google::Apis::SheetsV4::BatchUpdateSpreadsheetRequest.new
+    
+    delete_request.sheet_id = delete_id
+    
+    #assign the requests
+    new_request.delete_sheet = delete_request        
+    batch_update_request.requests = [new_request]
+    
+    #call the update
+    $service.batch_update_spreadsheet(spreadsheet_id, batch_update_request) 
+    
+end
 
 
 #date = Date object of first day of month
-
-def populate_spreadsheet(date, new_spreadsheet_id)
+# first will exist, so need to change its name and then do the rest.
+def populate_spreadsheet(date, spreadsheet_link, spreadsheet_id)
     month = date.month
-    x = 0
-    
-    #while date.month == month do 
-    date = date.tomorrow #probably will do this in func that generates the template sheet
-    while x < 2
-        create_new_sheet(date, new_spreadsheet_id)
+    while date.month == month do 
+        create_new_sheet(date, spreadsheet_id)
         date = date.tomorrow
-        x += 1
     end
+    
+    #delete the first sheet
+    delete_sheet(spreadsheet_link, spreadsheet_id)
 end
 
-
-id = "1tIuyylSNMianWOxUQCvHhYQGb8tONDDVyliWQemWwBM"
