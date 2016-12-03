@@ -23,7 +23,7 @@ RSpec.describe CasController, type: :controller do
     
     describe "GET #new" do
     	it "makes new ca" do
-	    	ca1 = FactoryGirl.create(:ca, :name => "Hola", :user_id => "2", :email => "hola@gmail.com", :phone_number => "111-111-1111")
+	    	#ca1 = FactoryGirl.create(:ca, :name => "Hola", :user_id => "2", :email => "hola@gmail.com", :phone_number => "111-111-1111")
 	    	get :new
 	    	expect(assigns(:ca)).to be_a_new(Ca)
 	    end
@@ -59,7 +59,7 @@ RSpec.describe CasController, type: :controller do
             expect(flash[:notice]).to eq("Ca was successfully updated.")
         end
 		
-		it "gives flash message when name & email are not filled out" do
+        it "gives flash message when name & email are not filled out" do
 			ca1 = FactoryGirl.create(:ca)
           	put :update, :id => ca1.id, :ca => {:name => "", :email => ""}
             expect(flash[:error]).to eq("Please input your name and email at least.")
