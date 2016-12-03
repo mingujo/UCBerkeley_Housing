@@ -43,9 +43,3 @@ RSpec.describe SessionsController, type: :controller do
     end
   end
 end
-describe "for nonsigned users" do 
-  it 'should redirect to admin user' do
-    get :create, :provider => :google_oauth2
-    expect(response).to redirect_to('/auth/login')
-  end
-end
