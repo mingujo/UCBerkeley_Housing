@@ -2,12 +2,13 @@ require 'time'
 require_relative 'google_api_authorization'
 require 'signet/oauth_2/client'
 require_relative '../mailers/scheduler_mailer'
+
 Figaro.load
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
 # This portion just initializes the Google API 
 # :nocov:
-if not ENV['TESTING_ENV']
+if ENV['TESTING_ENV'] == "false"
     $service = Google::Apis::SheetsV4::SheetsService.new
     $service.client_options.application_name = APPLICATION_NAME
     $service.authorization = authorize
