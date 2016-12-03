@@ -42,10 +42,18 @@ def detect_change_send_email(info_list)
     # ONE SAD PATH: check if client is being replaced
     
     for row in info_list[3..-1]
+        if row[0].nil?
+            next
+        end
         starttime = Time.parse(str_date + " " + row[0])
         # find ts
         ts = Timeslot.find_by_starttime(starttime)
         # find ca
+        
+        if row[1].nil?
+            next
+        end
+        
         ca = Ca.find_by_name(row[1].downcase)
         if not ts.nil? and not ca.nil?
             # find ca_id

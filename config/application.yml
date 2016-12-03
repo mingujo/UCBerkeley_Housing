@@ -23,10 +23,10 @@ CLIENT_SECRETS: client_secret.json
 CREDENTIALS_PATH: google_sheet_api_credentials.yaml
 
 development:
-  TESTING_ENV: "true"
+  TESTING_ENV: "false"
 
 production:
-  GMAIL_PASSWORD: "******"
+  GMAIL_PASSWORD: "169group15"
   HOST: ucberkeley-housing.herokuapp.com
   TESTING_ENV: "false"
 
