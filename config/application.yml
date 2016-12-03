@@ -26,7 +26,7 @@ TEMPLATE_LINK: https://docs.google.com/spreadsheets/d/16nnHznRUjw5LMfPxBSzMgJeRf
 
 development:
   GMAIL_PASSWORD: 169group15
-  TESTING_ENV: "false"
+  TESTING_ENV: "true"
 
 production:
   GMAIL_PASSWORD: 169group15

@@ -21,4 +21,3 @@
         %td= item.year
         %td= link_to "View".html_safe, item.link, class: "myButton"
         %td= button_to 'Remove', spreadsheet_path(item), :method => :delete, :confirm => 'Are you sure?', :class => "deletebutton"
-

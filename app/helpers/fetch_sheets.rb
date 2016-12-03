@@ -2,7 +2,6 @@ require 'time'
 require_relative 'google_api_authorization'
 require 'signet/oauth_2/client'
 require_relative '../mailers/scheduler_mailer'
-
 Figaro.load
 NEW_SCHEDULE = "new_schedule"
 CANCELLATION = "cancellation"
@@ -140,8 +139,8 @@ def format_time(time)
 end
 
 # find row number corresponding to the starttime of the appointment
-def find_row(starttime, sheet_ID)
-    spreadsheet_id = get_spreadsheet_id(starttime)
+def find_row(ts_starttime, starttime, sheet_ID)
+    spreadsheet_id = get_spreadsheet_id(ts_starttime)
     vals = $service.get_spreadsheet_values(spreadsheet_id, "#{sheet_ID}!A1:B" ).values
     # vals = list representation of the cells in the spreadsheet
     row = 0
@@ -189,7 +188,7 @@ def write_to_spreadsheet(timeslot)
 
     day = get_day(timeslot)
     starttime = get_starttime(timeslot)
-    row = find_row(starttime, day)
+    row = find_row(timeslot.starttime, starttime, day)
     range = "#{day}!B#{row}"
     ca_name = get_CA(timeslot).name
     write_sheet_values(range, [[ca_name]], timeslot.starttime)
@@ -201,7 +200,7 @@ end
 def remove_name_from_spreadsheet(timeslot)
     day = get_day(timeslot)
     starttime = get_starttime(timeslot)
-    row = find_row(starttime, day)
+    row = find_row(timeslot.starttime, starttime, day)
     range = "#{day}!B#{row}"
     write_sheet_values(range, [[""]])
 end
